@@ -31,6 +31,11 @@ export const sections = [
     description: "Primary and secondary variants",
   },
   {
+    slug: "checkbox",
+    title: "Checkbox",
+    description: "Single and labeled checkboxes",
+  },
+  {
     slug: "toast",
     title: "Toast",
     description: "Snackbar-style notifications",

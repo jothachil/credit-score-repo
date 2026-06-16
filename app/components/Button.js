@@ -1,3 +1,5 @@
+import { Button as BaseButton } from "@base-ui/react/button";
+
 const base =
   "w-full rounded-xl px-6 py-3 text-[16px] leading-6 font-bold transition-colors";
 
@@ -15,12 +17,12 @@ export default function Button({
   ...props
 }) {
   return (
-    <button
+    <BaseButton
       type="button"
       className={`${base} ${variants[variant]} ${className}`}
       {...props}
     >
       {children}
-    </button>
+    </BaseButton>
   );
 }
