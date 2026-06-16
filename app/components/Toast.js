@@ -53,7 +53,7 @@ function ToastList() {
       <Toast.Root
         key={item.id}
         toast={item}
-        className="pointer-events-auto w-full rounded-lg bg-background-inverse-primary text-content-inverse-primary shadow-[0_12px_36px_rgba(0,0,0,0.24)] transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] data-ending-style:translate-y-3 data-ending-style:opacity-0 data-starting-style:translate-y-3 data-starting-style:opacity-0"
+        className="pointer-events-auto w-full rounded-lg bg-background-inverse-primary text-content-inverse-primary shadow-md transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] data-ending-style:translate-y-3 data-ending-style:opacity-0 data-starting-style:translate-y-3 data-starting-style:opacity-0"
       >
         {block ? (
           <div className="flex flex-col gap-1 px-4 py-3">
@@ -88,7 +88,7 @@ export function ToastProvider({ children }) {
     <Toast.Provider toastManager={toast}>
       {children}
       <Toast.Portal>
-        <Toast.Viewport className="fixed bottom-4 left-1/2 z-[60] flex w-[328px] max-w-[calc(100vw-2rem)] -translate-x-1/2 flex-col-reverse gap-2">
+        <Toast.Viewport className="fixed bottom-4 left-1/2 z-[60] flex w-[368px] max-w-[calc(100vw-2rem)] -translate-x-1/2 flex-col-reverse gap-2">
           <ToastList />
         </Toast.Viewport>
       </Toast.Portal>

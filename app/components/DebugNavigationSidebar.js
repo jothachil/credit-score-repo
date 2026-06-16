@@ -17,7 +17,7 @@ const debugPages = [
 ];
 
 const tabClassName =
-  "relative z-10 h-7 flex-1 cursor-pointer rounded-md px-2 text-[11px] leading-4 font-semibold text-zinc-500 outline-none transition-colors hover:text-zinc-950 focus-visible:outline-2 focus-visible:outline-zinc-950 data-active:text-zinc-950";
+  "relative z-10 flex h-8 flex-1 cursor-pointer items-center justify-center rounded-lg px-2 text-[11px] leading-4 font-semibold text-zinc-500 outline-none transition-colors hover:text-zinc-950 focus-visible:outline-2 focus-visible:outline-zinc-950 data-active:text-zinc-950";
 
 const panelClassName =
   "mt-3 outline-none focus-visible:outline-2 focus-visible:outline-zinc-950 [[hidden]]:hidden";
@@ -66,7 +66,7 @@ export default function DebugNavigationSidebar() {
       )}
 
       {visible && (
-        <aside className="fixed top-4 bottom-4 left-4 z-40 hidden w-[300px] flex-col rounded-2xl border border-zinc-200 bg-white p-3 text-zinc-950 shadow-[0_16px_50px_rgba(0,0,0,0.1)] md:flex">
+        <aside className="fixed top-4 bottom-4 left-4 z-40 hidden w-[300px] flex-col rounded-2xl border border-zinc-200 bg-white p-3 text-zinc-950 shadow-lg md:flex">
           <div className="-mx-3 flex items-center justify-between border-b border-zinc-100 px-3 pb-3">
             <div>
               <h2 className="mt-0.5 text-[13px] leading-4 font-bold">
@@ -87,14 +87,14 @@ export default function DebugNavigationSidebar() {
             onValueChange={setActiveTab}
             className="min-h-0 flex-1"
           >
-            <Tabs.List className="relative isolate mt-3 flex rounded-lg border border-zinc-200 bg-zinc-50 p-0.5">
+            <Tabs.List className="relative isolate mt-3 flex rounded-xl border border-zinc-200 bg-zinc-50 p-1">
               <Tabs.Tab className={tabClassName} value="pages">
                 pages
               </Tabs.Tab>
               <Tabs.Tab className={tabClassName} value="flags">
                 flags
               </Tabs.Tab>
-              <Tabs.Indicator className="absolute top-0.5 left-0.5 z-0 h-7 w-(--active-tab-width) translate-x-(--active-tab-left) rounded-md border border-zinc-200 bg-white shadow-sm transition-[translate,width] duration-150 ease-in-out" />
+              <Tabs.Indicator className="absolute top-1 left-0 z-0 h-8 w-(--active-tab-width) translate-x-(--active-tab-left) rounded-lg border border-zinc-200 bg-white shadow-sm transition-[translate,width] duration-150 ease-in-out" />
             </Tabs.List>
 
             <Tabs.Panel value="pages" className={panelClassName}>
