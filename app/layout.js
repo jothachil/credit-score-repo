@@ -1,6 +1,7 @@
 import localFont from "next/font/local";
 import "./globals.css";
 import DebugNavigationSidebar from "./components/DebugNavigationSidebar";
+import { ToastProvider } from "./components/Toast";
 
 const lufga = localFont({
   src: [
@@ -52,12 +53,14 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${lufga.variable} h-full antialiased`}>
       <body className="min-h-full">
-        <div className="flex min-h-dvh flex-col items-center bg-zinc-100">
-          <main className="relative flex min-h-dvh w-full max-w-[400px] flex-col bg-white border-l border-r border-zinc-200">
-            {children}
-          </main>
-        </div>
-        <DebugNavigationSidebar />
+        <ToastProvider>
+          <div className="flex min-h-dvh flex-col items-center bg-zinc-100">
+            <main className="relative flex min-h-dvh w-full max-w-[400px] flex-col bg-white border-l border-r border-zinc-200">
+              {children}
+            </main>
+          </div>
+          <DebugNavigationSidebar />
+        </ToastProvider>
       </body>
     </html>
   );

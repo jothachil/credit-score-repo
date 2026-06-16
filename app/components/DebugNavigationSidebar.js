@@ -141,11 +141,22 @@ export default function DebugNavigationSidebar() {
             </Tabs.Panel>
           </Tabs.Root>
 
-          <div className="mt-3 border-t border-zinc-100 pt-3">
+          <div className="mt-3 grid grid-cols-2 gap-2 border-t border-zinc-100 pt-3">
+            <Link
+              href="/design-system"
+              aria-current={pathname === "/design-system" ? "page" : undefined}
+              className={`rounded-lg border px-3 py-2 text-center text-[11px] leading-4 font-semibold transition-colors ${
+                pathname === "/design-system"
+                  ? "border-zinc-950 bg-zinc-950 text-white"
+                  : "border-zinc-200 bg-zinc-50 text-zinc-700 hover:border-zinc-300 hover:bg-zinc-100 hover:text-zinc-950"
+              }`}
+            >
+              Design system
+            </Link>
             <button
               type="button"
               onClick={handleResetFlow}
-              className="w-full rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 text-[11px] leading-4 font-semibold text-zinc-700 transition-colors hover:border-zinc-300 hover:bg-zinc-100 hover:text-zinc-950"
+              className="rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 text-[11px] leading-4 font-semibold text-zinc-700 transition-colors hover:border-zinc-300 hover:bg-zinc-100 hover:text-zinc-950"
             >
               Reset flow
             </button>
