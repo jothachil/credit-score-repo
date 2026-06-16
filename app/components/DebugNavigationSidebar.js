@@ -17,7 +17,7 @@ const debugPages = [
 ];
 
 const tabClassName =
-  "relative z-10 h-7 flex-1 rounded-md px-2 text-[11px] leading-4 font-semibold text-zinc-500 outline-none transition-colors hover:text-zinc-950 focus-visible:outline-2 focus-visible:outline-zinc-950 data-active:text-zinc-950";
+  "relative z-10 h-7 flex-1 cursor-pointer rounded-md px-2 text-[11px] leading-4 font-semibold text-zinc-500 outline-none transition-colors hover:text-zinc-950 focus-visible:outline-2 focus-visible:outline-zinc-950 data-active:text-zinc-950";
 
 const panelClassName =
   "mt-3 outline-none focus-visible:outline-2 focus-visible:outline-zinc-950 [[hidden]]:hidden";
@@ -26,17 +26,15 @@ function DebugFlagSwitch({ flag }) {
   const [checked, setChecked] = useAtom(flag.atom);
 
   return (
-    <div className="grid grid-cols-[1fr_auto] items-center gap-3 border-b border-zinc-100 py-2 last:border-b-0">
-      <span className="min-w-0">
-        <span className="block truncate text-[11px] leading-4 font-semibold text-zinc-900">
-          {flag.label}
-        </span>
+    <div className="grid grid-cols-[1fr_auto] items-center gap-2 rounded-lg border border-zinc-200 bg-white px-2 py-2">
+      <span className="truncate text-[11px] leading-4 font-semibold text-zinc-700">
+        {flag.label}
       </span>
       <Switch.Root
         aria-label={flag.label}
         checked={checked}
         onCheckedChange={(nextChecked) => setChecked(nextChecked)}
-        className="flex h-5 w-9 shrink-0 rounded-full border border-zinc-300 bg-zinc-100 p-0.5 transition-colors duration-150 ease-[ease] data-checked:border-zinc-950 data-checked:bg-zinc-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-950"
+        className="flex h-5 w-9 shrink-0 cursor-pointer rounded-full border border-zinc-300 bg-zinc-100 p-0.5 transition-colors duration-150 ease-[ease] data-checked:border-zinc-950 data-checked:bg-zinc-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-950"
       >
         <Switch.Thumb className="size-3.5 rounded-full bg-white shadow-sm transition-[translate] duration-150 ease-[ease] data-checked:translate-x-4" />
       </Switch.Root>
@@ -61,7 +59,7 @@ export default function DebugNavigationSidebar() {
         <button
           type="button"
           onClick={() => setVisible(true)}
-          className="fixed right-4 bottom-4 z-40 hidden rounded-full border border-zinc-900/10 bg-zinc-950 px-4 py-3 text-[12px] font-bold tracking-wide text-white shadow-[0_12px_36px_rgba(0,0,0,0.24)] transition-transform hover:-translate-y-0.5 md:block"
+          className="fixed bottom-4 left-4 z-40 hidden cursor-pointer rounded-full border border-zinc-900/10 bg-zinc-950 px-4 py-3 text-[12px] font-bold tracking-wide text-white shadow-[0_12px_36px_rgba(0,0,0,0.24)] transition-transform hover:-translate-y-0.5 md:block"
         >
           Debug
         </button>
@@ -69,7 +67,7 @@ export default function DebugNavigationSidebar() {
 
       {visible && (
         <aside className="fixed top-4 bottom-4 left-4 z-40 hidden w-[300px] flex-col rounded-2xl border border-zinc-200 bg-white p-3 text-zinc-950 shadow-[0_16px_50px_rgba(0,0,0,0.1)] md:flex">
-          <div className="flex items-center justify-between pb-2">
+          <div className="-mx-3 flex items-center justify-between border-b border-zinc-100 px-3 pb-3">
             <div>
               <h2 className="mt-0.5 text-[13px] leading-4 font-bold">
                 Debug panel
@@ -78,7 +76,7 @@ export default function DebugNavigationSidebar() {
             <button
               type="button"
               onClick={() => setVisible(false)}
-              className="rounded-lg border border-zinc-200 px-2 py-1 text-[11px] leading-4 font-semibold text-zinc-600 hover:bg-zinc-50 hover:text-zinc-950"
+              className="cursor-pointer rounded-lg border border-zinc-200 px-2 py-1 text-[11px] leading-4 font-semibold text-zinc-600 hover:bg-zinc-50 hover:text-zinc-950"
             >
               Hide
             </button>
@@ -131,17 +129,15 @@ export default function DebugNavigationSidebar() {
             </Tabs.Panel>
 
             <Tabs.Panel value="flags" className={panelClassName}>
-              <div className="border-b border-zinc-100 pb-2">
-                <div className="mt-1">
-                  {debugFlags.map((flag) => (
-                    <DebugFlagSwitch key={flag.id} flag={flag} />
-                  ))}
-                </div>
+              <div className="flex flex-col gap-1">
+                {debugFlags.map((flag) => (
+                  <DebugFlagSwitch key={flag.id} flag={flag} />
+                ))}
               </div>
             </Tabs.Panel>
           </Tabs.Root>
 
-          <div className="mt-3 grid grid-cols-2 gap-2 border-t border-zinc-100 pt-3">
+          <div className="-mx-3 mt-3 grid grid-cols-2 gap-2 border-t border-zinc-100 px-3 pt-3">
             <Link
               href="/design-system"
               aria-current={pathname === "/design-system" ? "page" : undefined}
@@ -156,7 +152,7 @@ export default function DebugNavigationSidebar() {
             <button
               type="button"
               onClick={handleResetFlow}
-              className="rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 text-[11px] leading-4 font-semibold text-zinc-700 transition-colors hover:border-zinc-300 hover:bg-zinc-100 hover:text-zinc-950"
+              className="cursor-pointer rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 text-[11px] leading-4 font-semibold text-zinc-700 transition-colors hover:border-zinc-300 hover:bg-zinc-100 hover:text-zinc-950"
             >
               Reset flow
             </button>

@@ -36,7 +36,7 @@ function ToastAction({ id, action }) {
         action.onClick?.();
         toast.close(id);
       }}
-      className="shrink-0 text-[16px] leading-6 font-bold text-content-brand"
+      className="shrink-0 cursor-pointer text-[16px] leading-6 font-bold text-content-brand"
     >
       {action.label}
     </button>
