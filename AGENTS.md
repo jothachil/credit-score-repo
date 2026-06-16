@@ -20,12 +20,19 @@ Before building any component:
 3. Verify the installed API: `node -e "console.log(Object.keys(require('@base-ui/react/<slug>')))"`
    — the installed version (`@base-ui/react` in package.json) is the source of
    truth; data-attribute and prop names can differ from the public docs.
+   **Not every exported part is a renderable component.** Some are imperative
+   helpers/classes (e.g. `Drawer.Handle` is a class used with
+   `Drawer.createHandle`, NOT JSX — rendering `<Drawer.Handle>` throws "Class
+   constructor … cannot be invoked without 'new'"). When a part looks unusual,
+   check its type:
+   `node -e "const {X}=require('@base-ui/react/<slug>'); console.log(typeof X.Part, X.Part?.\$\$typeof)"`
+   — a real component is a function/object with `Symbol(react.forward_ref)`.
 4. Compose the primitive's parts, apply our semantic color tokens (see
    `app/globals.css`), and match the Figma design.
 
-Only drop to a plain element when no Base UI primitive fits (e.g. a static
-`<button>` styled as a link). Note the import slug differs from the part name:
-e.g. `import { RadioGroup } from "@base-ui/react/radio-group"`.
+Only drop to a plain element when no Base UI primitive fits (e.g. a pure layout
+wrapper). Note the import slug differs from the part name: e.g.
+`import { RadioGroup } from "@base-ui/react/radio-group"`.
 
 ## Available Base UI components
 
@@ -36,7 +43,57 @@ Number Field · OTP Field · Popover · Preview Card · Progress · Radio ·
 Scroll Area · Select · Separator · Slider · Switch · Tabs · Toast · Toggle ·
 Toggle Group · Toolbar · Tooltip
 
-Already wired up in this starter: **Input** (TextField), **OTP Field**
-(OTPField), **Radio** + **Radio Group** (RadioField), **Tabs** (TabsField),
-**Toast** (Toast), **Switch** + **Tabs** (DebugNavigationSidebar). Button is a
-plain styled `<button>` — swap to Base UI **Button** if you need its features.
+Already wired up in `app/components/`:
+
+| File                       | Base UI primitive(s)        |
+| -------------------------- | --------------------------- |
+| `Button.js`                | Button                      |
+| `Checkbox.js`              | Checkbox                    |
+| `TextField.js`             | Input (+ framer-motion)     |
+| `OTPField.js`              | OTP Field                   |
+| `RadioField.js`            | Radio + Radio Group         |
+| `TabsField.js`             | Tabs                        |
+| `Toast.js`                 | Toast (createToastManager)  |
+| `BottomSheet.js`           | Drawer (swipeDirection down) |
+| `DebugNavigationSidebar.js`| Tabs + Switch               |
+| `NavBar.js`                | none — plain layout bar (uses `next/navigation`) |
+
+# Styling conventions
+
+- **Use semantic color tokens only.** Product UI must use the Figma-mirrored
+  tokens from `app/globals.css` (`content/*`, `background/*`, `border/*` →
+  `text-content-primary`, `bg-background-brand`, `border-border-primary`, …) —
+  never raw `zinc-*` or hex. Primitive ramps (`--grey-*`, `--cerise-pink-*`, …)
+  are referenced by tokens, not used directly. **Exception:** dev-only
+  scaffolding (`DebugNavigationSidebar.js`, the frame backdrop in `layout.js`)
+  intentionally uses `zinc-*` since it isn't product UI.
+- **State styling comes from Base UI `data-*` attributes**, not JS props: e.g.
+  `data-active:` (Tabs), `group-data-checked:` / `group-data-disabled:` /
+  `group-data-focused:` (Checkbox/Radio), `data-starting-style:` /
+  `data-ending-style:` (Toast/Drawer transitions). Put `group` on the Base UI
+  Root and read it with `group-data-*` on a styled child.
+- **Variant styling:** for a single axis (like Button's `variant`), use a plain
+  object map of class strings — no dependency. Only reach for
+  `class-variance-authority` (+ `tailwind-merge`) once a component needs **2+
+  variant axes or compound variants** (e.g. `size` × `variant`). Keep the
+  starter dependency-light.
+- **`cursor-pointer` on every interactive element** (buttons, tabs, switches,
+  the checkbox/radio controls), plus `disabled:cursor-not-allowed` where it can
+  be disabled. Links get the pointer cursor for free.
+- **Accessibility:** label every field. For OTP, Base UI uses the *first* input
+  as the field's labelable control, so attach a (sr-only) `<label htmlFor>` to
+  it rather than per-input `aria-label`. Keep focus-visible rings.
+
+# Design-system catalog
+
+Every component gets a showcase page under `app/design-system/<slug>/page.js`,
+wrapped in `SectionShell` (which renders `NavBar`). Register the section in
+`app/design-system/sections.js` so it appears on the index. The index is
+reachable from the debug panel's "Design system" button. When you add a new
+component, add its catalog page + section entry.
+
+# Before finishing
+
+Run `bun run lint` and `bun run build` — both must pass. `bun run format` fixes
+Biome formatting. Tailwind directives (`@theme`, etc.) require
+`css.parser.tailwindDirectives: true` in `biome.json` (already set).

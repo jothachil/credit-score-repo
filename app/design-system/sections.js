@@ -40,4 +40,9 @@ export const sections = [
     title: "Toast",
     description: "Snackbar-style notifications",
   },
+  {
+    slug: "bottom-sheet",
+    title: "Bottom sheet",
+    description: "Swipe-down drawer sheet",
+  },
 ];
