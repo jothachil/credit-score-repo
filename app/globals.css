@@ -1,0 +1,208 @@
+@import "tailwindcss";
+
+/*
+ * Color system — mirrors the Figma variable collection.
+ *
+ * Two layers:
+ *   1. Primitives  — raw palette ramps (Grey, Cerise Pink, …). Not exposed as
+ *      utilities; only referenced by semantic tokens below.
+ *   2. Semantic    — Figma's content/* , background/* , border/* tokens.
+ *      Figma's "/" becomes "-" here, so `content/primary` → `text-content-primary`,
+ *      `background/secondary` → `bg-background-secondary`, etc.
+ *
+ * To re-skin, repoint the semantic tokens (or edit a primitive ramp).
+ */
+:root {
+  /* ---- Primitives: Grey ---- */
+  --grey-01: #f5f5f5;
+  --grey-02: #eeeeee;
+  --grey-03: #e5e5e5;
+  --grey-04: #d4d4d4;
+  --grey-05: #a3a3a3;
+  --grey-06: #737373;
+  --grey-07: #525252;
+  --grey-08: #404040;
+  --grey-09: #262626;
+  --grey-10: #171717;
+  --white: #ffffff;
+  --black: #000000;
+
+  /* ---- Primitives: Cerise Pink (brand) ---- */
+  --cerise-pink-01: #fff0f4;
+  --cerise-pink-02: #ffd6e0;
+  --cerise-pink-03: #ffafc3;
+  --cerise-pink-04: #ff7e9e;
+  --cerise-pink-05: #ee537a;
+  --cerise-pink-06: #db2855;
+  --cerise-pink-07: #9f183a;
+  --cerise-pink-08: #740924;
+  --cerise-pink-09: #510216;
+  --cerise-pink-10: #2a0a12;
+
+  /* ---- Primitives: Fire Red (negative) ---- */
+  --fire-red-01: #fff1f1;
+  --fire-red-02: #ffd7d9;
+  --fire-red-03: #ffb3b8;
+  --fire-red-04: #ff8389;
+  --fire-red-05: #fa4d56;
+  --fire-red-06: #da1e28;
+  --fire-red-07: #a2191f;
+  --fire-red-09: #2d0709;
+
+  /* ---- Primitives: Mountain Green (positive) ---- */
+  --mountain-green-01: #ecfdf5;
+  --mountain-green-02: #d1fae5;
+  --mountain-green-03: #a7f3d0;
+  --mountain-green-04: #6ee7b7;
+  --mountain-green-05: #34d399;
+  --mountain-green-06: #10b981;
+  --mountain-green-07: #05a372;
+  --mountain-green-08: #047555;
+  --mountain-green-09: #05523c;
+  --mountain-green-10: #042e23;
+
+  /* ---- Primitives: Sunrise Yellow (warning) ---- */
+  --sunrise-yellow-01: #fffbeb;
+  --sunrise-yellow-02: #fef3c7;
+  --sunrise-yellow-03: #fde68a;
+  --sunrise-yellow-04: #fcd34d;
+  --sunrise-yellow-05: #fbbf24;
+  --sunrise-yellow-06: #f59e0b;
+  --sunrise-yellow-07: #c46c05;
+  --sunrise-yellow-08: #8c4107;
+  --sunrise-yellow-09: #5e2909;
+  --sunrise-yellow-10: #301306;
+
+  /* ---- Primitives: Electric Purple (sub-brand) ---- */
+  --electric-purple-01: #f2e6ff;
+  --electric-purple-02: #cca2fc;
+  --electric-purple-03: #a973f0;
+  --electric-purple-04: #8649e3;
+  --electric-purple-05: #6422d6;
+  --electric-purple-06: #4400c9;
+  --electric-purple-07: #3100a3;
+  --electric-purple-08: #21007d;
+  --electric-purple-09: #140057;
+  --electric-purple-10: #0a0030;
+
+  /* ---- Primitives: Cobalt Blue ---- */
+  --cobalt-blue-01: #dfebfe;
+  --cobalt-blue-02: #9fb9f9;
+  --cobalt-blue-03: #7790f7;
+  --cobalt-blue-04: #5569f6;
+  --cobalt-blue-05: #323ef2;
+  --cobalt-blue-06: #2d35d7;
+  --cobalt-blue-07: #232aad;
+  --cobalt-blue-08: #252c88;
+  --cobalt-blue-09: #151950;
+
+  /* ---- Semantic: content/* ---- */
+  --content-primary: var(--grey-10);
+  --content-secondary: var(--grey-06);
+  --content-tertiary: var(--grey-04);
+  --content-inactive: var(--grey-05);
+  --content-inverse-primary: var(--white);
+  --content-brand: var(--cerise-pink-06);
+  --content-negative: var(--fire-red-06);
+  --content-warning: var(--sunrise-yellow-07);
+  --content-postive: var(--mountain-green-06);
+
+  /* ---- Semantic: background/* ---- */
+  --background-primary: var(--white);
+  --background-secondary: var(--grey-01);
+  --background-inverse-primary: var(--black);
+  --background-inverse-secondary: var(--grey-10);
+  --background-brand: var(--cerise-pink-06);
+  --background-warning: var(--sunrise-yellow-06);
+  --background-postive: var(--mountain-green-06);
+  --background-light-brand: var(--cerise-pink-01);
+  --background-light-negative: var(--fire-red-01);
+  --background-light-warning: var(--sunrise-yellow-01);
+  --background-light-postive: var(--mountain-green-01);
+  --background-overlay: #0000004d;
+  --background-pressed-primary-button: var(--cerise-pink-07);
+  --background-pressed-secondary-button: var(--grey-03);
+
+  /* ---- Semantic: border/* ---- */
+  --border-primary: var(--grey-03);
+  --border-selected: var(--grey-10);
+  --border-brand: var(--cerise-pink-06);
+  --border-negative: var(--fire-red-06);
+  --border-warning: var(--sunrise-yellow-06);
+  --border-postive: var(--mountain-green-06);
+  --border-inverse: var(--grey-09);
+}
+
+@theme inline {
+  /* content/* → text-content-primary, etc. */
+  --color-content-primary: var(--content-primary);
+  --color-content-secondary: var(--content-secondary);
+  --color-content-tertiary: var(--content-tertiary);
+  --color-content-inactive: var(--content-inactive);
+  --color-content-inverse-primary: var(--content-inverse-primary);
+  --color-content-brand: var(--content-brand);
+  --color-content-negative: var(--content-negative);
+  --color-content-warning: var(--content-warning);
+  --color-content-postive: var(--content-postive);
+
+  /* background/* → bg-background-primary, etc. */
+  --color-background-primary: var(--background-primary);
+  --color-background-secondary: var(--background-secondary);
+  --color-background-inverse-primary: var(--background-inverse-primary);
+  --color-background-inverse-secondary: var(--background-inverse-secondary);
+  --color-background-brand: var(--background-brand);
+  --color-background-warning: var(--background-warning);
+  --color-background-postive: var(--background-postive);
+  --color-background-light-brand: var(--background-light-brand);
+  --color-background-light-negative: var(--background-light-negative);
+  --color-background-light-warning: var(--background-light-warning);
+  --color-background-light-postive: var(--background-light-postive);
+  --color-background-overlay: var(--background-overlay);
+  --color-background-pressed-primary-button: var(
+    --background-pressed-primary-button
+  );
+  --color-background-pressed-secondary-button: var(
+    --background-pressed-secondary-button
+  );
+
+  /* border/* → border-border-primary, etc. */
+  --color-border-primary: var(--border-primary);
+  --color-border-selected: var(--border-selected);
+  --color-border-brand: var(--border-brand);
+  --color-border-negative: var(--border-negative);
+  --color-border-warning: var(--border-warning);
+  --color-border-postive: var(--border-postive);
+  --color-border-inverse: var(--border-inverse);
+
+  --font-sans: var(--font-lufga);
+}
+
+@theme {
+  /* Typography scale */
+  --text-xss: 12px;
+  --text-xss--line-height: 24px;
+  --text-xs: 14px;
+  --text-xs--line-height: 24px;
+  --text-sm: 16px;
+  --text-sm--line-height: 28px;
+  --text-lg: 18px;
+  --text-lg--line-height: 28px;
+  --text-xl: 24px;
+  --text-xl--line-height: 36px;
+  --text-2xl: 32px;
+  --text-2xl--line-height: 48px;
+  --text-3xl: 48px;
+  --text-3xl--line-height: 56px;
+  --text-display-1: 64px;
+  --text-display-1--line-height: 1.2;
+}
+
+body {
+  background: var(--background-primary);
+  color: var(--content-primary);
+  font-family: var(--font-lufga), sans-serif;
+}
+
+html {
+  font-feature-settings: "ss01", "ss02", "ss03", "ss04", "ss05";
+}

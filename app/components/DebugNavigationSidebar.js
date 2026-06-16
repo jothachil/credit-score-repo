@@ -1,0 +1,157 @@
+"use client";
+
+import { Switch } from "@base-ui/react/switch";
+import { Tabs } from "@base-ui/react/tabs";
+import { useAtom } from "jotai";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { useState } from "react";
+import { debugFlags } from "../state/debugFlags";
+
+// Register each screen of your prototype here so you can jump straight to it.
+const debugPages = [
+  {
+    id: "home",
+    path: "/",
+  },
+];
+
+const tabClassName =
+  "relative z-10 h-7 flex-1 rounded-md px-2 text-[11px] leading-4 font-semibold text-zinc-500 outline-none transition-colors hover:text-zinc-950 focus-visible:outline-2 focus-visible:outline-zinc-950 data-active:text-zinc-950";
+
+const panelClassName =
+  "mt-3 outline-none focus-visible:outline-2 focus-visible:outline-zinc-950 [[hidden]]:hidden";
+
+function DebugFlagSwitch({ flag }) {
+  const [checked, setChecked] = useAtom(flag.atom);
+
+  return (
+    <div className="grid grid-cols-[1fr_auto] items-center gap-3 border-b border-zinc-100 py-2 last:border-b-0">
+      <span className="min-w-0">
+        <span className="block truncate text-[11px] leading-4 font-semibold text-zinc-900">
+          {flag.label}
+        </span>
+      </span>
+      <Switch.Root
+        aria-label={flag.label}
+        checked={checked}
+        onCheckedChange={(nextChecked) => setChecked(nextChecked)}
+        className="flex h-5 w-9 shrink-0 rounded-full border border-zinc-300 bg-zinc-100 p-0.5 transition-colors duration-150 ease-[ease] data-checked:border-zinc-950 data-checked:bg-zinc-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-zinc-950"
+      >
+        <Switch.Thumb className="size-3.5 rounded-full bg-white shadow-sm transition-[translate] duration-150 ease-[ease] data-checked:translate-x-4" />
+      </Switch.Root>
+    </div>
+  );
+}
+
+export default function DebugNavigationSidebar() {
+  const pathname = usePathname();
+  const router = useRouter();
+  const [visible, setVisible] = useState(true);
+  const [activeTab, setActiveTab] = useState("pages");
+
+  const handleResetFlow = () => {
+    setActiveTab("pages");
+    router.push("/");
+  };
+
+  return (
+    <>
+      {!visible && (
+        <button
+          type="button"
+          onClick={() => setVisible(true)}
+          className="fixed right-4 bottom-4 z-40 hidden rounded-full border border-zinc-900/10 bg-zinc-950 px-4 py-3 text-[12px] font-bold tracking-wide text-white shadow-[0_12px_36px_rgba(0,0,0,0.24)] transition-transform hover:-translate-y-0.5 md:block"
+        >
+          Debug
+        </button>
+      )}
+
+      {visible && (
+        <aside className="fixed top-4 bottom-4 left-4 z-40 hidden w-[300px] flex-col rounded-2xl border border-zinc-200 bg-white p-3 text-zinc-950 shadow-[0_16px_50px_rgba(0,0,0,0.1)] md:flex">
+          <div className="flex items-center justify-between pb-2">
+            <div>
+              <h2 className="mt-0.5 text-[13px] leading-4 font-bold">
+                Debug panel
+              </h2>
+            </div>
+            <button
+              type="button"
+              onClick={() => setVisible(false)}
+              className="rounded-lg border border-zinc-200 px-2 py-1 text-[11px] leading-4 font-semibold text-zinc-600 hover:bg-zinc-50 hover:text-zinc-950"
+            >
+              Hide
+            </button>
+          </div>
+
+          <Tabs.Root
+            value={activeTab}
+            onValueChange={setActiveTab}
+            className="min-h-0 flex-1"
+          >
+            <Tabs.List className="relative isolate mt-3 flex rounded-lg border border-zinc-200 bg-zinc-50 p-0.5">
+              <Tabs.Tab className={tabClassName} value="pages">
+                pages
+              </Tabs.Tab>
+              <Tabs.Tab className={tabClassName} value="flags">
+                flags
+              </Tabs.Tab>
+              <Tabs.Indicator className="absolute top-0.5 left-0.5 z-0 h-7 w-(--active-tab-width) translate-x-(--active-tab-left) rounded-md border border-zinc-200 bg-white shadow-sm transition-[translate,width] duration-150 ease-in-out" />
+            </Tabs.List>
+
+            <Tabs.Panel value="pages" className={panelClassName}>
+              <nav className="flex flex-col gap-1" aria-label="Debug pages">
+                {debugPages.map(({ id, path }) => {
+                  const active = pathname === path;
+
+                  return (
+                    <Link
+                      key={path}
+                      href={path}
+                      aria-current={active ? "page" : undefined}
+                      className={`grid grid-cols-[72px_1fr_52px] items-center gap-2 rounded-lg border px-2 py-2 text-[11px] leading-4 transition-colors ${
+                        active
+                          ? "border-zinc-950 bg-zinc-950 text-white"
+                          : "border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50"
+                      }`}
+                    >
+                      <span className="font-semibold">{id}</span>
+                      <span className="truncate font-mono">{path}</span>
+                      <span
+                        className={`text-right font-mono uppercase ${
+                          active ? "text-white/70" : "text-zinc-400"
+                        }`}
+                      >
+                        {active ? "live" : "idle"}
+                      </span>
+                    </Link>
+                  );
+                })}
+              </nav>
+            </Tabs.Panel>
+
+            <Tabs.Panel value="flags" className={panelClassName}>
+              <div className="border-b border-zinc-100 pb-2">
+                <div className="mt-1">
+                  {debugFlags.map((flag) => (
+                    <DebugFlagSwitch key={flag.id} flag={flag} />
+                  ))}
+                </div>
+              </div>
+            </Tabs.Panel>
+          </Tabs.Root>
+
+          <div className="mt-3 border-t border-zinc-100 pt-3">
+            <button
+              type="button"
+              onClick={handleResetFlow}
+              className="w-full rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 text-[11px] leading-4 font-semibold text-zinc-700 transition-colors hover:border-zinc-300 hover:bg-zinc-100 hover:text-zinc-950"
+            >
+              Reset flow
+            </button>
+          </div>
+        </aside>
+      )}
+    </>
+  );
+}
