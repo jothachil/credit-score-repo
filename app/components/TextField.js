@@ -2,7 +2,7 @@
 
 import { Input } from "@base-ui/react/input";
 import { motion } from "framer-motion";
-import { useId, useState } from "react";
+import { useId, useRef, useState } from "react";
 
 /**
  * Floating-label text input with focus + error animation.
@@ -25,6 +25,7 @@ export default function TextField({
 }) {
   const reactId = useId();
   const fieldId = id ?? reactId;
+  const inputRef = useRef(null);
   const [focused, setFocused] = useState(false);
   const active = focused || String(value ?? "").length > 0;
   const invalid = Boolean(error);
@@ -41,7 +42,15 @@ export default function TextField({
           borderWidth: focused || invalid ? 2 : 1,
         }}
         transition={{ duration: 0.16, ease: "easeOut" }}
-        className="flex h-14 flex-col justify-center rounded-xl border border-solid bg-background-primary px-4 py-2"
+        onMouseDown={(event) => {
+          // The input collapses to 0px when inactive, so a tap on the rest of
+          // the card would miss it — redirect focus to the input.
+          if (event.target !== inputRef.current) {
+            event.preventDefault();
+            inputRef.current?.focus();
+          }
+        }}
+        className="flex h-14 cursor-text flex-col justify-center rounded-xl border border-solid bg-background-primary px-4 py-2"
       >
         <motion.label
           htmlFor={fieldId}
@@ -58,6 +67,7 @@ export default function TextField({
           {label}
         </motion.label>
         <Input
+          ref={inputRef}
           id={fieldId}
           value={value}
           onValueChange={onChange}

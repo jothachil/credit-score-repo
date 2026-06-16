@@ -55,27 +55,29 @@ function ToastList() {
         toast={item}
         className="pointer-events-auto w-full rounded-lg bg-background-inverse-primary text-content-inverse-primary shadow-[0_12px_36px_rgba(0,0,0,0.24)] transition-all duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] data-ending-style:translate-y-3 data-ending-style:opacity-0 data-starting-style:translate-y-3 data-starting-style:opacity-0"
       >
-        {block
-          ? <div className="flex flex-col gap-1 px-4 py-3">
-              <div className="flex items-start gap-4">
-                {Icon && <Icon size={24} stroke={2} className="shrink-0" />}
-                <Toast.Title className="text-[14px] leading-5">
-                  {item.title}
-                </Toast.Title>
-              </div>
-              <div className="flex justify-end px-2 py-1">
-                <ToastAction id={item.id} action={action} />
-              </div>
+        {block ? (
+          <div className="flex flex-col gap-1 px-4 py-3">
+            <div className="flex items-start gap-4">
+              {Icon && <Icon size={24} stroke={2} className="shrink-0" />}
+              <Toast.Title className="text-[14px] leading-5">
+                {item.title}
+              </Toast.Title>
             </div>
-          : <div className="flex items-center justify-between gap-2 px-4 py-3">
-              <div className="flex min-w-0 flex-1 items-center gap-4">
-                {Icon && <Icon size={24} stroke={2} className="shrink-0" />}
-                <Toast.Title className="text-[14px] leading-5">
-                  {item.title}
-                </Toast.Title>
-              </div>
+            <div className="flex justify-end px-2 py-1">
               <ToastAction id={item.id} action={action} />
-            </div>}
+            </div>
+          </div>
+        ) : (
+          <div className="flex items-center justify-between gap-2 px-4 py-3">
+            <div className="flex min-w-0 flex-1 items-center gap-4">
+              {Icon && <Icon size={24} stroke={2} className="shrink-0" />}
+              <Toast.Title className="text-[14px] leading-5">
+                {item.title}
+              </Toast.Title>
+            </div>
+            <ToastAction id={item.id} action={action} />
+          </div>
+        )}
       </Toast.Root>
     );
   });
