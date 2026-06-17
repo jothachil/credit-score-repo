@@ -97,7 +97,7 @@ export default function Onboarding() {
         <Button
           variant="primary"
           disabled={!consented}
-          onClick={() => router.push("/score")}
+          onClick={() => router.push("/fetching")}
         >
           Check score now
         </Button>

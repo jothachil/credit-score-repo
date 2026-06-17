@@ -5,9 +5,7 @@ import {
   IconArrowLeft,
   IconChevronRight,
   IconCreditCard,
-  IconHeadset,
   IconHome,
-  IconReceipt2,
   IconRefresh,
 } from "@tabler/icons-react";
 import { useAtomValue } from "jotai";
@@ -106,20 +104,60 @@ function LoanRow({ icon: Icon, name, detail, status, tone, large, last }) {
   );
 }
 
-function ActionRow({ icon: Icon, label, last }) {
+// Factors that move the score — a horizontally scrolling row of cards.
+const IMPACTS = [
+  {
+    id: "card-usage",
+    rating: "Excellent",
+    label: ["Card", "Usage"],
+    value: "2%",
+  },
+  {
+    id: "timely-payments",
+    rating: "Excellent",
+    label: ["Timely", "payments"],
+    value: "100%",
+  },
+  {
+    id: "credit-age",
+    rating: "Excellent",
+    label: ["Credit", "Age"],
+    value: "7y,4m",
+  },
+  {
+    id: "hard-enquiries",
+    rating: "Excellent",
+    label: ["Hard", "Enquiries"],
+    value: "0",
+  },
+  {
+    id: "credit-mix",
+    rating: "Excellent",
+    label: ["Credit", "Mix"],
+    value: "3 Cards",
+  },
+];
+
+function ImpactCard({ rating, label, value }) {
   return (
-    <button
-      type="button"
-      className={`flex w-full cursor-pointer items-center gap-4 p-4 text-left transition-colors hover:bg-background-secondary ${
-        last ? "" : "border-b border-border-primary"
-      }`}
-    >
-      <Icon size={24} stroke={2} className="shrink-0 text-content-primary" />
-      <span className="flex-1 text-[14px] leading-5 text-content-primary">
-        {label}
+    <div className="flex w-48 shrink-0 snap-start flex-col gap-6 rounded-2xl border border-border-primary bg-gradient-to-b from-background-light-postive to-background-primary p-4">
+      {/* mountain-green-02: a stronger tint than the card's pale top, no token */}
+      <span className="self-start rounded-full bg-[var(--mountain-green-02)] px-3 py-1 text-[14px] leading-5 font-medium text-content-postive">
+        {rating}
       </span>
-      <ChevronCircle />
-    </button>
+      <div className="flex flex-col gap-3">
+        <span className="text-[14px] leading-5 text-content-secondary">
+          {label.map((line) => (
+            <span key={line} className="block">
+              {line}
+            </span>
+          ))}
+        </span>
+        <span className="text-2xl leading-9 font-bold text-content-primary">
+          {value}
+        </span>
+      </div>
+    </div>
   );
 }
 
@@ -182,11 +220,11 @@ export default function CreditScore() {
             {/* Fixed height so the SSR-empty → built → rolling states of the
                 slot-text number never change the row height (slot-text injects
                 its cells client-side and uses its own line-height). */}
-            <p className="flex h-10 items-baseline gap-2">
+            <p className="flex h-14 items-baseline gap-2">
               <SlotText
                 text={String(score)}
                 options={{ direction }}
-                className="text-2xl leading-10 font-bold text-content-inverse-primary"
+                className="text-3xl font-bold text-content-inverse-primary"
               />
               <span className="text-sm leading-6 text-content-inverse-primary lowercase">
                 {band.label}
@@ -243,6 +281,19 @@ export default function CreditScore() {
       <div className="flex flex-col gap-6 px-4 py-6">
         <section className="flex flex-col gap-2">
           <h2 className="text-sm leading-6 font-semibold text-content-secondary">
+            What impacts your score?
+          </h2>
+          {/* Full-bleed horizontal scroll: -mx-4/px-4 lets cards run to the
+              frame edge while the first card still aligns with the section. */}
+          <div className="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-px-4 px-4 pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            {IMPACTS.map((impact) => (
+              <ImpactCard key={impact.id} {...impact} />
+            ))}
+          </div>
+        </section>
+
+        <section className="flex flex-col gap-2">
+          <h2 className="text-sm leading-6 font-semibold text-content-secondary">
             Loans &amp; Credit lines
           </h2>
           <div className="overflow-hidden rounded-2xl border border-border-primary bg-background-primary py-1">
@@ -269,16 +320,6 @@ export default function CreditScore() {
               large
               last
             />
-          </div>
-        </section>
-
-        <section className="flex flex-col gap-2">
-          <h2 className="text-sm leading-6 font-semibold text-content-secondary">
-            Actions
-          </h2>
-          <div className="overflow-hidden rounded-2xl border border-border-primary bg-background-primary">
-            <ActionRow icon={IconReceipt2} label="View payment history" />
-            <ActionRow icon={IconHeadset} label="Contact support" last />
           </div>
         </section>
       </div>
