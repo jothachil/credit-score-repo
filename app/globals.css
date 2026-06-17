@@ -114,6 +114,7 @@
   --background-inverse-secondary: var(--grey-10);
   --background-brand: var(--cerise-pink-06);
   --background-warning: var(--sunrise-yellow-06);
+  --background-negative: var(--fire-red-06);
   --background-postive: var(--mountain-green-06);
   --background-light-brand: var(--cerise-pink-01);
   --background-light-negative: var(--fire-red-01);
@@ -152,6 +153,7 @@
   --color-background-inverse-secondary: var(--background-inverse-secondary);
   --color-background-brand: var(--background-brand);
   --color-background-warning: var(--background-warning);
+  --color-background-negative: var(--background-negative);
   --color-background-postive: var(--background-postive);
   --color-background-light-brand: var(--background-light-brand);
   --color-background-light-negative: var(--background-light-negative);
