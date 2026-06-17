@@ -11,8 +11,12 @@ import { debugFlags } from "../state/debugFlags";
 // Register each screen of your prototype here so you can jump straight to it.
 const debugPages = [
   {
-    id: "home",
+    id: "onboarding",
     path: "/",
+  },
+  {
+    id: "score",
+    path: "/score",
   },
 ];
 
