@@ -37,7 +37,7 @@ export function TabsList({ className = "", children, ...props }) {
 export function TabsTab({ className = "", ...props }) {
   return (
     <BaseTabs.Tab
-      className={`relative cursor-pointer px-4 py-3 text-[14px] leading-5 font-normal text-content-secondary outline-none transition-colors hover:text-content-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-border-selected data-active:font-semibold data-active:text-content-brand ${className}`}
+      className={`relative cursor-pointer px-4 py-4 text-[14px] leading-5 font-normal text-content-secondary outline-none transition-colors hover:text-content-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-border-selected data-active:font-semibold data-active:text-content-brand ${className}`}
       {...props}
     />
   );

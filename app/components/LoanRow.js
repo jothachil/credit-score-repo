@@ -1,16 +1,5 @@
-import { IconChevronRight } from "@tabler/icons-react";
-
-// Circular chevron affordance on the trailing edge of a row.
-function ChevronCircle() {
-  return (
-    <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-background-secondary text-content-primary">
-      <IconChevronRight size={20} stroke={2} />
-    </span>
-  );
-}
-
 /**
- * A tappable loan / credit-line row: logo tile, name + detail + status, chevron.
+ * A tappable loan / credit-line row: logo tile, name + detail + status.
  *
  *   <LoanRow icon={IconCreditCard} name="…" detail="…" status="Active"
  *            tone="positive" />
@@ -60,7 +49,6 @@ export default function LoanRow({
           </span>
         </span>
       </span>
-      <ChevronCircle />
     </button>
   );
 }

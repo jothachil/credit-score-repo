@@ -55,7 +55,7 @@ export default function RootLayout({ children }) {
       <body className="min-h-full">
         <ToastProvider>
           <div className="flex min-h-dvh flex-col items-center bg-zinc-200">
-            <main className="relative flex min-h-dvh w-full max-w-[400px] flex-col bg-white border-l border-r border-zinc-200">
+            <main className="relative flex min-h-dvh w-full max-w-[400px] flex-col bg-white">
               {children}
             </main>
           </div>

@@ -4,7 +4,6 @@ import "slot-text/style.css";
 import {
   IconArrowLeft,
   IconCreditCard,
-  IconHome,
   IconRefresh,
 } from "@tabler/icons-react";
 import { useAtomValue } from "jotai";
@@ -186,12 +185,15 @@ export default function CreditScore() {
           </div>
 
           <div className="flex flex-col gap-2">
-            <div className="flex h-2.5 w-full gap-1">
+            <div
+              className="flex h-6
+             w-full gap-0.5"
+            >
               {segments.map((segment) => (
                 <span
                   key={segment.id}
                   style={{ flexGrow: segment.span }}
-                  className={`h-full basis-0 rounded-lg transition-[flex-grow] duration-500 ease-out ${segment.color}`}
+                  className={`h-full basis-0  transition-[flex-grow] duration-500 ease-out ${segment.color}`}
                 />
               ))}
             </div>
@@ -272,14 +274,6 @@ export default function CreditScore() {
               detail="₹64,000 · Card EMI"
               status="Active"
               tone="positive"
-            />
-            <LoanRow
-              icon={IconHome}
-              name="Jun statement"
-              detail="₹64,000 · House Loan"
-              status="Closed"
-              tone="negative"
-              large
               last
             />
           </div>
