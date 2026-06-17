@@ -54,14 +54,17 @@ export default function Loans() {
       <NavBar title="Loans & Credit lines" backHref="/score" border={false} />
 
       <Tabs value={tab} onValueChange={setTab} className="flex flex-1 flex-col">
-        <TabsList className="bg-background-primary">
-          <TabsTab value="active" className="flex-1 text-center">
-            Active
-          </TabsTab>
-          <TabsTab value="closed" className="flex-1 text-center">
-            Closed
-          </TabsTab>
-        </TabsList>
+        {/* Sticky beneath the NavBar (top-14 = NavBar height) */}
+        <div className="sticky top-14 z-10 bg-background-primary">
+          <TabsList>
+            <TabsTab value="active" className="flex-1 text-center">
+              Active
+            </TabsTab>
+            <TabsTab value="closed" className="flex-1 text-center">
+              Closed
+            </TabsTab>
+          </TabsList>
+        </div>
 
         <TabsPanel value="active" className="px-4">
           <LoanList loans={ACTIVE_LOANS} />
