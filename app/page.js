@@ -152,10 +152,10 @@ export default function CreditScore() {
     <div className="flex flex-1 flex-col bg-background-secondary">
       {/* Hero — dark surface with score, gauge and refresh banner */}
       <section className="relative overflow-hidden bg-background-inverse-primary">
-        {/* Ambient green glow behind the gauge */}
+        {/* Ambient glow behind the gauge — tinted to the current score band */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-x-0 bottom-12 mx-auto h-40 w-[130%] rounded-full bg-background-postive/40 blur-[56px]"
+          className={`pointer-events-none absolute inset-x-0 -bottom-20 mx-auto h-48 w-[200%] rounded-full opacity-40 blur-[56px] transition-colors duration-500 ${band.color}`}
         />
 
         {/* App bar */}
