@@ -23,7 +23,7 @@ export default function Onboarding() {
   const [consented, setConsented] = useState(true);
 
   return (
-    <div className="flex flex-1 flex-col bg-background-primary">
+    <div className="flex flex-1 flex-col  bg-background-primary">
       {/* App bar */}
       <header className="flex items-center px-4 py-3">
         <button
@@ -37,17 +37,17 @@ export default function Onboarding() {
       </header>
 
       {/* Illustration */}
-      <div className="flex min-h-[240px] flex-1 items-center justify-center">
+      <div className="flex items-center justify-center">
         {/* biome-ignore lint/performance/noImgElement: prototype static asset */}
         <img
-          src="/onboarding-4.png"
+          src="/onboarding-5.png"
           alt="Credit score meter"
           className="h-auto w-full max-w-[360px] object-contain"
         />
       </div>
 
       {/* Heading */}
-      <div className="flex flex-col items-center gap-2 px-6 text-center">
+      <div className="mt-10 flex flex-col items-center gap-2 px-6 text-center">
         <h1 className="text-2xl leading-9 font-bold tracking-tight text-content-primary">
           Check your credit score for free!
         </h1>
@@ -57,7 +57,7 @@ export default function Onboarding() {
       </div>
 
       {/* Feature highlights */}
-      <div className="px-5 pt-7">
+      <div className="p-7">
         <div className="grid grid-cols-3 divide-x divide-border-primary rounded-2xl bg-background-secondary py-5">
           {FEATURES.map(({ id, icon: Icon, lines }) => (
             <div
@@ -77,8 +77,8 @@ export default function Onboarding() {
         </div>
       </div>
 
-      {/* Consent + CTA */}
-      <div className="flex flex-col gap-5 px-5 pt-7 pb-6">
+      {/* Consent + CTA — pinned to the bottom of the screen */}
+      <div className="sticky bottom-0 mt-auto flex flex-col gap-5 bg-background-primary p-4 border-t border-border-primary">
         <div className="flex items-start gap-3">
           <Checkbox
             id="consent"
