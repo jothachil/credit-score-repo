@@ -3,7 +3,6 @@
 import "slot-text/style.css";
 import {
   IconArrowLeft,
-  IconChevronRight,
   IconCreditCard,
   IconHome,
   IconRefresh,
@@ -12,6 +11,7 @@ import { useAtomValue } from "jotai";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { SlotText } from "slot-text/react";
+import LoanRow from "../components/LoanRow";
 import { debugFlagAtoms } from "../state/debugFlags";
 
 // FICO score model. Bands run low → high; each segment of the gauge is sized
@@ -55,53 +55,6 @@ function resolveScore(score) {
   const fraction = Math.min(Math.max((score - SCORE_MIN) / range, 0), 1);
   const activeTick = Math.round((1 - fraction) * (SCORE_TICKS.length - 1));
   return { segments, band, activeTick };
-}
-
-function ChevronCircle() {
-  return (
-    <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-background-secondary text-content-primary">
-      <IconChevronRight size={20} stroke={2} />
-    </span>
-  );
-}
-
-function LoanRow({ icon: Icon, name, detail, status, tone, large, last }) {
-  return (
-    <button
-      type="button"
-      className={`flex w-full cursor-pointer items-center justify-between gap-3 px-4 py-3 text-left transition-colors hover:bg-background-secondary ${
-        last ? "" : "border-b border-border-primary"
-      }`}
-    >
-      <span className="flex items-start gap-3">
-        <span className="grid size-10 shrink-0 place-items-center rounded-lg border border-border-primary bg-background-secondary text-content-primary">
-          <Icon size={22} stroke={1.5} />
-        </span>
-        <span className="flex flex-col">
-          <span
-            className={`font-semibold text-content-primary ${
-              large ? "text-sm leading-6" : "text-[14px] leading-5"
-            }`}
-          >
-            {name}
-          </span>
-          <span className="text-[14px] leading-5 text-content-secondary">
-            {detail}
-          </span>
-          <span
-            className={`text-[12px] leading-4 font-semibold ${
-              tone === "negative"
-                ? "text-content-negative"
-                : "text-content-postive"
-            }`}
-          >
-            {status}
-          </span>
-        </span>
-      </span>
-      <ChevronCircle />
-    </button>
-  );
 }
 
 // Factors that move the score — a horizontally scrolling row of cards.
@@ -293,9 +246,18 @@ export default function CreditScore() {
         </section>
 
         <section className="flex flex-col gap-2">
-          <h2 className="text-sm leading-6 font-semibold text-content-secondary">
-            Loans &amp; Credit lines
-          </h2>
+          <div className="flex items-center justify-between gap-4">
+            <h2 className="text-sm leading-6 font-semibold text-content-secondary">
+              Loans &amp; Credit lines
+            </h2>
+            <button
+              type="button"
+              onClick={() => router.push("/loans")}
+              className="cursor-pointer text-[14px] leading-5 font-bold text-content-brand"
+            >
+              View all
+            </button>
+          </div>
           <div className="overflow-hidden rounded-2xl border border-border-primary bg-background-primary py-1">
             <LoanRow
               icon={IconCreditCard}

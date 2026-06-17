@@ -10,16 +10,22 @@ import { useRouter } from "next/navigation";
  *   <NavBar title="Short Title" backHref="/somewhere" />
  *
  * Pass `backHref` to navigate to a specific route, or omit it to go back in
- * history. Sticks to the top of the mobile frame.
+ * history. Sticks to the top of the mobile frame. Set `border={false}` to drop
+ * the bottom divider (e.g. when the bar sits directly above tabs that already
+ * carry one).
  */
-export default function NavBar({ title, backHref }) {
+export default function NavBar({ title, backHref, border = true }) {
   const router = useRouter();
 
   const backClassName =
     "-m-2 inline-flex shrink-0 cursor-pointer items-center justify-center rounded-lg p-2 text-content-primary outline-none transition-colors hover:bg-background-secondary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-border-selected";
 
   return (
-    <header className="sticky top-0 z-10 flex items-center gap-4 border-b border-border-primary bg-background-primary px-5 py-4">
+    <header
+      className={`sticky top-0 z-10 flex items-center gap-4 bg-background-primary px-5 py-4 ${
+        border ? "border-b border-border-primary" : ""
+      }`}
+    >
       {backHref ? (
         <Link href={backHref} aria-label="Back" className={backClassName}>
           <IconArrowLeft size={24} stroke={2} />

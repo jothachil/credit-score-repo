@@ -22,6 +22,10 @@ const debugPages = [
     id: "score",
     path: "/score",
   },
+  {
+    id: "loans",
+    path: "/loans",
+  },
 ];
 
 const tabClassName =
