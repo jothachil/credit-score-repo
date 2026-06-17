@@ -22,7 +22,7 @@ export default function NavBar({ title, backHref, border = true }) {
 
   return (
     <header
-      className={`sticky top-0 z-10 flex items-center gap-4 bg-background-primary px-5 py-4 ${
+      className={`sticky top-0 z-10 flex items-center gap-4 bg-background-primary px-5 pt-[calc(1rem+env(safe-area-inset-top))] pb-4 ${
         border ? "border-b border-border-primary" : ""
       }`}
     >

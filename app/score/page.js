@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { SlotText } from "slot-text/react";
 import LoanRow from "../components/LoanRow";
+import ThemeColor from "../components/ThemeColor";
 import { debugFlagAtoms } from "../state/debugFlags";
 
 // FICO score model. Bands run low → high; each segment of the gauge is sized
@@ -143,6 +144,8 @@ export default function CreditScore() {
 
   return (
     <div className="flex flex-1 flex-col bg-background-secondary">
+      {/* Status bar tints dark to match the hero's top edge */}
+      <ThemeColor color="#000000" />
       {/* Hero — dark surface with score, gauge and refresh banner */}
       <section className="relative overflow-hidden bg-background-inverse-primary">
         {/* Ambient glow behind the gauge — tinted to the current score band */}
@@ -152,7 +155,7 @@ export default function CreditScore() {
         />
 
         {/* App bar */}
-        <div className="relative flex items-center px-4 py-3">
+        <div className="relative flex items-center px-4 pt-[calc(0.75rem+env(safe-area-inset-top))] pb-3">
           <button
             type="button"
             onClick={() => router.back()}
@@ -240,7 +243,7 @@ export default function CreditScore() {
           </h2>
           {/* Full-bleed horizontal scroll: -mx-4/px-4 lets cards run to the
               frame edge while the first card still aligns with the section. */}
-          <div className="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-px-4 px-4 pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <div className="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain scroll-px-4 px-4 pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {IMPACTS.map((impact) => (
               <ImpactCard key={impact.id} {...impact} />
             ))}

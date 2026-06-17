@@ -207,4 +207,25 @@ body {
 
 html {
   font-feature-settings: "ss01", "ss02", "ss03", "ss04", "ss05";
+  /* WebView: kill rubber-band / pull-to-refresh and iOS auto text inflation. */
+  overscroll-behavior: none;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* App-like feel inside a WebView: no grey tap flash, no long-press callout. */
+a,
+button,
+[role="button"],
+label {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+/* Interactive chrome shouldn't be text-selectable; real content (headings,
+   paragraphs, the consent label) stays selectable since it's excluded here. */
+button,
+[role="button"] {
+  -webkit-user-select: none;
+  user-select: none;
 }

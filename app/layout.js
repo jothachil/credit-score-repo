@@ -49,6 +49,17 @@ export const metadata = {
   description: "A new prototype",
 };
 
+// WebView-friendly viewport: cover the safe areas (notch / home indicator) so
+// we can pad bars with env(safe-area-inset-*), and lock zoom for an app feel.
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: "cover",
+  themeColor: "#ffffff",
+};
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${lufga.variable} h-full antialiased`}>
@@ -59,7 +70,7 @@ export default function RootLayout({ children }) {
               {children}
             </main>
           </div>
-          <DebugNavigationSidebar />
+          {process.env.NODE_ENV !== "production" && <DebugNavigationSidebar />}
         </ToastProvider>
       </body>
     </html>

@@ -25,7 +25,7 @@ export default function Onboarding() {
   return (
     <div className="flex flex-1 flex-col  bg-background-primary">
       {/* App bar */}
-      <header className="flex items-center px-4 py-3">
+      <header className="flex items-center px-4 pt-[calc(0.75rem+env(safe-area-inset-top))] pb-3">
         <button
           type="button"
           onClick={() => router.back()}
@@ -78,7 +78,7 @@ export default function Onboarding() {
       </div>
 
       {/* Consent + CTA — pinned to the bottom of the screen */}
-      <div className="sticky bottom-0 mt-auto flex flex-col gap-5 bg-background-primary p-4 border-t border-border-primary">
+      <div className="sticky bottom-0 mt-auto flex flex-col gap-5 border-t border-border-primary bg-background-primary px-4 pt-4 pb-[calc(1rem+env(safe-area-inset-bottom))]">
         <div className="flex items-start gap-3">
           <Checkbox
             id="consent"
