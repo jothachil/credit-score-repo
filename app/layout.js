@@ -70,7 +70,7 @@ export default function RootLayout({ children }) {
               {children}
             </main>
           </div>
-          {process.env.NODE_ENV !== "production" && <DebugNavigationSidebar />}
+          <DebugNavigationSidebar />
         </ToastProvider>
       </body>
     </html>
