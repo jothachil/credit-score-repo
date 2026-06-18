@@ -1,16 +1,13 @@
 "use client";
 
 import "slot-text/style.css";
-import {
-  IconArrowLeft,
-  IconCreditCard,
-  IconRefresh,
-} from "@tabler/icons-react";
+import { IconCreditCard, IconRefresh } from "@tabler/icons-react";
 import { useAtomValue } from "jotai";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { SlotText } from "slot-text/react";
 import LoanRow from "../components/LoanRow";
+import NavBar from "../components/NavBar";
 import ThemeColor from "../components/ThemeColor";
 import { debugFlagAtoms } from "../state/debugFlags";
 
@@ -154,17 +151,8 @@ export default function CreditScore() {
           className={`pointer-events-none absolute inset-x-0 -bottom-20 mx-auto h-48 w-[200%] rounded-full opacity-40 blur-[56px] transition-colors duration-500 ${band.color}`}
         />
 
-        {/* App bar */}
-        <div className="relative flex items-center px-4 pt-[calc(0.75rem+env(safe-area-inset-top))] pb-3">
-          <button
-            type="button"
-            onClick={() => router.back()}
-            aria-label="Back"
-            className="-m-2 inline-flex cursor-pointer items-center justify-center rounded-lg p-2 text-content-inverse-primary outline-none transition-colors hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-          >
-            <IconArrowLeft size={24} stroke={2} />
-          </button>
-        </div>
+        {/* App bar — shared NavBar, transparent over the dark hero */}
+        <NavBar inverse border={false} />
 
         {/* Score + gauge */}
         <div className="relative flex flex-col gap-4 px-4 pt-1 pb-5">
