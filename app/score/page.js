@@ -176,15 +176,14 @@ export default function CreditScore() {
           </div>
 
           <div className="flex flex-col gap-2">
-            <div
-              className="flex h-6
-             w-full gap-0.5"
-            >
+            <div className="flex h-8 w-full items-end gap-0.5">
               {segments.map((segment) => (
                 <span
                   key={segment.id}
                   style={{ flexGrow: segment.span }}
-                  className={`h-full basis-0  transition-[flex-grow] duration-500 ease-out ${segment.color}`}
+                  className={`basis-0  transition-all duration-500 ease-out ${segment.color} ${
+                    segment.id === band.id ? "h-full" : "h-3/4"
+                  }`}
                 />
               ))}
             </div>

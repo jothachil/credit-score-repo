@@ -89,8 +89,8 @@ export default function Onboarding() {
             htmlFor="consent"
             className="cursor-pointer text-[14px] leading-5 text-content-secondary"
           >
-            You hereby consent to Scapic Innovations Private Limited (SIPL) to
-            receive your credit information.
+            You hereby consent to CIBLI Private Limited to receive your credit
+            information.
           </label>
         </div>
 
