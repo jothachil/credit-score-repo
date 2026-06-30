@@ -1,7 +1,13 @@
 "use client";
 
 import "slot-text/style.css";
-import { IconCreditCard, IconRefresh } from "@tabler/icons-react";
+import {
+  IconChevronRight,
+  IconCreditCard,
+  IconFileDownload,
+  IconHelpCircle,
+  IconRefresh,
+} from "@tabler/icons-react";
 import { useAtomValue } from "jotai";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -57,34 +63,40 @@ function resolveScore(score) {
 // Factors that move the score — a horizontally scrolling row of cards.
 const IMPACTS = [
   {
-    id: "card-usage",
+    id: "payment-history",
     rating: "Excellent",
-    label: ["Card", "Usage"],
-    value: "2%",
-  },
-  {
-    id: "timely-payments",
-    rating: "Excellent",
-    label: ["Timely", "payments"],
+    label: ["Payment history"],
     value: "100%",
   },
   {
-    id: "credit-age",
+    id: "credit-utilization",
     rating: "Excellent",
-    label: ["Credit", "Age"],
-    value: "7y,4m",
+    label: ["Credit utilization"],
+    value: "2.27%",
   },
   {
-    id: "hard-enquiries",
+    id: "credit-history",
     rating: "Excellent",
-    label: ["Hard", "Enquiries"],
-    value: "0",
+    label: ["Credit history"],
+    value: "7+ years",
   },
   {
     id: "credit-mix",
+    rating: "Good",
+    label: ["Credit mix"],
+    value: "4 acc",
+  },
+  {
+    id: "recent-inquiries",
     rating: "Excellent",
-    label: ["Credit", "Mix"],
-    value: "3 Cards",
+    label: ["Recent inquiries"],
+    value: "0",
+  },
+  {
+    id: "disputes",
+    rating: "Excellent",
+    label: ["Disputes"],
+    value: "0",
   },
 ];
 
@@ -95,7 +107,7 @@ function ImpactCard({ rating, label, value }) {
       <span className="self-start rounded-full bg-[var(--mountain-green-02)] px-3 py-1 text-[14px] leading-5 font-medium text-content-postive">
         {rating}
       </span>
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-1">
         <span className="text-[14px] leading-5 text-content-secondary">
           {label.map((line) => (
             <span key={line} className="block">
@@ -108,6 +120,32 @@ function ImpactCard({ rating, label, value }) {
         </span>
       </div>
     </div>
+  );
+}
+
+// A tappable list row: leading icon, label, and a circular chevron affordance.
+// Rows stack inside a bordered card; all but the last carry a bottom divider.
+function ActionRow({ icon: Icon, label, onClick, last }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`flex w-full cursor-pointer items-center gap-4 p-4 text-left ${
+        last ? "" : "border-b border-border-primary"
+      }`}
+    >
+      <Icon size={24} stroke={2} className="shrink-0 text-content-primary" />
+      <span className="flex-1 text-[14px] leading-5 text-content-primary">
+        {label}
+      </span>
+      <span className="flex items-center justify-center rounded-full bg-background-secondary p-1">
+        <IconChevronRight
+          size={20}
+          stroke={2}
+          className="text-content-primary"
+        />
+      </span>
+    </button>
   );
 }
 
@@ -268,6 +306,35 @@ export default function CreditScore() {
             />
           </div>
         </section>
+
+        <section className="flex flex-col gap-2">
+          <h2 className="text-sm leading-6 font-semibold text-content-secondary">
+            Actions
+          </h2>
+          <div className="overflow-hidden rounded-2xl border border-border-primary bg-background-primary">
+            <ActionRow
+              icon={IconHelpCircle}
+              label="Get help"
+              onClick={() => router.push("/help")}
+            />
+            <ActionRow
+              icon={IconFileDownload}
+              label="Download full report"
+              onClick={() => router.push("/report")}
+              last
+            />
+          </div>
+        </section>
+
+        {/* Powered by CIBIL — bureau attribution */}
+        <div className="flex items-center justify-center pt-2 pb-4">
+          {/* biome-ignore lint/performance/noImgElement: prototype static asset */}
+          <img
+            src="/cibil.png"
+            alt="Powered by CIBIL"
+            className="h-auto w-full max-w-[64px] object-contain"
+          />
+        </div>
       </div>
     </div>
   );

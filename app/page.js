@@ -40,7 +40,7 @@ export default function Onboarding() {
       <div className="flex items-center justify-center">
         {/* biome-ignore lint/performance/noImgElement: prototype static asset */}
         <img
-          src="/onboarding-5.png"
+          src="/onboarding-6.png"
           alt="Credit score meter"
           className="h-auto w-full max-w-[360px] object-contain"
         />
