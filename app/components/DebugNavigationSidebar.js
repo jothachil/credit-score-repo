@@ -30,6 +30,10 @@ const debugPages = [
     id: "error",
     path: "/error-state",
   },
+  {
+    id: "no-score",
+    path: "/no-score",
+  },
 ];
 
 const tabClassName =
