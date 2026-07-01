@@ -12,7 +12,7 @@ export default function NoCreditScore() {
       <div className="flex flex-1 flex-col items-center justify-center gap-4 px-8 text-center">
         {/* biome-ignore lint/performance/noImgElement: prototype static asset */}
         <img
-          src="/no-credit-score.png"
+          src="/no-credit-score-1.png"
           alt="A magnifying glass over an empty score"
           className="size-[274px] object-contain"
         />
@@ -21,9 +21,9 @@ export default function NoCreditScore() {
             We couldn&apos;t spot a score
           </h1>
           <p className="text-sm leading-6 text-content-secondary">
-            You don&apos;t have enough credit activity yet for us to calculate a
-            score. Once you start using credit, check back and it&apos;ll show
-            up here.
+            We are unable to locate your information in CIBIL records. Based on
+            the information you have provided during enrollment, we could not
+            locate your credit data in CIBIL records
           </p>
         </div>
       </div>
