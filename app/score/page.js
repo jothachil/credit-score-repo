@@ -228,17 +228,31 @@ export default function CreditScore() {
                 />
               ))}
             </div>
-            <div className="flex w-full justify-between px-px">
-              {SCORE_TICKS.map((tick, i) => (
-                <span
-                  key={tick}
-                  className={`size-1.5 rounded-full transition-colors duration-500 ${
-                    i === activeTick
-                      ? "bg-content-inverse-primary"
-                      : "bg-content-secondary"
-                  }`}
-                />
-              ))}
+            <div className="flex w-full items-center justify-between px-px">
+              {SCORE_TICKS.map((tick, i) => {
+                // Endpoints show the score range (high end left, low end right);
+                // the rest stay as dots, with the active one highlighted.
+                if (i === 0 || i === SCORE_TICKS.length - 1) {
+                  return (
+                    <span
+                      key={tick}
+                      className="text-[13px] leading-4 font-medium text-content-inverse-primary"
+                    >
+                      {i === 0 ? 900 : 300}
+                    </span>
+                  );
+                }
+                return (
+                  <span
+                    key={tick}
+                    className={`size-1.5 rounded-full transition-colors duration-500 ${
+                      i === activeTick
+                        ? "bg-content-inverse-primary"
+                        : "bg-content-secondary"
+                    }`}
+                  />
+                );
+              })}
             </div>
           </div>
 

@@ -22,7 +22,7 @@ const BENEFITS = [
     id: "decisions",
     icon: IconBulb,
     title: "Make informed financial decisions",
-    detail: "Plan better for loans, cards and big purchases.",
+    detail: "Plan better for loans, cards & big purchases.",
   },
 ];
 
@@ -42,15 +42,15 @@ export default function RefreshScoreSheet({ open, onOpenChange, onConfirm }) {
         {/* Illustration */}
         {/* biome-ignore lint/performance/noImgElement: prototype static asset */}
         <img
-          src="/no-credit-score-2.png"
+          src="/no-credit-score-3.png"
           alt="Credit score being refreshed"
-          className="size-[240PX] object-contain"
+          className="size-[200PX] object-contain"
         />
 
         {/* Heading + subtitle */}
         <div className="flex flex-col text-center">
           <h2 className="text-xl leading-8 font-bold text-content-primary">
-            Unlock Your Latest Credit Score
+            Unlock Latest Credit Score
           </h2>
           <p className="text-sm leading-6 text-content-secondary">
             Refresh it to see the most up-to-date picture of your credit health.
@@ -58,17 +58,17 @@ export default function RefreshScoreSheet({ open, onOpenChange, onConfirm }) {
         </div>
 
         {/* Benefits */}
-        <div className="flex w-full flex-col gap-3">
+        <div className="flex w-full flex-col gap-6 mt-4">
           {BENEFITS.map(({ id, icon: Icon, title, detail }) => (
             <div key={id} className="flex items-center gap-4">
-              <span className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-background-light-brand">
+              <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-background-light-brand">
                 <Icon size={24} stroke={2} className="text-content-brand" />
               </span>
               <div className="flex flex-col gap-0.5">
                 <p className="text-[15px] leading-5 font-bold text-content-primary">
                   {title}
                 </p>
-                <p className="text-sm leading-5 text-content-secondary">
+                <p className="text-xs leading-5 text-content-secondary">
                   {detail}
                 </p>
               </div>
