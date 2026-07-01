@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import { SlotText } from "slot-text/react";
 import LoanRow from "../components/LoanRow";
 import NavBar from "../components/NavBar";
+import RefreshScoreSheet from "../components/RefreshScoreSheet";
 import ThemeColor from "../components/ThemeColor";
 import { debugFlagAtoms } from "../state/debugFlags";
 
@@ -156,6 +157,7 @@ export default function CreditScore() {
   const refreshAvailable = useAtomValue(debugFlagAtoms.refreshAvailable);
   const [score, setScore] = useState(SCORE_MIN);
   const [direction, setDirection] = useState("up");
+  const [refreshSheetOpen, setRefreshSheetOpen] = useState(false);
   const { segments, band, activeTick } = resolveScore(score);
 
   // slot-text only rolls on text *changes*, not on mount — so start at the
@@ -175,6 +177,7 @@ export default function CreditScore() {
     }
     setDirection(next > score ? "up" : "down");
     setScore(next);
+    setRefreshSheetOpen(false);
   }
 
   return (
@@ -250,7 +253,7 @@ export default function CreditScore() {
             {refreshAvailable && (
               <button
                 type="button"
-                onClick={refreshScore}
+                onClick={() => setRefreshSheetOpen(true)}
                 className="cursor-pointer text-[14px] leading-5 font-bold text-content-brand"
               >
                 Update
@@ -336,6 +339,12 @@ export default function CreditScore() {
           />
         </div>
       </div>
+
+      <RefreshScoreSheet
+        open={refreshSheetOpen}
+        onOpenChange={setRefreshSheetOpen}
+        onConfirm={refreshScore}
+      />
     </div>
   );
 }
