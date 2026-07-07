@@ -3,7 +3,6 @@
 import {
   IconBulb,
   IconLock,
-  IconShieldCheck,
   IconShieldCheckFilled,
   IconTrendingUp,
 } from "@tabler/icons-react";

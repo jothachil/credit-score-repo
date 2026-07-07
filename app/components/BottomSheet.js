@@ -43,17 +43,17 @@ export default function BottomSheet({
                 className={
                   titleHidden
                     ? "sr-only"
-                    : "px-5 pt-5 text-[18px] leading-6 font-bold text-content-primary"
+                    : "px-5 pt-8 text-xl leading-6 font-bold text-content-primary"
                 }
               >
                 {title}
               </Drawer.Title>
               {description && (
-                <Drawer.Description className="px-5 pt-1 text-xs text-content-secondary">
+                <Drawer.Description className="px-5  text-xs text-content-secondary">
                   {description}
                 </Drawer.Description>
               )}
-              <div className="p-5">{children}</div>
+              <div className="px-5 pb-10">{children}</div>
             </Drawer.Content>
           </Drawer.Popup>
         </Drawer.Viewport>

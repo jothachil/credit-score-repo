@@ -6,6 +6,7 @@ import {
   IconCreditCard,
   IconFileDownload,
   IconHelpCircle,
+  IconInfoCircle,
   IconRefresh,
 } from "@tabler/icons-react";
 import { useAtomValue } from "jotai";
@@ -15,6 +16,7 @@ import { SlotText } from "slot-text/react";
 import LoanRow from "../components/LoanRow";
 import NavBar from "../components/NavBar";
 import RefreshScoreSheet from "../components/RefreshScoreSheet";
+import ScoreBreakdownSheet from "../components/ScoreBreakdownSheet";
 import ThemeColor from "../components/ThemeColor";
 import { debugFlagAtoms } from "../state/debugFlags";
 
@@ -158,6 +160,7 @@ export default function CreditScore() {
   const [score, setScore] = useState(SCORE_MIN);
   const [direction, setDirection] = useState("up");
   const [refreshSheetOpen, setRefreshSheetOpen] = useState(false);
+  const [breakdownSheetOpen, setBreakdownSheetOpen] = useState(false);
   const { segments, band, activeTick } = resolveScore(score);
 
   // slot-text only rolls on text *changes*, not on mount — so start at the
@@ -210,8 +213,16 @@ export default function CreditScore() {
                 options={{ direction }}
                 className="text-3xl font-bold text-content-inverse-primary"
               />
-              <span className="text-sm leading-6 text-content-inverse-primary lowercase">
+              <span className="flex items-center gap-1 text-sm leading-6 text-content-inverse-primary lowercase">
                 {band.label}
+                <button
+                  type="button"
+                  aria-label="How your score is calculated"
+                  onClick={() => setBreakdownSheetOpen(true)}
+                  className="flex cursor-pointer items-center text-content-inverse-primary"
+                >
+                  <IconInfoCircle size={16} stroke={2} />
+                </button>
               </span>
             </p>
           </div>
@@ -358,6 +369,12 @@ export default function CreditScore() {
         open={refreshSheetOpen}
         onOpenChange={setRefreshSheetOpen}
         onConfirm={refreshScore}
+      />
+
+      <ScoreBreakdownSheet
+        open={breakdownSheetOpen}
+        onOpenChange={setBreakdownSheetOpen}
+        currentBandId={band.id}
       />
     </div>
   );
