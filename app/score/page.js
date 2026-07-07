@@ -13,6 +13,7 @@ import { useAtomValue } from "jotai";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { SlotText } from "slot-text/react";
+import ImpactBreakdownSheet from "../components/ImpactBreakdownSheet";
 import LoanRow from "../components/LoanRow";
 import NavBar from "../components/NavBar";
 import RefreshScoreSheet from "../components/RefreshScoreSheet";
@@ -63,53 +64,119 @@ function resolveScore(score) {
   return { segments, band, activeTick };
 }
 
-// Factors that move the score — a horizontally scrolling row of cards.
+// Factors that move the score — a 2×3 grid of cards. Each carries a `title`,
+// a short `description`, and the `ranges` that define its Excellent→Poor bands
+// (shown in a bottom sheet). `rating` marks which band the user falls in.
 const IMPACTS = [
   {
     id: "payment-history",
     rating: "Excellent",
     label: ["Payment history"],
     value: "100%",
+    title: "Payment history",
+    description:
+      "The share of your credit payments made on time. Even one missed payment can pull this down.",
+    ranges: [
+      { tone: "excellent", label: "Excellent", range: "98 – 100%" },
+      { tone: "good", label: "Good", range: "90 – 97%" },
+      { tone: "fair", label: "Fair", range: "75 – 89%" },
+      { tone: "poor", label: "Poor", range: "Below 75%" },
+    ],
   },
   {
     id: "credit-utilization",
     rating: "Excellent",
     label: ["Credit utilization"],
     value: "2.27%",
+    title: "Credit utilization",
+    description:
+      "How much of your available credit limit you're using. The lower, the better.",
+    ranges: [
+      { tone: "excellent", label: "Excellent", range: "Below 10%" },
+      { tone: "good", label: "Good", range: "10 – 30%" },
+      { tone: "fair", label: "Fair", range: "30 – 50%" },
+      { tone: "poor", label: "Poor", range: "Above 50%" },
+    ],
   },
   {
     id: "credit-history",
     rating: "Excellent",
     label: ["Credit history"],
     value: "7+ years",
+    title: "Credit history",
+    description:
+      "How long you've had active credit accounts. A longer history helps your score.",
+    ranges: [
+      { tone: "excellent", label: "Excellent", range: "7+ years" },
+      { tone: "good", label: "Good", range: "3 – 7 years" },
+      { tone: "fair", label: "Fair", range: "1 – 3 years" },
+      { tone: "poor", label: "Poor", range: "Below 1 year" },
+    ],
   },
   {
     id: "credit-mix",
     rating: "Good",
     label: ["Credit mix"],
     value: "4 acc",
+    title: "Credit mix",
+    description:
+      "The variety of credit you hold — cards, loans and more. A healthy mix helps.",
+    ranges: [
+      { tone: "excellent", label: "Excellent", range: "5+ accounts" },
+      { tone: "good", label: "Good", range: "3 – 4 accounts" },
+      { tone: "fair", label: "Fair", range: "1 – 2 accounts" },
+      { tone: "poor", label: "Poor", range: "None" },
+    ],
   },
   {
     id: "recent-inquiries",
     rating: "Excellent",
     label: ["Recent inquiries"],
     value: "0",
+    title: "Recent inquiries",
+    description:
+      "Hard inquiries from new credit applications in the last 6 months. Fewer is better.",
+    ranges: [
+      { tone: "excellent", label: "Excellent", range: "0 – 1" },
+      { tone: "good", label: "Good", range: "2 – 3" },
+      { tone: "fair", label: "Fair", range: "4 – 5" },
+      { tone: "poor", label: "Poor", range: "6+" },
+    ],
   },
   {
     id: "disputes",
     rating: "Excellent",
     label: ["Disputes"],
     value: "0",
+    title: "Disputes",
+    description:
+      "Open disputes on your credit report. Ideally you have none outstanding.",
+    ranges: [
+      { tone: "excellent", label: "Excellent", range: "0" },
+      { tone: "fair", label: "Fair", range: "1 – 2" },
+      { tone: "poor", label: "Poor", range: "3+" },
+    ],
   },
 ];
 
-function ImpactCard({ rating, label, value }) {
+function ImpactCard({ rating, label, value, onClick }) {
   return (
-    <div className="flex w-48 shrink-0 snap-start flex-col gap-6 rounded-2xl border border-border-primary bg-gradient-to-b from-background-light-postive to-background-primary p-4">
-      {/* mountain-green-02: a stronger tint than the card's pale top, no token */}
-      <span className="self-start rounded-full bg-[var(--mountain-green-02)] px-3 py-1 text-[14px] leading-5 font-medium text-content-postive">
-        {rating}
-      </span>
+    <button
+      type="button"
+      onClick={onClick}
+      className="flex cursor-pointer flex-col gap-6 rounded-2xl border border-border-primary bg-gradient-to-b from-background-light-postive to-background-primary p-4 text-left"
+    >
+      <div className="flex items-center justify-between gap-2">
+        {/* mountain-green-02: a stronger tint than the card's pale top, no token */}
+        <span className="rounded-full bg-[var(--mountain-green-02)] px-3 py-1 text-[14px] leading-5 font-medium text-content-postive">
+          {rating}
+        </span>
+        <IconInfoCircle
+          size={18}
+          stroke={2}
+          className="shrink-0 text-content-secondary"
+        />
+      </div>
       <div className="flex flex-col gap-1">
         <span className="text-[14px] leading-5 text-content-secondary">
           {label.map((line) => (
@@ -122,7 +189,7 @@ function ImpactCard({ rating, label, value }) {
           {value}
         </span>
       </div>
-    </div>
+    </button>
   );
 }
 
@@ -161,6 +228,7 @@ export default function CreditScore() {
   const [direction, setDirection] = useState("up");
   const [refreshSheetOpen, setRefreshSheetOpen] = useState(false);
   const [breakdownSheetOpen, setBreakdownSheetOpen] = useState(false);
+  const [activeImpact, setActiveImpact] = useState(null);
   const { segments, band, activeTick } = resolveScore(score);
 
   // slot-text only rolls on text *changes*, not on mount — so start at the
@@ -294,11 +362,14 @@ export default function CreditScore() {
           <h2 className="text-sm leading-6 font-semibold text-content-secondary">
             What impacts your score?
           </h2>
-          {/* Full-bleed horizontal scroll: -mx-4/px-4 lets cards run to the
-              frame edge while the first card still aligns with the section. */}
-          <div className="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain scroll-px-4 px-4 pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          {/* 2×3 grid — six impact factors, two per row. */}
+          <div className="grid grid-cols-2 gap-3">
             {IMPACTS.map((impact) => (
-              <ImpactCard key={impact.id} {...impact} />
+              <ImpactCard
+                key={impact.id}
+                {...impact}
+                onClick={() => setActiveImpact(impact)}
+              />
             ))}
           </div>
         </section>
@@ -375,6 +446,11 @@ export default function CreditScore() {
         open={breakdownSheetOpen}
         onOpenChange={setBreakdownSheetOpen}
         currentBandId={band.id}
+      />
+
+      <ImpactBreakdownSheet
+        impact={activeImpact}
+        onOpenChange={(open) => !open && setActiveImpact(null)}
       />
     </div>
   );
