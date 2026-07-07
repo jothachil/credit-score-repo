@@ -360,7 +360,7 @@ export default function CreditScore() {
       <div className="flex flex-col gap-6 px-4 py-6">
         <section className="flex flex-col gap-2">
           <h2 className="text-sm leading-6 font-semibold text-content-secondary">
-            What impacts your score?
+            Credit Overview
           </h2>
           {/* 2×3 grid — six impact factors, two per row. */}
           <div className="grid grid-cols-2 gap-3">

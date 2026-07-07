@@ -53,7 +53,7 @@ export default function BottomSheet({
                   {description}
                 </Drawer.Description>
               )}
-              <div className="px-5 pb-10">{children}</div>
+              <div className="px-5 pb-5">{children}</div>
             </Drawer.Content>
           </Drawer.Popup>
         </Drawer.Viewport>

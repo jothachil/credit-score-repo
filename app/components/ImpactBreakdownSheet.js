@@ -1,6 +1,7 @@
 "use client";
 
 import BottomSheet from "./BottomSheet";
+import Button from "./Button";
 
 // Rating tones → gauge-matching colours (design-system tokens only).
 const TONE_COLOR = {
@@ -57,6 +58,10 @@ export default function ImpactBreakdownSheet({ impact, onOpenChange }) {
             interpretation to help you understand what's generally considered
             healthy, and may differ from how the bureau weighs each factor.
           </p>
+
+          <Button variant="primary" onClick={() => onOpenChange(false)}>
+            I understood
+          </Button>
         </div>
       )}
     </BottomSheet>
