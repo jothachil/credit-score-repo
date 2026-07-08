@@ -5,9 +5,9 @@ import {
   IconChevronRight,
   IconCreditCard,
   IconFileDownload,
+  IconFileText,
   IconHelpCircle,
   IconInfoCircle,
-  IconRefresh,
 } from "@tabler/icons-react";
 import { useAtomValue } from "jotai";
 import { useRouter } from "next/navigation";
@@ -221,6 +221,9 @@ function ActionRow({ icon: Icon, label, onClick, last }) {
 
 const CURRENT_SCORE = 789;
 
+// Date this credit report was last fetched from the bureau.
+const REPORT_FETCH_DATE = "24 Jun 2026";
+
 export default function CreditScore() {
   const router = useRouter();
   const refreshAvailable = useAtomValue(debugFlagAtoms.refreshAvailable);
@@ -338,10 +341,8 @@ export default function CreditScore() {
           {/* Refresh banner — copy + CTA depend on the "refresh available" flag */}
           <div className="flex items-center justify-between gap-4 rounded-lg bg-background-inverse-secondary px-4 py-3">
             <span className="flex items-center gap-2 text-[14px] leading-5 text-content-inverse-primary">
-              <IconRefresh size={20} stroke={2} className="shrink-0" />
-              {refreshAvailable
-                ? "Refresh available"
-                : "Next refresh in 30 days"}
+              <IconFileText size={20} stroke={2} className="shrink-0" />
+              Fetched on {REPORT_FETCH_DATE}
             </span>
             {refreshAvailable && (
               <button
