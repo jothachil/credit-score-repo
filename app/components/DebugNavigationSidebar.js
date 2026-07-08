@@ -38,6 +38,10 @@ const debugPages = [
     id: "no-history",
     path: "/no-history",
   },
+  {
+    id: "faq",
+    path: "/faq",
+  },
 ];
 
 const tabClassName =

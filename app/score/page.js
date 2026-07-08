@@ -414,8 +414,8 @@ export default function CreditScore() {
           <div className="overflow-hidden rounded-2xl border border-border-primary bg-background-primary">
             <ActionRow
               icon={IconHelpCircle}
-              label="Get help"
-              onClick={() => router.push("/help")}
+              label="FAQ"
+              onClick={() => router.push("/faq")}
             />
             <ActionRow
               icon={IconFileDownload}
