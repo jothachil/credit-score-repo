@@ -12,8 +12,8 @@ export default function NoCreditHistory() {
       <div className="flex flex-1 flex-col items-center justify-center gap-4 px-8 text-center">
         {/* biome-ignore lint/performance/noImgElement: prototype static asset */}
         <img
-          src="/no-credit-score-3.png"
-          alt="A credit score gauge with no reading"
+          src="/no-score-history.png"
+          alt="A person climbing steps toward a star"
           className="size-[274px] object-contain"
         />
         <div className="flex flex-col gap-2">

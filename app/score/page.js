@@ -85,9 +85,9 @@ const IMPACTS = [
   },
   {
     id: "credit-utilization",
-    rating: "Excellent",
+    rating: "Good",
     label: ["Credit utilization"],
-    value: "2.27%",
+    value: "24%",
     title: "Credit utilization",
     description:
       "How much of your available credit limit you're using. The lower, the better.",
@@ -100,9 +100,9 @@ const IMPACTS = [
   },
   {
     id: "credit-history",
-    rating: "Excellent",
+    rating: "Fair",
     label: ["Credit history"],
-    value: "7+ years",
+    value: "2 years",
     title: "Credit history",
     description:
       "How long you've had active credit accounts. A longer history helps your score.",
@@ -130,9 +130,9 @@ const IMPACTS = [
   },
   {
     id: "recent-inquiries",
-    rating: "Excellent",
+    rating: "Poor",
     label: ["Recent inquiries"],
-    value: "0",
+    value: "7",
     title: "Recent inquiries",
     description:
       "Hard inquiries from new credit applications in the last 6 months. Fewer is better.",
@@ -159,16 +159,40 @@ const IMPACTS = [
   },
 ];
 
+// Each rating maps to a tone: the card's top-tint gradient and the badge's
+// (stronger) tint + text colour. The *-02 badge tints are one step darker than
+// the card's *-01 top, so the pill reads against the surface (no token).
+const RATING_TONE = {
+  Excellent: {
+    card: "from-background-light-postive",
+    badge: "bg-[var(--mountain-green-02)] text-content-postive",
+  },
+  Good: {
+    card: "from-background-light-postive",
+    badge: "bg-[var(--mountain-green-02)] text-content-postive",
+  },
+  Fair: {
+    card: "from-background-light-warning",
+    badge: "bg-[var(--sunrise-yellow-02)] text-content-warning",
+  },
+  Poor: {
+    card: "from-background-light-negative",
+    badge: "bg-[var(--fire-red-02)] text-content-negative",
+  },
+};
+
 function ImpactCard({ rating, label, value, onClick }) {
+  const tone = RATING_TONE[rating] ?? RATING_TONE.Good;
   return (
     <button
       type="button"
       onClick={onClick}
-      className="flex cursor-pointer flex-col gap-6 rounded-2xl border border-border-primary bg-gradient-to-b from-background-light-postive to-background-primary p-4 text-left"
+      className={`flex cursor-pointer flex-col gap-6 rounded-2xl border border-border-primary bg-gradient-to-b to-background-primary p-4 text-left ${tone.card}`}
     >
       <div className="flex items-center justify-between gap-2">
-        {/* mountain-green-02: a stronger tint than the card's pale top, no token */}
-        <span className="rounded-full bg-[var(--mountain-green-02)] px-3 py-1 text-[14px] leading-5 font-medium text-content-postive">
+        <span
+          className={`rounded-full px-3 py-1 text-[14px] leading-5 font-medium ${tone.badge}`}
+        >
           {rating}
         </span>
         <IconInfoCircle

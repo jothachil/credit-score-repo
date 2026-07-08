@@ -1,8 +1,7 @@
 "use client";
 
 import { Accordion } from "@base-ui/react/accordion";
-import { IconChevronDown, IconQuestionMark } from "@tabler/icons-react";
-import Button from "../components/Button";
+import { IconChevronDown } from "@tabler/icons-react";
 import NavBar from "../components/NavBar";
 
 const FAQS = [
