@@ -53,10 +53,10 @@ export default function ImpactBreakdownSheet({ impact, onOpenChange }) {
             })}
           </div>
 
-          <p className="text-xss leading-4 text-content-secondary">
-            These ranges aren't defined or endorsed by CIBIL. They're PayU's own
-            interpretation to help you understand what's generally considered
-            healthy, and may differ from how the bureau weighs each factor.
+          <p className="text-xss leading-4 text-content-inactive">
+            Above classification is PayUFin's educational opinion and does not
+            ensure or imply any guarantee of credit approval from partner or
+            non-partner financial institutions.
           </p>
 
           <Button variant="primary" onClick={() => onOpenChange(false)}>

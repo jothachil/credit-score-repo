@@ -1,6 +1,7 @@
 "use client";
 
 import BottomSheet from "./BottomSheet";
+import Button from "./Button";
 
 // Score bands with their ranges, ordered high → low to match the gauge.
 // Colours mirror the gauge segments on the score screen.
@@ -55,8 +56,8 @@ export default function ScoreBreakdownSheet({
       <div className="flex flex-col gap-4">
         <p className="text-xs  text-content-secondary mt-2">
           Your credit score ranges from 300 to 900. The higher your score, the
-          more likely lenders are to approve you — and at better terms. Here's
-          how the range breaks down.
+          more likely lenders are to approve you and at better terms. Here's how
+          the range breaks down.
         </p>
 
         <div className="flex flex-col gap-1">
@@ -80,6 +81,16 @@ export default function ScoreBreakdownSheet({
             );
           })}
         </div>
+
+        <p className="text-xss leading-4 text-content-inactive">
+          Above classification is PayUFin's educational opinion and does not
+          ensure or imply any guarantee of credit approval from partner or
+          non-partner financial institutions.
+        </p>
+
+        <Button variant="primary" onClick={() => onOpenChange(false)}>
+          I understood
+        </Button>
       </div>
     </BottomSheet>
   );

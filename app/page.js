@@ -89,8 +89,15 @@ export default function Onboarding() {
             htmlFor="consent"
             className="cursor-pointer text-[14px] leading-5 text-content-secondary"
           >
-            You hereby consent to CIBLI Private Limited to receive your credit
-            information.
+            I agree to the{" "}
+            <a
+              href="/terms-and-conditions"
+              className="font-semibold text-content-brand"
+            >
+              Terms and Conditions
+            </a>{" "}
+            of TUCIBIL and hereby provide explicit consent to share my Credit
+            Information with PayU Finance India Private Limited.
           </label>
         </div>
 
