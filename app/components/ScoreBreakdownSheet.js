@@ -55,9 +55,8 @@ export default function ScoreBreakdownSheet({
     >
       <div className="flex flex-col gap-4">
         <p className="text-xs  text-content-secondary mt-2">
-          Your credit score ranges from 300 to 900. The higher your score, the
-          more likely lenders are to approve you and at better terms. Here's how
-          the range breaks down.
+          Your credit score ranges from 300 to 900. Here's how the range breaks
+          down.
         </p>
 
         <div className="flex flex-col gap-1">
