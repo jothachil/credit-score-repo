@@ -2,6 +2,8 @@
 
 import "slot-text/style.css";
 import {
+  IconArrowUp,
+  IconAward,
   IconChevronRight,
   IconCreditCard,
   IconFileDownload,
@@ -44,6 +46,15 @@ const SCORE_BANDS = [
     color: "bg-background-postive",
   },
 ];
+
+// Band id → SVG fill (mirrors each gauge segment's colour) for charting.
+const BAND_FILL = {
+  poor: "var(--background-negative)",
+  fair: "#f47b0b",
+  good: "var(--background-warning)",
+  "very-good": "var(--mountain-green-04)",
+  exceptional: "var(--background-postive)",
+};
 
 // 16 evenly spaced scale ticks under the gauge.
 const SCORE_TICKS = Array.from({ length: 16 }, (_, i) => `tick-${i}`);
@@ -261,6 +272,123 @@ function ImpactCard({ rating, label, value, onClick }) {
   );
 }
 
+// Mocked month-by-month score history (oldest → newest).
+const SCORE_HISTORY = [
+  { month: "Feb", score: 560 }, // Poor
+  { month: "Mar", score: 620 }, // Fair
+  { month: "Apr", score: 685 }, // Good
+  { month: "May", score: 730 }, // Good
+  { month: "Jun", score: 765 }, // Very Good
+  { month: "Jul", score: 789 }, // Very Good
+];
+
+// Highlight callout data: percentile standing + change vs. last month.
+const USER_PERCENTILE = 20;
+const SCORE_DELTA = SCORE_HISTORY.at(-1).score - SCORE_HISTORY.at(-2).score; // +9 pts
+
+// A compact line chart of the monthly score history. Pure SVG, sized by a
+// viewBox so it scales to the card width; colours come from our brand token.
+function ScoreTrendChart({ data }) {
+  const W = 320;
+  const H = 160;
+  const padX = 22;
+  const padTop = 30;
+  const padBottom = 26;
+  const scores = data.map((d) => d.score);
+  const min = Math.min(...scores) - 8;
+  const max = Math.max(...scores) + 8;
+  const stepX = (W - padX * 2) / (data.length - 1);
+  const yFor = (score) =>
+    padTop + (1 - (score - min) / (max - min)) * (H - padTop - padBottom);
+  const points = data.map((d, i) => ({
+    ...d,
+    x: padX + i * stepX,
+    y: yFor(d.score),
+  }));
+  const baseline = H - padBottom;
+
+  return (
+    <svg
+      viewBox={`0 0 ${W} ${H}`}
+      className="w-full"
+      role="img"
+      aria-label="Credit score over the last six months"
+    >
+      <defs>
+        {Object.entries(BAND_FILL).map(([id, color]) => (
+          <linearGradient
+            key={id}
+            id={`scoreTrendFill-${id}`}
+            x1="0"
+            y1="0"
+            x2="0"
+            y2="1"
+          >
+            <stop offset="0%" stopColor={color} stopOpacity="0.22" />
+            <stop offset="100%" stopColor={color} stopOpacity="0" />
+          </linearGradient>
+        ))}
+      </defs>
+
+      {points.slice(0, -1).map((p, i) => {
+        const next = points[i + 1];
+        const bandId = resolveScore(next.score).band.id;
+        return (
+          <g key={`seg-${p.month}`}>
+            <polygon
+              points={`${p.x},${p.y} ${next.x},${next.y} ${next.x},${baseline} ${p.x},${baseline}`}
+              fill={`url(#scoreTrendFill-${bandId})`}
+            />
+            <line
+              x1={p.x}
+              y1={p.y}
+              x2={next.x}
+              y2={next.y}
+              stroke={BAND_FILL[bandId]}
+              strokeWidth="2.5"
+              strokeLinecap="round"
+            />
+          </g>
+        );
+      })}
+
+      {points.map((p, i) => {
+        const isLast = i === points.length - 1;
+        const fill = BAND_FILL[resolveScore(p.score).band.id];
+        return (
+          <g key={p.month}>
+            <circle
+              cx={p.x}
+              cy={p.y}
+              r={isLast ? 5 : 4}
+              fill={fill}
+              stroke="var(--background-primary)"
+              strokeWidth="2"
+            />
+            <text
+              x={p.x}
+              y={p.y - 12}
+              textAnchor="middle"
+              className="text-[10px] font-semibold"
+              fill={fill}
+            >
+              {p.score}
+            </text>
+            <text
+              x={p.x}
+              y={H - 8}
+              textAnchor="middle"
+              className="fill-content-secondary text-[10px]"
+            >
+              {p.month}
+            </text>
+          </g>
+        );
+      })}
+    </svg>
+  );
+}
+
 // A tappable list row: leading icon, label, and a circular chevron affordance.
 // Rows stack inside a bordered card; all but the last carry a bottom divider.
 function ActionRow({ icon: Icon, label, onClick, last }) {
@@ -427,6 +555,47 @@ export default function CreditScore() {
 
       {/* Body */}
       <div className="flex flex-col gap-6 px-4 py-6">
+        <section className="flex flex-col gap-2">
+          <h2 className="text-sm leading-6 font-semibold text-content-secondary">
+            Score history
+          </h2>
+          <div className="overflow-hidden rounded-2xl border border-border-primary bg-background-primary">
+            {/* Percentile standing */}
+            <div className="flex items-center gap-3 px-4 py-3">
+              <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-background-light-postive">
+                <IconAward
+                  size={20}
+                  stroke={2}
+                  className="text-content-postive"
+                />
+              </span>
+              <p className="text-[14px] leading-5 text-content-primary">
+                Cheers! You're in the top{" "}
+                <span className="font-bold text-content-postive">
+                  {USER_PERCENTILE}%
+                </span>{" "}
+                of 3M+ users
+              </p>
+            </div>
+            <div className="border-t border-border-primary" />
+            {/* Change since last month */}
+            <div className="flex items-center gap-3 px-4 py-3">
+              <span className="flex shrink-0 items-center gap-1 rounded-full bg-background-postive px-2.5 py-1 text-[14px] leading-5 font-bold text-content-inverse-primary">
+                <IconArrowUp size={16} stroke={2.5} />
+                {SCORE_DELTA} pts
+              </span>
+              <span className="text-[14px] leading-5 text-content-secondary">
+                since last month
+              </span>
+            </div>
+            <div className="border-t border-border-primary" />
+            {/* Monthly trend */}
+            <div className="p-4">
+              <ScoreTrendChart data={SCORE_HISTORY} />
+            </div>
+          </div>
+        </section>
+
         <section className="flex flex-col gap-2">
           <h2 className="text-sm leading-6 font-semibold text-content-secondary">
             Credit Overview
