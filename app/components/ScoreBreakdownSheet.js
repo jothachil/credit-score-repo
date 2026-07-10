@@ -8,7 +8,7 @@ import Button from "./Button";
 const SCORE_RANGES = [
   {
     id: "exceptional",
-    label: "Exceptional",
+    label: "Excellent",
     range: "800 – 900",
     color: "bg-background-postive",
   },
@@ -33,7 +33,7 @@ const SCORE_RANGES = [
   {
     id: "poor",
     label: "Poor",
-    range: "300 – 579",
+    range: "≤ 579",
     color: "bg-background-negative",
   },
 ];

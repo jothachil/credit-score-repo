@@ -6,8 +6,9 @@ import Button from "./Button";
 // Rating tones → gauge-matching colours (design-system tokens only).
 const TONE_COLOR = {
   excellent: "bg-background-postive",
-  good: "bg-[var(--mountain-green-04)]",
-  fair: "bg-background-warning",
+  "very-good": "bg-[var(--mountain-green-04)]",
+  good: "bg-background-warning",
+  fair: "bg-[#f47b0b]",
   poor: "bg-background-negative",
 };
 
