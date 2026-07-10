@@ -231,7 +231,7 @@ function ImpactCard({ rating, label, value, onClick }) {
     <button
       type="button"
       onClick={onClick}
-      className={`flex cursor-pointer flex-col gap-6 rounded-2xl border border-border-primary bg-gradient-to-b to-background-primary p-4 text-left ${tone.card}`}
+      className={`flex w-48 shrink-0 snap-start cursor-pointer flex-col gap-6 rounded-2xl border border-border-primary bg-gradient-to-b to-background-primary p-4 text-left ${tone.card}`}
     >
       <div className="flex items-center justify-between gap-2">
         <span
@@ -431,8 +431,9 @@ export default function CreditScore() {
           <h2 className="text-sm leading-6 font-semibold text-content-secondary">
             Credit Overview
           </h2>
-          {/* 2×3 grid — six impact factors, two per row. */}
-          <div className="grid grid-cols-2 gap-3">
+          {/* Full-bleed horizontal scroll: -mx-4/px-4 lets cards run to the
+              frame edge while the first card still aligns with the section. */}
+          <div className="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain scroll-px-4 px-4 pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {IMPACTS.map((impact) => (
               <ImpactCard
                 key={impact.id}
