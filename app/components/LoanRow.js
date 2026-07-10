@@ -15,10 +15,12 @@ export default function LoanRow({
   tone,
   large,
   last,
+  onClick,
 }) {
   return (
     <button
       type="button"
+      onClick={onClick}
       className={`flex w-full cursor-pointer items-center justify-between gap-3 px-4 py-3 text-left transition-colors hover:bg-background-secondary ${
         last ? "" : "border-b border-border-primary"
       }`}

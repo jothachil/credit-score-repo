@@ -12,14 +12,15 @@ import { useRouter } from "next/navigation";
  * Pass `backHref` to navigate to a specific route, or omit it to go back in
  * history. Sticks to the top of the mobile frame. Set `border={false}` to drop
  * the bottom divider (e.g. when the bar sits directly above tabs that already
- * carry one). Set `inverse` for a transparent bar with white controls, to
- * overlay a dark surface (e.g. the score hero). Omit `title` for a back-only
- * bar.
+ * carry one). Set `transparent` to remove the bar background, or `inverse` for
+ * a transparent bar with white controls over a dark surface (e.g. the score
+ * hero). Omit `title` for a back-only bar.
  */
 export default function NavBar({
   title,
   backHref,
   border = true,
+  transparent = false,
   inverse = false,
 }) {
   const router = useRouter();
@@ -33,7 +34,7 @@ export default function NavBar({
   return (
     <header
       className={`sticky top-0 z-10 flex items-center gap-4 px-5 pt-[calc(1rem+env(safe-area-inset-top))] pb-4 ${
-        inverse ? "" : "bg-background-primary"
+        inverse || transparent ? "" : "bg-background-primary"
       } ${border ? "border-b border-border-primary" : ""}`}
     >
       {backHref ? (

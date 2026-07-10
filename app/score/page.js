@@ -633,6 +633,7 @@ export default function CreditScore() {
               detail="₹64,000 · Card EMI"
               status="Active"
               tone="positive"
+              onClick={() => router.push("/card")}
             />
             <LoanRow
               icon={IconCreditCard}
@@ -640,6 +641,7 @@ export default function CreditScore() {
               detail="₹64,000 · Card EMI"
               status="Active"
               tone="positive"
+              onClick={() => router.push("/card")}
               last
             />
           </div>

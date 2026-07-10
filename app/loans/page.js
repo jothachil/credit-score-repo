@@ -1,6 +1,7 @@
 "use client";
 
 import { IconCreditCard, IconHome } from "@tabler/icons-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import LoanRow from "../components/LoanRow";
 import NavBar from "../components/NavBar";
@@ -36,17 +37,23 @@ const CLOSED_LOANS = [
   },
 ];
 
-function LoanList({ loans }) {
+function LoanList({ loans, onSelect }) {
   return (
     <div className="overflow-hidden rounded-2xl border border-border-primary bg-background-primary py-1">
       {loans.map((loan, i) => (
-        <LoanRow key={loan.id} {...loan} last={i === loans.length - 1} />
+        <LoanRow
+          key={loan.id}
+          {...loan}
+          last={i === loans.length - 1}
+          onClick={() => onSelect(loan)}
+        />
       ))}
     </div>
   );
 }
 
 export default function Loans() {
+  const router = useRouter();
   const [tab, setTab] = useState("active");
 
   return (
@@ -67,10 +74,16 @@ export default function Loans() {
         </div>
 
         <TabsPanel value="active" className="px-4">
-          <LoanList loans={ACTIVE_LOANS} />
+          <LoanList
+            loans={ACTIVE_LOANS}
+            onSelect={() => router.push("/card")}
+          />
         </TabsPanel>
         <TabsPanel value="closed" className="px-4">
-          <LoanList loans={CLOSED_LOANS} />
+          <LoanList
+            loans={CLOSED_LOANS}
+            onSelect={() => router.push("/card")}
+          />
         </TabsPanel>
       </Tabs>
     </div>
