@@ -55,7 +55,7 @@ export default function ScoreBreakdownSheet({
     >
       <div className="flex flex-col gap-4">
         <p className="text-xs  text-content-secondary mt-2">
-          Your credit score ranges from 300 to 900. Here's how the range breaks
+          Your CIBIL Score ranges from 300 to 900. Here's how the range breaks
           down.
         </p>
 

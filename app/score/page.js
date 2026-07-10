@@ -73,6 +73,14 @@ const PAYMENT_HISTORY_RANGES = [
   { tone: "fair", label: "Fair", range: "55% · 3 – 4 missed payments" },
   { tone: "poor", label: "Poor", range: "50% · 5+ missed payments" },
 ];
+const PAYMENT_HISTORY_VALUE = 100; // % on-time
+function classifyPaymentHistory(pct) {
+  if (pct >= 90) return "Excellent";
+  if (pct >= 80) return "Very Good";
+  if (pct >= 70) return "Good";
+  if (pct >= 50) return "Fair";
+  return "Poor";
+}
 
 const CREDIT_UTILIZATION_RANGES = [
   { tone: "excellent", label: "Excellent", range: "Below 10%" },
@@ -81,6 +89,14 @@ const CREDIT_UTILIZATION_RANGES = [
   { tone: "fair", label: "Fair", range: "51 – 75%" },
   { tone: "poor", label: "Poor", range: "Above 76%" },
 ];
+const CREDIT_UTILIZATION_VALUE = 24; // % of limit used (lower is better)
+function classifyCreditUtilization(pct) {
+  if (pct <= 10) return "Excellent";
+  if (pct <= 30) return "Very Good";
+  if (pct <= 50) return "Good";
+  if (pct <= 75) return "Fair";
+  return "Poor";
+}
 
 const CREDIT_HISTORY_RANGES = [
   { tone: "excellent", label: "Excellent", range: "7 years & above" },
@@ -89,12 +105,27 @@ const CREDIT_HISTORY_RANGES = [
   { tone: "fair", label: "Fair", range: "2 – 3 years" },
   { tone: "poor", label: "Poor", range: "Below 2 years" },
 ];
+const CREDIT_HISTORY_VALUE = 2; // years
+function classifyCreditHistory(years) {
+  if (years >= 7) return "Excellent";
+  if (years >= 5) return "Very Good";
+  if (years >= 3) return "Good";
+  if (years >= 2) return "Fair";
+  return "Poor";
+}
 
 const CREDIT_MIX_RANGES = [
-  { tone: "excellent", label: "Excellent", range: "Above 4 accounts" },
-  { tone: "fair", label: "Fair", range: "2 – 4 accounts" },
-  { tone: "poor", label: "Poor", range: "0 – 1 accounts" },
+  { tone: "excellent", label: "Excellent", range: "40 – 100%" },
+  { tone: "good", label: "Good", range: "5 – 40%" },
+  { tone: "poor", label: "Poor", range: "0 – 5%" },
 ];
+
+const CREDIT_MIX_VALUE = 42;
+function classifyCreditMix(pct) {
+  if (pct >= 40) return "Excellent";
+  if (pct >= 5) return "Good";
+  return "Poor";
+}
 
 const RECENT_INQUIRIES_RANGES = [
   { tone: "excellent", label: "Excellent", range: "0 – 1 enquiries" },
@@ -103,11 +134,14 @@ const RECENT_INQUIRIES_RANGES = [
   { tone: "fair", label: "Fair", range: "4 – 5 enquiries" },
   { tone: "poor", label: "Poor", range: "6+ enquiries" },
 ];
-
-const DISPUTES_RANGES = [
-  { tone: "excellent", label: "Excellent", range: "0" },
-  { tone: "poor", label: "Poor", range: "1 & above" },
-];
+const RECENT_INQUIRIES_VALUE = 7; // hard enquiries in last 6 months
+function classifyRecentInquiries(n) {
+  if (n <= 1) return "Excellent";
+  if (n === 2) return "Very Good";
+  if (n === 3) return "Good";
+  if (n <= 5) return "Fair";
+  return "Poor";
+}
 
 // Factors that move the score — a 2×3 grid of cards. Each carries a `title`,
 // a short `description`, and the `ranges` that define its Excellent→Poor bands
@@ -115,9 +149,9 @@ const DISPUTES_RANGES = [
 const IMPACTS = [
   {
     id: "payment-history",
-    rating: "Excellent",
+    rating: classifyPaymentHistory(PAYMENT_HISTORY_VALUE),
     label: ["Payment history"],
-    value: "100%",
+    value: `${PAYMENT_HISTORY_VALUE}%`,
     title: "Payment history",
     description:
       "The share of your credit payments made on time. Even one missed payment can pull this down.",
@@ -125,9 +159,9 @@ const IMPACTS = [
   },
   {
     id: "credit-utilization",
-    rating: "Very Good",
+    rating: classifyCreditUtilization(CREDIT_UTILIZATION_VALUE),
     label: ["Credit utilization"],
-    value: "24%",
+    value: `${CREDIT_UTILIZATION_VALUE}%`,
     title: "Credit utilization",
     description:
       "How much of your available credit limit you're using. The lower, the better.",
@@ -135,9 +169,9 @@ const IMPACTS = [
   },
   {
     id: "credit-history",
-    rating: "Fair",
+    rating: classifyCreditHistory(CREDIT_HISTORY_VALUE),
     label: ["Credit history"],
-    value: "2 years",
+    value: `${CREDIT_HISTORY_VALUE} years`,
     title: "Credit history",
     description:
       "How long you've had active credit accounts. A longer history helps your score.",
@@ -145,33 +179,23 @@ const IMPACTS = [
   },
   {
     id: "credit-mix",
-    rating: "Fair",
+    rating: classifyCreditMix(CREDIT_MIX_VALUE),
     label: ["Credit mix"],
-    value: "4 acc",
+    value: `${CREDIT_MIX_VALUE}%`,
     title: "Credit mix",
     description:
-      "The variety of credit you hold — cards, loans and more. A healthy mix helps.",
+      "The share of secured vs unsecured credit you hold. A healthier balance helps your score.",
     ranges: CREDIT_MIX_RANGES,
   },
   {
     id: "recent-inquiries",
-    rating: "Poor",
+    rating: classifyRecentInquiries(RECENT_INQUIRIES_VALUE),
     label: ["Recent inquiries"],
-    value: "7",
+    value: `${RECENT_INQUIRIES_VALUE}`,
     title: "Recent inquiries",
     description:
       "Hard inquiries from new credit applications in the last 6 months. Fewer is better.",
     ranges: RECENT_INQUIRIES_RANGES,
-  },
-  {
-    id: "disputes",
-    rating: "Excellent",
-    label: ["Disputes"],
-    value: "0",
-    title: "Disputes",
-    description:
-      "Open disputes on your credit report. Ideally you have none outstanding.",
-    ranges: DISPUTES_RANGES,
   },
 ];
 
@@ -317,7 +341,7 @@ export default function CreditScore() {
         <div className="relative flex flex-col gap-4 px-4 pt-1 pb-5">
           <div className="flex flex-col gap-0.5">
             <p className="mt-10 text-[10px] leading-4 font-medium tracking-[1px] text-content-inverse-primary uppercase">
-              Credit Score
+              CIBIL Score
             </p>
             {/* Fixed height so the SSR-empty → built → rolling states of the
                 slot-text number never change the row height (slot-text injects

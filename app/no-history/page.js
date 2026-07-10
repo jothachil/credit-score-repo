@@ -1,7 +1,11 @@
 "use client";
 
+import { IconFileText } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import Button from "../components/Button";
+
+// Date this credit report was last fetched from the bureau.
+const REPORT_FETCH_DATE = "24 Jun 2026";
 
 export default function NoCreditHistory() {
   const router = useRouter();
@@ -16,16 +20,25 @@ export default function NoCreditHistory() {
           alt="A person climbing steps toward a star"
           className="size-[274px] object-contain"
         />
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col items-center gap-2">
           <h1 className="text-xl leading-8 font-bold text-content-primary">
-            No credit history yet
+            No credit history
           </h1>
-          <p className="text-sm leading-6 text-content-secondary">
-            You don&apos;t have enough credit history for CIBIL to calculate a
-            score. Start using a credit card or loan and repay on time — your
-            score will show up here once there&apos;s enough activity.
-          </p>
+          <div className="flex items-center justify-center gap-2 text-[14px] leading-5 text-content-secondary">
+            <IconFileText size={20} stroke={2} className="shrink-0" />
+            Fetched on {REPORT_FETCH_DATE}
+          </div>
         </div>
+      </div>
+
+      {/* Powered by CIBIL — bureau attribution */}
+      <div className="flex items-center justify-center pb-2">
+        {/* biome-ignore lint/performance/noImgElement: prototype static asset */}
+        <img
+          src="/cibil.png"
+          alt="Powered by CIBIL"
+          className="h-auto w-full max-w-[80px] object-contain"
+        />
       </div>
 
       {/* CTA, pinned to the bottom */}

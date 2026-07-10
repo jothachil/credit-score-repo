@@ -49,7 +49,7 @@ export default function Onboarding() {
       {/* Heading */}
       <div className="mt-10 flex flex-col items-center gap-2 px-6 text-center">
         <h1 className="text-2xl leading-9 font-bold tracking-tight text-content-primary">
-          Check your credit score for free!
+          Check your CIBIL Score for free!
         </h1>
         <p className="text-sm text-content-secondary">
           Get detailed insights on your credit report

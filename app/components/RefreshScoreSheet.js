@@ -34,7 +34,7 @@ export default function RefreshScoreSheet({ open, onOpenChange, onConfirm }) {
     <BottomSheet
       open={open}
       onOpenChange={onOpenChange}
-      title="Unlock Your Latest Credit Score"
+      title="Unlock Your Latest CIBIL Score"
       titleHidden
     >
       <div className="flex flex-col items-center gap-4">
@@ -49,7 +49,7 @@ export default function RefreshScoreSheet({ open, onOpenChange, onConfirm }) {
         {/* Heading + subtitle */}
         <div className="flex flex-col text-center">
           <h2 className="text-xl leading-8 font-bold text-content-primary">
-            Unlock Latest Credit Score
+            Unlock Latest CIBIL Score
           </h2>
           <p className="text-sm leading-6 text-content-secondary">
             Refresh it to see the most up-to-date picture of your credit health.
