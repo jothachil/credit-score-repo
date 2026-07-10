@@ -64,6 +64,51 @@ function resolveScore(score) {
   return { segments, band, activeTick };
 }
 
+// Classification bands per factor (PayUFin's rating scale). Ordered
+// Excellent → Poor; each `tone` maps to a colour in the breakdown sheet.
+const PAYMENT_HISTORY_RANGES = [
+  { tone: "excellent", label: "Excellent", range: "100% · 0 missed payment" },
+  { tone: "very-good", label: "Very Good", range: "85% · 1 missed payment" },
+  { tone: "good", label: "Good", range: "75% · 2 missed payments" },
+  { tone: "fair", label: "Fair", range: "55% · 3 – 4 missed payments" },
+  { tone: "poor", label: "Poor", range: "50% · 5+ missed payments" },
+];
+
+const CREDIT_UTILIZATION_RANGES = [
+  { tone: "excellent", label: "Excellent", range: "Below 10%" },
+  { tone: "very-good", label: "Very Good", range: "11 – 30%" },
+  { tone: "good", label: "Good", range: "31 – 50%" },
+  { tone: "fair", label: "Fair", range: "51 – 75%" },
+  { tone: "poor", label: "Poor", range: "Above 76%" },
+];
+
+const CREDIT_HISTORY_RANGES = [
+  { tone: "excellent", label: "Excellent", range: "7 years & above" },
+  { tone: "very-good", label: "Very Good", range: "5 – 7 years" },
+  { tone: "good", label: "Good", range: "3 – 5 years" },
+  { tone: "fair", label: "Fair", range: "2 – 3 years" },
+  { tone: "poor", label: "Poor", range: "Below 2 years" },
+];
+
+const CREDIT_MIX_RANGES = [
+  { tone: "excellent", label: "Excellent", range: "Above 4 accounts" },
+  { tone: "fair", label: "Fair", range: "2 – 4 accounts" },
+  { tone: "poor", label: "Poor", range: "0 – 1 accounts" },
+];
+
+const RECENT_INQUIRIES_RANGES = [
+  { tone: "excellent", label: "Excellent", range: "0 – 1 enquiries" },
+  { tone: "very-good", label: "Very Good", range: "2 enquiries" },
+  { tone: "good", label: "Good", range: "3 enquiries" },
+  { tone: "fair", label: "Fair", range: "4 – 5 enquiries" },
+  { tone: "poor", label: "Poor", range: "6+ enquiries" },
+];
+
+const DISPUTES_RANGES = [
+  { tone: "excellent", label: "Excellent", range: "0" },
+  { tone: "poor", label: "Poor", range: "1 & above" },
+];
+
 // Factors that move the score — a 2×3 grid of cards. Each carries a `title`,
 // a short `description`, and the `ranges` that define its Excellent→Poor bands
 // (shown in a bottom sheet). `rating` marks which band the user falls in.
@@ -76,13 +121,7 @@ const IMPACTS = [
     title: "Payment history",
     description:
       "The share of your credit payments made on time. Even one missed payment can pull this down.",
-    ranges: [
-      { tone: "excellent", label: "Excellent", range: "≥ 90% · 0 missed" },
-      { tone: "very-good", label: "Very Good", range: "80 – 89% · 1 missed" },
-      { tone: "good", label: "Good", range: "70 – 79% · 2 missed" },
-      { tone: "fair", label: "Fair", range: "50 – 69% · 3 – 4 missed" },
-      { tone: "poor", label: "Poor", range: "< 50% · 5+ missed" },
-    ],
+    ranges: PAYMENT_HISTORY_RANGES,
   },
   {
     id: "credit-utilization",
@@ -92,13 +131,7 @@ const IMPACTS = [
     title: "Credit utilization",
     description:
       "How much of your available credit limit you're using. The lower, the better.",
-    ranges: [
-      { tone: "excellent", label: "Excellent", range: "Below 10%" },
-      { tone: "very-good", label: "Very Good", range: "11 – 30%" },
-      { tone: "good", label: "Good", range: "31 – 50%" },
-      { tone: "fair", label: "Fair", range: "51 – 75%" },
-      { tone: "poor", label: "Poor", range: "Above 76%" },
-    ],
+    ranges: CREDIT_UTILIZATION_RANGES,
   },
   {
     id: "credit-history",
@@ -108,13 +141,7 @@ const IMPACTS = [
     title: "Credit history",
     description:
       "How long you've had active credit accounts. A longer history helps your score.",
-    ranges: [
-      { tone: "excellent", label: "Excellent", range: "7 years & above" },
-      { tone: "very-good", label: "Very Good", range: "5 – 7 years" },
-      { tone: "good", label: "Good", range: "3 – 5 years" },
-      { tone: "fair", label: "Fair", range: "2 – 3 years" },
-      { tone: "poor", label: "Poor", range: "Below 2 years" },
-    ],
+    ranges: CREDIT_HISTORY_RANGES,
   },
   {
     id: "credit-mix",
@@ -124,11 +151,7 @@ const IMPACTS = [
     title: "Credit mix",
     description:
       "The variety of credit you hold — cards, loans and more. A healthy mix helps.",
-    ranges: [
-      { tone: "excellent", label: "Excellent", range: "Above 4 accounts" },
-      { tone: "fair", label: "Fair", range: "2 – 4 accounts" },
-      { tone: "poor", label: "Poor", range: "0 – 1 accounts" },
-    ],
+    ranges: CREDIT_MIX_RANGES,
   },
   {
     id: "recent-inquiries",
@@ -138,13 +161,7 @@ const IMPACTS = [
     title: "Recent inquiries",
     description:
       "Hard inquiries from new credit applications in the last 6 months. Fewer is better.",
-    ranges: [
-      { tone: "excellent", label: "Excellent", range: "0 – 1 enquiries" },
-      { tone: "very-good", label: "Very Good", range: "2 enquiries" },
-      { tone: "good", label: "Good", range: "3 enquiries" },
-      { tone: "fair", label: "Fair", range: "4 – 5 enquiries" },
-      { tone: "poor", label: "Poor", range: "6+ enquiries" },
-    ],
+    ranges: RECENT_INQUIRIES_RANGES,
   },
   {
     id: "disputes",
@@ -154,10 +171,7 @@ const IMPACTS = [
     title: "Disputes",
     description:
       "Open disputes on your credit report. Ideally you have none outstanding.",
-    ranges: [
-      { tone: "excellent", label: "Excellent", range: "0" },
-      { tone: "poor", label: "Poor", range: "1 & above" },
-    ],
+    ranges: DISPUTES_RANGES,
   },
 ];
 
