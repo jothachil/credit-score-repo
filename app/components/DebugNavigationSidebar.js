@@ -31,6 +31,10 @@ const debugPages = [
     path: "/card",
   },
   {
+    id: "loan",
+    path: "/loan",
+  },
+  {
     id: "error",
     path: "/error-state",
   },

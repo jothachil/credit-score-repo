@@ -43,26 +43,26 @@ function StatusMarker({ status, size = 24 }) {
   );
 }
 
-function CardDetailContent() {
+function LoanDetailContent() {
   const router = useRouter();
   const id = useSearchParams().get("id");
-  const CARD = mock.findAccount(id) ?? mock.card;
+  const LOAN = mock.findAccount(id) ?? mock.loan;
 
   return (
     <div className="flex flex-1 flex-col bg-background-secondary">
-      <NavBar backHref="/score" border={false} transparent />
+      <NavBar backHref="/loans" border={false} transparent />
 
       <div className="flex flex-col gap-6 px-4 pt-2 pb-8">
         {/* Identity */}
         <div className="flex flex-col gap-3 px-1 py-2">
           <div className="flex items-start justify-between gap-4">
             <h1 className="text-xl leading-7 font-bold text-content-primary">
-              {CARD.name}
+              {LOAN.name}
             </h1>
             <span
-              className={`mt-0.5 shrink-0 rounded-full px-3 py-1 text-[12px] leading-4 font-semibold tracking-[0.5px] uppercase ${statusBadgeClass(CARD.status)}`}
+              className={`mt-0.5 shrink-0 rounded-full px-3 py-1 text-[12px] leading-4 font-semibold tracking-[0.5px] uppercase ${statusBadgeClass(LOAN.status)}`}
             >
-              {CARD.status}
+              {LOAN.status}
             </span>
           </div>
 
@@ -73,28 +73,28 @@ function CardDetailContent() {
               className="text-content-primary"
             />
             <span className="text-[14px] leading-5 font-semibold tracking-[0.5px] text-content-primary uppercase">
-              {CARD.bank}
+              {LOAN.bank}
             </span>
           </div>
         </div>
 
-        {/* Summary — spends & utilization */}
+        {/* Summary — outstanding & repayment */}
         <div className="flex flex-col rounded-2xl border border-border-primary bg-background-primary">
           <div className="flex items-stretch">
             <div className="flex flex-1 flex-col gap-1 border-r border-border-primary p-4">
               <span className="text-[12px] leading-4 font-medium tracking-[1px] text-content-secondary uppercase">
-                Total spends
+                Outstanding
               </span>
               <span className="text-xl leading-8 font-bold text-content-primary">
-                {CARD.totalSpends}
+                {LOAN.outstanding}
               </span>
             </div>
             <div className="flex flex-1 flex-col items-end gap-1 p-4">
               <span className="text-[12px] leading-4 font-medium tracking-[1px] text-content-secondary uppercase">
-                Credit limit
+                Loan amount
               </span>
               <span className="text-xl leading-8 font-bold text-content-primary">
-                {CARD.creditLimit}
+                {LOAN.loanAmount}
               </span>
             </div>
           </div>
@@ -104,21 +104,21 @@ function CardDetailContent() {
               <span
                 className="absolute top-0 w-fit rounded-md border border-border-primary bg-background-primary px-2 py-0.5 text-[12px] leading-4 font-bold whitespace-nowrap text-content-primary"
                 style={{
-                  left: `${CARD.limitUsedPct}%`,
-                  transform: `translateX(-${CARD.limitUsedPct}%)`,
+                  left: `${LOAN.paidPct}%`,
+                  transform: `translateX(-${LOAN.paidPct}%)`,
                 }}
               >
-                {CARD.limitUsedPct}%
+                {LOAN.paidPct}% paid
               </span>
             </div>
             <div className="h-2 w-full overflow-hidden rounded-full bg-background-secondary">
               <div
                 className="h-full rounded-full bg-background-postive"
-                style={{ width: `${Math.max(CARD.limitUsedPct, 1)}%` }}
+                style={{ width: `${Math.max(LOAN.paidPct, 1)}%` }}
               />
             </div>
             <span className="text-[12px] leading-4 font-medium tracking-[0.5px] text-content-secondary uppercase">
-              Limit used {CARD.limitUsedAmount}
+              Principal paid {LOAN.principalPaid}
             </span>
           </div>
         </div>
@@ -129,7 +129,7 @@ function CardDetailContent() {
             Payment history
           </h2>
           <div className="flex flex-col rounded-2xl border border-border-primary bg-background-primary">
-            <Tabs defaultValue={String(CARD.year)} className="flex flex-col">
+            <Tabs defaultValue={String(LOAN.year)} className="flex flex-col">
               <TabsList>
                 {PAYMENT_YEARS.map((year) => (
                   <TabsTab
@@ -176,7 +176,7 @@ function CardDetailContent() {
 
         {/* Footer */}
         <p className="px-1 pt-1 text-[13px] leading-5 text-content-secondary">
-          Last updated by {CARD.updatedBy} on {CARD.updatedOn} to CIBIL
+          Last updated by {LOAN.updatedBy} on {LOAN.updatedOn} to CIBIL
         </p>
         <Button variant="secondary" onClick={() => router.push("/error-state")}>
           Report an error
@@ -186,10 +186,10 @@ function CardDetailContent() {
   );
 }
 
-export default function CardDetail() {
+export default function LoanDetail() {
   return (
     <Suspense>
-      <CardDetailContent />
+      <LoanDetailContent />
     </Suspense>
   );
 }

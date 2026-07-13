@@ -5,7 +5,6 @@ import {
   IconArrowUp,
   IconAward,
   IconChevronRight,
-  IconCreditCard,
   IconFileDownload,
   IconFileText,
   IconHelpCircle,
@@ -21,6 +20,7 @@ import NavBar from "../components/NavBar";
 import RefreshScoreSheet from "../components/RefreshScoreSheet";
 import ScoreBreakdownSheet from "../components/ScoreBreakdownSheet";
 import ThemeColor from "../components/ThemeColor";
+import { mock } from "../data/mock";
 import { debugFlagAtoms } from "../state/debugFlags";
 
 // FICO score model. Bands run low → high; each segment of the gauge is sized
@@ -74,141 +74,6 @@ function resolveScore(score) {
   const activeTick = Math.round((1 - fraction) * (SCORE_TICKS.length - 1));
   return { segments, band, activeTick };
 }
-
-// Classification bands per factor (PayUFin's rating scale). Ordered
-// Excellent → Poor; each `tone` maps to a colour in the breakdown sheet.
-const PAYMENT_HISTORY_RANGES = [
-  { tone: "excellent", label: "Excellent", range: "100% · 0 missed payment" },
-  { tone: "very-good", label: "Very Good", range: "85% · 1 missed payment" },
-  { tone: "good", label: "Good", range: "75% · 2 missed payments" },
-  { tone: "fair", label: "Fair", range: "55% · 3 – 4 missed payments" },
-  { tone: "poor", label: "Poor", range: "50% · 5+ missed payments" },
-];
-const PAYMENT_HISTORY_VALUE = 100; // % on-time
-function classifyPaymentHistory(pct) {
-  if (pct >= 90) return "Excellent";
-  if (pct >= 80) return "Very Good";
-  if (pct >= 70) return "Good";
-  if (pct >= 50) return "Fair";
-  return "Poor";
-}
-
-const CREDIT_UTILIZATION_RANGES = [
-  { tone: "excellent", label: "Excellent", range: "Below 10%" },
-  { tone: "very-good", label: "Very Good", range: "11 – 30%" },
-  { tone: "good", label: "Good", range: "31 – 50%" },
-  { tone: "fair", label: "Fair", range: "51 – 75%" },
-  { tone: "poor", label: "Poor", range: "Above 76%" },
-];
-const CREDIT_UTILIZATION_VALUE = 24; // % of limit used (lower is better)
-function classifyCreditUtilization(pct) {
-  if (pct <= 10) return "Excellent";
-  if (pct <= 30) return "Very Good";
-  if (pct <= 50) return "Good";
-  if (pct <= 75) return "Fair";
-  return "Poor";
-}
-
-const CREDIT_HISTORY_RANGES = [
-  { tone: "excellent", label: "Excellent", range: "7 years & above" },
-  { tone: "very-good", label: "Very Good", range: "5 – 7 years" },
-  { tone: "good", label: "Good", range: "3 – 5 years" },
-  { tone: "fair", label: "Fair", range: "2 – 3 years" },
-  { tone: "poor", label: "Poor", range: "Below 2 years" },
-];
-const CREDIT_HISTORY_VALUE = 2; // years
-function classifyCreditHistory(years) {
-  if (years >= 7) return "Excellent";
-  if (years >= 5) return "Very Good";
-  if (years >= 3) return "Good";
-  if (years >= 2) return "Fair";
-  return "Poor";
-}
-
-const CREDIT_MIX_RANGES = [
-  { tone: "excellent", label: "Excellent", range: "40 – 100%" },
-  { tone: "good", label: "Good", range: "5 – 40%" },
-  { tone: "poor", label: "Poor", range: "0 – 5%" },
-];
-
-const CREDIT_MIX_VALUE = 42;
-function classifyCreditMix(pct) {
-  if (pct >= 40) return "Excellent";
-  if (pct >= 5) return "Good";
-  return "Poor";
-}
-
-const RECENT_INQUIRIES_RANGES = [
-  { tone: "excellent", label: "Excellent", range: "0 – 1 enquiries" },
-  { tone: "very-good", label: "Very Good", range: "2 enquiries" },
-  { tone: "good", label: "Good", range: "3 enquiries" },
-  { tone: "fair", label: "Fair", range: "4 – 5 enquiries" },
-  { tone: "poor", label: "Poor", range: "6+ enquiries" },
-];
-const RECENT_INQUIRIES_VALUE = 7; // hard enquiries in last 6 months
-function classifyRecentInquiries(n) {
-  if (n <= 1) return "Excellent";
-  if (n === 2) return "Very Good";
-  if (n === 3) return "Good";
-  if (n <= 5) return "Fair";
-  return "Poor";
-}
-
-// Factors that move the score — a 2×3 grid of cards. Each carries a `title`,
-// a short `description`, and the `ranges` that define its Excellent→Poor bands
-// (shown in a bottom sheet). `rating` marks which band the user falls in.
-const IMPACTS = [
-  {
-    id: "payment-history",
-    rating: classifyPaymentHistory(PAYMENT_HISTORY_VALUE),
-    label: ["Payment history"],
-    value: `${PAYMENT_HISTORY_VALUE}%`,
-    title: "Payment history",
-    description:
-      "The share of your credit payments made on time. Even one missed payment can pull this down.",
-    ranges: PAYMENT_HISTORY_RANGES,
-  },
-  {
-    id: "credit-utilization",
-    rating: classifyCreditUtilization(CREDIT_UTILIZATION_VALUE),
-    label: ["Credit utilization"],
-    value: `${CREDIT_UTILIZATION_VALUE}%`,
-    title: "Credit utilization",
-    description:
-      "How much of your available credit limit you're using. The lower, the better.",
-    ranges: CREDIT_UTILIZATION_RANGES,
-  },
-  {
-    id: "credit-history",
-    rating: classifyCreditHistory(CREDIT_HISTORY_VALUE),
-    label: ["Credit history"],
-    value: `${CREDIT_HISTORY_VALUE} years`,
-    title: "Credit history",
-    description:
-      "How long you've had active credit accounts. A longer history helps your score.",
-    ranges: CREDIT_HISTORY_RANGES,
-  },
-  {
-    id: "credit-mix",
-    rating: classifyCreditMix(CREDIT_MIX_VALUE),
-    label: ["Credit mix"],
-    value: `${CREDIT_MIX_VALUE}%`,
-    title: "Credit mix",
-    description:
-      "The share of secured vs unsecured credit you hold. A healthier balance helps your score.",
-    ranges: CREDIT_MIX_RANGES,
-  },
-  {
-    id: "recent-inquiries",
-    rating: classifyRecentInquiries(RECENT_INQUIRIES_VALUE),
-    label: ["Recent inquiries"],
-    value: `${RECENT_INQUIRIES_VALUE}`,
-    title: "Recent inquiries",
-    description:
-      "Hard inquiries from new credit applications in the last 6 months. Fewer is better.",
-    ranges: RECENT_INQUIRIES_RANGES,
-  },
-];
 
 // Each rating maps to a tone: the card's top-tint gradient and the badge's
 // (stronger) tint + text colour. The *-02 badge tints are one step darker than
@@ -271,20 +136,6 @@ function ImpactCard({ rating, label, value, onClick }) {
     </button>
   );
 }
-
-// Mocked month-by-month score history (oldest → newest).
-const SCORE_HISTORY = [
-  { month: "Feb", score: 560 }, // Poor
-  { month: "Mar", score: 620 }, // Fair
-  { month: "Apr", score: 685 }, // Good
-  { month: "May", score: 730 }, // Good
-  { month: "Jun", score: 765 }, // Very Good
-  { month: "Jul", score: 789 }, // Very Good
-];
-
-// Highlight callout data: percentile standing + change vs. last month.
-const USER_PERCENTILE = 20;
-const SCORE_DELTA = SCORE_HISTORY.at(-1).score - SCORE_HISTORY.at(-2).score; // +9 pts
 
 // A compact line chart of the monthly score history. Pure SVG, sized by a
 // viewBox so it scales to the card width; colours come from our brand token.
@@ -415,11 +266,6 @@ function ActionRow({ icon: Icon, label, onClick, last }) {
   );
 }
 
-const CURRENT_SCORE = 789;
-
-// Date this credit report was last fetched from the bureau.
-const REPORT_FETCH_DATE = "24 Jun 2026";
-
 export default function CreditScore() {
   const router = useRouter();
   const refreshAvailable = useAtomValue(debugFlagAtoms.refreshAvailable);
@@ -434,7 +280,7 @@ export default function CreditScore() {
   // score floor and settle on the real value after first paint to get an
   // entrance roll (number, label, and gauge all animate into place).
   useEffect(() => {
-    setScore(CURRENT_SCORE);
+    setScore(mock.currentScore);
   }, []);
 
   // Roll the score to a new value — drives the slot-text animation. Direction
@@ -538,7 +384,7 @@ export default function CreditScore() {
           <div className="flex items-center justify-between gap-4 rounded-lg bg-background-inverse-secondary px-4 py-3">
             <span className="flex items-center gap-2 text-[14px] leading-5 text-content-inverse-primary">
               <IconFileText size={20} stroke={2} className="shrink-0" />
-              Fetched on {REPORT_FETCH_DATE}
+              Fetched on {mock.reportFetchDate}
             </span>
             {refreshAvailable && (
               <button
@@ -572,7 +418,7 @@ export default function CreditScore() {
               <p className="text-[14px] leading-5 text-content-primary">
                 Cheers! You're in the top{" "}
                 <span className="font-bold text-content-postive">
-                  {USER_PERCENTILE}%
+                  {mock.userPercentile}%
                 </span>{" "}
                 of 3M+ users
               </p>
@@ -582,7 +428,7 @@ export default function CreditScore() {
             <div className="flex items-center gap-3 px-4 py-3">
               <span className="flex shrink-0 items-center gap-1 rounded-full bg-background-postive px-2.5 py-1 text-[14px] leading-5 font-bold text-content-inverse-primary">
                 <IconArrowUp size={16} stroke={2.5} />
-                {SCORE_DELTA} pts
+                {mock.scoreDelta} pts
               </span>
               <span className="text-[14px] leading-5 text-content-secondary">
                 since last month
@@ -591,7 +437,7 @@ export default function CreditScore() {
             <div className="border-t border-border-primary" />
             {/* Monthly trend */}
             <div className="p-4">
-              <ScoreTrendChart data={SCORE_HISTORY} />
+              <ScoreTrendChart data={mock.scoreHistory} />
             </div>
           </div>
         </section>
@@ -603,7 +449,7 @@ export default function CreditScore() {
           {/* Full-bleed horizontal scroll: -mx-4/px-4 lets cards run to the
               frame edge while the first card still aligns with the section. */}
           <div className="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain scroll-px-4 px-4 pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            {IMPACTS.map((impact) => (
+            {mock.impacts.map((impact) => (
               <ImpactCard
                 key={impact.id}
                 {...impact}
@@ -627,23 +473,14 @@ export default function CreditScore() {
             </button>
           </div>
           <div className="overflow-hidden rounded-2xl border border-border-primary bg-background-primary py-1">
-            <LoanRow
-              icon={IconCreditCard}
-              name="PayU Finance Private Ltd"
-              detail="₹64,000 · Card EMI"
-              status="Active"
-              tone="positive"
-              onClick={() => router.push("/card")}
-            />
-            <LoanRow
-              icon={IconCreditCard}
-              name="PayU Finance Private Ltd"
-              detail="₹64,000 · Card EMI"
-              status="Active"
-              tone="positive"
-              onClick={() => router.push("/card")}
-              last
-            />
+            {mock.loans.active.map((loan, i) => (
+              <LoanRow
+                key={loan.id}
+                {...loan}
+                last={i === mock.loans.active.length - 1}
+                onClick={() => router.push(`/${loan.type}?id=${loan.id}`)}
+              />
+            ))}
           </div>
         </section>
 
