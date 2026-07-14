@@ -38,6 +38,18 @@ const scorePrediction = {
 // Card illustrations live in /public, named after each choice id.
 const predictor = {
   heading: "Make a choice. See where it takes you",
+  // Detail screen for the "miss a payment" choice.
+  missPayment: {
+    kicker: "See how your score changes",
+    title: "If you miss loan EMI or credit card bills",
+    optionsLabel: "Miss payments for",
+    options: [
+      { id: "30", label: "30 days" },
+      { id: "60", label: "60 days" },
+      { id: "90", label: "90 days" },
+    ],
+    cta: "Predict score",
+  },
   choices: [
     {
       id: "miss-payment",

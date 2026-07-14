@@ -18,9 +18,7 @@ import { RadioGroup as BaseRadioGroup } from "@base-ui/react/radio-group";
  * `className="flex-col"` on RadioGroup to stack them vertically instead.
  */
 export function RadioGroup({ className = "", ...props }) {
-  return (
-    <BaseRadioGroup className={`flex flex-row gap-3 ${className}`} {...props} />
-  );
+  return <BaseRadioGroup className={`flex gap-3 ${className}`} {...props} />;
 }
 
 export function RadioCard({ children, className = "", ...props }) {

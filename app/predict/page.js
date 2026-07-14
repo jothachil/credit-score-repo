@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import NavBar from "../components/NavBar";
 import { mock } from "../data/mock";
@@ -46,7 +47,18 @@ function ChoiceCard({ choice, active, onClick }) {
 }
 
 export default function PredictScore() {
+  const router = useRouter();
   const [activeId, setActiveId] = useState(null);
+
+  // Choices with a built detail screen navigate there; the rest just toggle
+  // their selected state for now.
+  function choose(choice) {
+    if (choice.id === "miss-payment") {
+      router.push("/predict/miss-payment");
+      return;
+    }
+    setActiveId(activeId === choice.id ? null : choice.id);
+  }
 
   return (
     <div className="flex flex-1 flex-col bg-background-secondary">
@@ -69,9 +81,7 @@ export default function PredictScore() {
               key={choice.id}
               choice={choice}
               active={activeId === choice.id}
-              onClick={() =>
-                setActiveId(activeId === choice.id ? null : choice.id)
-              }
+              onClick={() => choose(choice)}
             />
           ))}
         </div>
