@@ -23,7 +23,7 @@ export default function Onboarding() {
   const [consented, setConsented] = useState(true);
 
   return (
-    <div className="flex flex-1 flex-col  bg-background-primary">
+    <div className="flex flex-1 flex-col bg-background-primary bg-gradient-to-b from-background-postive/30 to-background-primary to-45%">
       {/* App bar */}
       <header className="flex items-center px-4 pt-[calc(0.75rem+env(safe-area-inset-top))] pb-3">
         <button
@@ -40,7 +40,7 @@ export default function Onboarding() {
       <div className="flex items-center justify-center">
         {/* biome-ignore lint/performance/noImgElement: prototype static asset */}
         <img
-          src="/onboarding-6.png"
+          src="/onboarding-8.png"
           alt="Credit score meter"
           className="h-auto w-full max-w-[360px] object-contain"
         />
@@ -49,7 +49,7 @@ export default function Onboarding() {
       {/* Heading */}
       <div className="mt-10 flex flex-col items-center gap-2 px-6 text-center">
         <h1 className="text-2xl leading-9 font-bold tracking-tight text-content-primary">
-          Check your CIBIL Score for free!
+          Check your CIBIL Score
         </h1>
         <p className="text-sm text-content-secondary">
           Get detailed insights on your credit report
@@ -78,35 +78,17 @@ export default function Onboarding() {
       </div>
 
       {/* Consent + CTA — pinned to the bottom of the screen */}
-      <div className="sticky bottom-0 mt-auto flex flex-col gap-5 border-t border-border-primary bg-background-primary px-4 pt-4 pb-[calc(1rem+env(safe-area-inset-bottom))]">
-        <div className="flex items-start gap-3">
-          <Checkbox
-            id="consent"
-            checked={consented}
-            onCheckedChange={setConsented}
-          />
-          <label
-            htmlFor="consent"
-            className="cursor-pointer text-[14px] leading-5 text-content-secondary"
-          >
-            I agree to the{" "}
-            <a
-              href="/terms-and-conditions"
-              className="font-semibold text-content-brand"
-            >
-              Terms and Conditions
-            </a>{" "}
-            of TUCIBIL and hereby provide explicit consent to share my Credit
-            Information with PayU Finance India Private Limited.
-          </label>
-        </div>
-
+      <div className="sticky bottom-0 mt-auto flex flex-col gap-3 border-t border-border-primary bg-background-primary px-4 pt-4 pb-[calc(1rem+env(safe-area-inset-bottom))]">
         <Button
           variant="primary"
           disabled={!consented}
           onClick={() => router.push("/fetching")}
+          className="flex items-center justify-center gap-2"
         >
           Check score now
+          {/* Price strike — was paid, now free */}
+          <span className="opacity-60 line-through">₹49</span>
+          <span>FREE</span>
         </Button>
       </div>
     </div>

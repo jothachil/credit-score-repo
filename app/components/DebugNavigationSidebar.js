@@ -23,6 +23,10 @@ const debugPages = [
     path: "/score",
   },
   {
+    id: "predict",
+    path: "/predict",
+  },
+  {
     id: "loans",
     path: "/loans",
   },

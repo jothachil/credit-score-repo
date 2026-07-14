@@ -32,6 +32,52 @@ const scorePrediction = {
   cta: "Check now",
 };
 
+// Score predictor page: each choice applies a delta to the current score.
+// Deltas are illustrative magnitudes — hits for missed payments/defaults,
+// modest gains for repayment/utilisation, small dips for new credit.
+// Card illustrations live in /public, named after each choice id.
+const predictor = {
+  heading: "Make a choice. See where it takes you",
+  choices: [
+    {
+      id: "miss-payment",
+      label: "Miss a payment due date",
+      delta: -58,
+      tone: "negative",
+    },
+    {
+      id: "pay-outstanding",
+      label: "Pay outstanding loans & cards",
+      delta: 32,
+      tone: "positive",
+    },
+    {
+      id: "lower-utilisation",
+      label: "Lower your credit utilisation",
+      delta: 18,
+      tone: "brand",
+    },
+    {
+      id: "default-loan",
+      label: "Default on a loan or card",
+      delta: -112,
+      tone: "negative",
+    },
+    {
+      id: "close-oldest-card",
+      label: "Close oldest credit card",
+      delta: -24,
+      tone: "warning",
+    },
+    {
+      id: "new-credit",
+      label: "Take a new credit card",
+      delta: -12,
+      tone: "brand",
+    },
+  ],
+};
+
 // ---- Impact factors ----
 // Classification bands per factor (PayUFin's rating scale), Excellent → Poor.
 const paymentHistoryRanges = [
@@ -395,6 +441,7 @@ export const mock = {
   scoreHistory,
   scoreDelta,
   scorePrediction,
+  predictor,
   impacts,
   loans,
   card,

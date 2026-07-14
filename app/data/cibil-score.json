@@ -1,0 +1,2603 @@
+{
+  "Type": "SingleCreditReport",
+  "Status": "Active",
+  "AssetId": 29528128969,
+  "uniqueRefNo": null,
+  "CreationDate": "2026-07-13T12:08:04.698+05:30",
+  "ExpirationDate": "2028-07-12T12:08:04.698+05:30",
+  "SafetyCheckFailure": false,
+  "TrueLinkCreditReport": {
+    "Message": {
+      "Code": {
+        "rank": "100000",
+        "symbol": "",
+        "description": "",
+        "abbreviation": ""
+      },
+      "Type": {
+        "rank": "100000",
+        "symbol": "ZZ",
+        "description": "",
+        "abbreviation": ""
+      }
+    },
+    "Sources": {
+      "Source": {
+        "Bureau": {
+          "rank": "100000",
+          "symbol": "CIBIL",
+          "description": "",
+          "abbreviation": ""
+        },
+        "InquiryDate": "2026-07-13T12:08:04.000+05:30"
+      }
+    },
+    "Borrower": {
+      "Birth": {
+        "age": "0",
+        "date": "1995-11-25",
+        "Source": {
+          "Bureau": {
+            "rank": "100000",
+            "symbol": "CIBIL",
+            "description": "",
+            "abbreviation": ""
+          },
+          "Locale": "en_IN",
+          "Reference": "69c4d13b-afc6-4252-833d-0c0efca62110",
+          "BorrowerKey": "947427949",
+          "InquiryDate": "2026-07-13+05:30"
+        },
+        "BirthDate": {
+          "day": "25",
+          "year": "1995",
+          "month": "11"
+        },
+        "partitionSet": "0"
+      },
+      "Gender": "Male",
+      "Employer": {
+        "Source": {
+          "Bureau": {
+            "rank": "100000",
+            "symbol": "CIBIL",
+            "description": "",
+            "abbreviation": ""
+          },
+          "Locale": "en_IN",
+          "Reference": "69c4d13b-afc6-4252-833d-0c0efca62110",
+          "BorrowerKey": "947427949",
+          "InquiryDate": "2026-07-13+05:30"
+        },
+        "account": "10",
+        "dateReported": "2026-07-10+05:30",
+        "partitionSet": 0,
+        "CreditAddress": {
+          "City": "",
+          "Region": "",
+          "PostalCode": "",
+          "AddressType": "",
+          "StreetAddress": ""
+        },
+        "OccupationCode": {
+          "rank": "100000",
+          "symbol": "01",
+          "description": "Salaried",
+          "abbreviation": ""
+        }
+      },
+      "CreditScore": {
+        "Source": {
+          "Bureau": {
+            "rank": "100000",
+            "symbol": "CIBIL",
+            "description": "",
+            "abbreviation": ""
+          },
+          "Locale": "en_IN",
+          "Reference": "69c4d13b-afc6-4252-833d-0c0efca62110",
+          "BorrowerKey": "947427949",
+          "InquiryDate": "2026-07-13+05:30"
+        },
+        "riskScore": "784",
+        "scoreName": "CIBILTransUnionScore3",
+        "NoScoreReason": {
+          "rank": "100000",
+          "symbol": "",
+          "description": "",
+          "abbreviation": ""
+        },
+        "populationRank": "15",
+        "CreditScoreModel": {
+          "rank": "100000",
+          "symbol": "CIBILTUSC3",
+          "description": "",
+          "abbreviation": ""
+        },
+        "CreditScoreFactor": [
+          {
+            "Factor": {
+              "rank": "100000",
+              "symbol": "39",
+              "description": "",
+              "abbreviation": ""
+            },
+
+            "bureauCode": "39"
+          },
+          {
+            "Factor": {
+              "rank": "100000",
+              "symbol": "36",
+              "description": "",
+              "abbreviation": ""
+            },
+
+            "bureauCode": "36"
+          },
+          {
+            "Factor": {
+              "rank": "100000",
+              "symbol": "38",
+              "description": "",
+              "abbreviation": ""
+            },
+
+            "bureauCode": "38"
+          },
+          {
+            "Factor": {
+              "rank": "100000",
+              "symbol": "00",
+              "description": "",
+              "abbreviation": ""
+            },
+
+            "bureauCode": "00"
+          },
+          {
+            "Factor": {
+              "rank": "100000",
+              "symbol": "00",
+              "description": "",
+              "abbreviation": ""
+            },
+
+            "bureauCode": "00"
+          }
+        ]
+      },
+      "BorrowerName": {
+        "Name": {
+          "Surname": null,
+          "Forename": "MR NETHALA BILVA TEJA BALA TATAJI RAO"
+        },
+        "Source": {
+          "Bureau": {
+            "rank": "100000",
+            "symbol": "CIBIL",
+            "description": "",
+            "abbreviation": ""
+          },
+          "Locale": "en_IN",
+          "Reference": "69c4d13b-afc6-4252-833d-0c0efca62110",
+          "BorrowerKey": "947427949",
+          "InquiryDate": "2026-07-13+05:30"
+        },
+        "NameType": {
+          "rank": "100000",
+          "symbol": "",
+          "description": "",
+          "abbreviation": ""
+        },
+        "partitionSet": 0
+      },
+      "EmailAddress": [
+        {
+          "Email": "BILVA.NETHALA@LAZYPAY.IN",
+          "serialNumber": "640611518"
+        },
+        {
+          "Email": "BILVA.NETHALA@OLBCABS.COM",
+          "serialNumber": "545018455"
+        },
+        {
+          "Email": "BILVATEJA.NETHALA@IITDALUMNI.COM",
+          "serialNumber": "245771239"
+        },
+        {
+          "Email": "BILVATEJA.NETHALA@GMAIL.COM",
+          "serialNumber": "211189688"
+        }
+      ],
+      "BorrowerAddress": [
+        {
+          "Origin": {
+            "rank": "100000",
+            "symbol": "IDFC FIRST BANK",
+            "description": "",
+            "abbreviation": ""
+          },
+          "Source": {
+            "Bureau": {
+              "rank": "100000",
+              "symbol": "CIBIL",
+              "description": "",
+              "abbreviation": ""
+            },
+            "Locale": "en_IN",
+            "Reference": "69c4d13b-afc6-4252-833d-0c0efca62110",
+            "BorrowerKey": "947427949",
+            "InquiryDate": "2026-07-13+05:30"
+          },
+          "Dwelling": {
+            "rank": "100000",
+            "symbol": "03",
+            "description": "",
+            "abbreviation": ""
+          },
+          "Ownership": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          },
+          "enrichMode": "R",
+          "addressOrder": "0",
+          "dateReported": "2026-02-28+05:30",
+          "partitionSet": "0",
+          "CreditAddress": {
+            "City": "",
+            "Region": "29",
+            "PostalCode": "560071",
+            "AddressType": "",
+            "SerialNumber": "5397913081",
+            "StreetAddress": "LAZYPAY PVT LTDPAYU BANGLORE OFFICE, DIV YASREEGREENS, 100 FEET RD, EMBASSY G"
+          }
+        },
+        {
+          "Origin": {
+            "rank": "100000",
+            "symbol": "ICICI BANK",
+            "description": "",
+            "abbreviation": ""
+          },
+          "Source": {
+            "Bureau": {
+              "rank": "100000",
+              "symbol": "CIBIL",
+              "description": "",
+              "abbreviation": ""
+            },
+            "Locale": "en_IN",
+            "Reference": "69c4d13b-afc6-4252-833d-0c0efca62110",
+            "BorrowerKey": "947427949",
+            "InquiryDate": "2026-07-13+05:30"
+          },
+          "Dwelling": {
+            "rank": "100000",
+            "symbol": "03",
+            "description": "",
+            "abbreviation": ""
+          },
+          "Ownership": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          },
+          "enrichMode": "R",
+          "addressOrder": "1",
+          "dateReported": "2025-02-28+05:30",
+          "partitionSet": "1",
+          "CreditAddress": {
+            "City": "",
+            "Region": "29",
+            "PostalCode": "560095",
+            "AddressType": "",
+            "SerialNumber": "3639542779",
+            "StreetAddress": "OLA CAMPUS C WING PRESTIGE RMZ STARTECH KORMANGALA 5TH BLOCK, KORAMANGALA  BENGA LURU URBAN"
+          }
+        },
+        {
+          "Origin": {
+            "rank": "100000",
+            "symbol": "ICICI BANK",
+            "description": "",
+            "abbreviation": ""
+          },
+          "Source": {
+            "Bureau": {
+              "rank": "100000",
+              "symbol": "CIBIL",
+              "description": "",
+              "abbreviation": ""
+            },
+            "Locale": "en_IN",
+            "Reference": "69c4d13b-afc6-4252-833d-0c0efca62110",
+            "BorrowerKey": "947427949",
+            "InquiryDate": "2026-07-13+05:30"
+          },
+          "Dwelling": {
+            "rank": "100000",
+            "symbol": "02",
+            "description": "",
+            "abbreviation": ""
+          },
+          "Ownership": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          },
+          "enrichMode": "R",
+          "addressOrder": "2",
+          "dateReported": "2025-02-28+05:30",
+          "partitionSet": "2",
+          "CreditAddress": {
+            "City": "",
+            "Region": "29",
+            "PostalCode": "560078",
+            "AddressType": "",
+            "SerialNumber": "3639542778",
+            "StreetAddress": "FLAT NO 108 PARIWAR PETALS APARTMENT 17T H H CROSS ROSE GARDEN ROAD J P NAGAR 2ND PHASE  BENGALURU URBAN"
+          }
+        },
+        {
+          "Origin": {
+            "rank": "100000",
+            "symbol": "ICICI BANK",
+            "description": "",
+            "abbreviation": ""
+          },
+          "Source": {
+            "Bureau": {
+              "rank": "100000",
+              "symbol": "CIBIL",
+              "description": "",
+              "abbreviation": ""
+            },
+            "Locale": "en_IN",
+            "Reference": "69c4d13b-afc6-4252-833d-0c0efca62110",
+            "BorrowerKey": "947427949",
+            "InquiryDate": "2026-07-13+05:30"
+          },
+          "Dwelling": {
+            "rank": "100000",
+            "symbol": "01",
+            "description": "",
+            "abbreviation": ""
+          },
+          "Ownership": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          },
+          "enrichMode": "R",
+          "addressOrder": "3",
+          "dateReported": "2025-02-28+05:30",
+          "partitionSet": "3",
+          "CreditAddress": {
+            "City": "",
+            "Region": "36",
+            "PostalCode": "508207",
+            "AddressType": "",
+            "SerialNumber": "3639542777",
+            "StreetAddress": "1-90-514(LIG-I-111)MIRYALAGUDA APHB COLO NY NEAR RAVI KIRANAM MIRYALAGUDA  NALGON DA"
+          }
+        }
+      ],
+      "CreditStatement": {
+        "Source": {
+          "Bureau": {
+            "rank": "100000",
+            "symbol": "CIBIL",
+            "description": "",
+            "abbreviation": ""
+          },
+          "Locale": "en_IN",
+          "Reference": "69c4d13b-afc6-4252-833d-0c0efca62110",
+          "BorrowerKey": "947427949",
+          "InquiryDate": "2026-07-13+05:30"
+        },
+        "StatementType": {
+          "rank": "100000",
+          "symbol": "DISPUTE",
+          "description": "",
+          "abbreviation": ""
+        }
+      },
+      "BorrowerTelephone": [
+        {
+          "Source": {
+            "Bureau": {
+              "rank": "100000",
+              "symbol": "CIBIL",
+              "description": "",
+              "abbreviation": ""
+            },
+            "Locale": "en_IN",
+            "Reference": "69c4d13b-afc6-4252-833d-0c0efca62110",
+            "BorrowerKey": "947427949",
+            "InquiryDate": "2026-07-13+05:30"
+          },
+          "PhoneType": {
+            "rank": "100000",
+            "symbol": "01",
+            "description": "",
+            "abbreviation": ""
+          },
+          "enrichMode": "R",
+          "PhoneNumber": {
+            "Number": "9911012965",
+            "SerialNumber": "2436748215"
+          },
+          "partitionSet": "0"
+        },
+        {
+          "Source": {
+            "Bureau": {
+              "rank": "100000",
+              "symbol": "CIBIL",
+              "description": "",
+              "abbreviation": ""
+            },
+            "Locale": "en_IN",
+            "Reference": "69c4d13b-afc6-4252-833d-0c0efca62110",
+            "BorrowerKey": "947427949",
+            "InquiryDate": "2026-07-13+05:30"
+          },
+          "PhoneType": {
+            "rank": "100000",
+            "symbol": "01",
+            "description": "",
+            "abbreviation": ""
+          },
+          "enrichMode": "R",
+          "PhoneNumber": {
+            "Number": "9911012965",
+            "SerialNumber": "1050809237"
+          },
+          "partitionSet": "1"
+        },
+        {
+          "Source": {
+            "Bureau": {
+              "rank": "100000",
+              "symbol": "CIBIL",
+              "description": "",
+              "abbreviation": ""
+            },
+            "Locale": "en_IN",
+            "Reference": "69c4d13b-afc6-4252-833d-0c0efca62110",
+            "BorrowerKey": "947427949",
+            "InquiryDate": "2026-07-13+05:30"
+          },
+          "PhoneType": {
+            "rank": "100000",
+            "symbol": "01",
+            "description": "",
+            "abbreviation": ""
+          },
+          "enrichMode": "E",
+          "PhoneNumber": {
+            "Number": "8187853852",
+            "SerialNumber": "531453840"
+          },
+          "partitionSet": "2"
+        }
+      ],
+      "IdentifierPartition": {
+        "Identifier": [
+          {
+            "ID": {
+              "Id": "947427949",
+              "IdentifierName": "SocialId"
+            },
+            "Source": {
+              "Bureau": {
+                "rank": "100000",
+                "symbol": "CIBIL",
+                "description": "",
+                "abbreviation": ""
+              },
+              "Locale": "en_IN",
+              "Reference": "69c4d13b-afc6-4252-833d-0c0efca62110",
+              "BorrowerKey": "947427949",
+              "InquiryDate": "2026-07-13+05:30"
+            }
+          },
+          {
+            "ID": {
+              "Id": "ATQPN6254J",
+              "SerialNumber": "215394851",
+              "IdentifierName": "TaxId"
+            },
+            "Source": {
+              "Bureau": {
+                "rank": "100000",
+                "symbol": "CIBIL",
+                "description": "",
+                "abbreviation": ""
+              },
+              "Locale": "en_IN",
+              "Reference": "69c4d13b-afc6-4252-833d-0c0efca62110",
+              "BorrowerKey": "947427949",
+              "InquiryDate": "2026-07-13+05:30"
+            },
+            "enrichMode": "R"
+          },
+          {
+            "ID": {
+              "Id": "UJQ1159111",
+              "SerialNumber": "215394852",
+              "IdentifierName": "VoterId"
+            },
+            "Source": {
+              "Bureau": {
+                "rank": "100000",
+                "symbol": "CIBIL",
+                "description": "",
+                "abbreviation": ""
+              },
+              "Locale": "en_IN",
+              "Reference": "69c4d13b-afc6-4252-833d-0c0efca62110",
+              "BorrowerKey": "947427949",
+              "InquiryDate": "2026-07-13+05:30"
+            },
+            "enrichMode": "E"
+          },
+          {
+            "ID": {
+              "Id": "30090130233182",
+              "SerialNumber": "1152823053",
+              "IdentifierName": "CkycId"
+            },
+            "Source": {
+              "Bureau": {
+                "rank": "100000",
+                "symbol": "CIBIL",
+                "description": "",
+                "abbreviation": ""
+              },
+              "Locale": "en_IN",
+              "Reference": "69c4d13b-afc6-4252-833d-0c0efca62110",
+              "BorrowerKey": "947427949",
+              "InquiryDate": "2026-07-13+05:30"
+            },
+            "enrichMode": "R"
+          }
+        ]
+      }
+    },
+    "ReferenceKey": "11294078247",
+    "FraudIndicator": false,
+    "InquiryPartition": [
+      {
+        "Inquiry": {
+          "Source": {
+            "Bureau": {
+              "rank": "100000",
+              "symbol": "CIBIL",
+              "description": "",
+              "abbreviation": ""
+            },
+            "Locale": "en_IN",
+            "Reference": "69c4d13b-afc6-4252-833d-0c0efca62110",
+            "BorrowerKey": "947427949",
+            "InquiryDate": "2026-07-13+05:30"
+          },
+          "amount": "10000",
+          "bureau": "",
+          "description": "",
+          "inquiryDate": "2026-01-29+05:30",
+          "inquiryType": "10",
+          "IndustryCode": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          },
+          "enqControlNum": "10464383582",
+          "subscriberName": "HDFC BANK",
+          "subscriberNumber": ""
+        }
+      },
+      {
+        "Inquiry": {
+          "Source": {
+            "Bureau": {
+              "rank": "100000",
+              "symbol": "CIBIL",
+              "description": "",
+              "abbreviation": ""
+            },
+            "Locale": "en_IN",
+            "Reference": "69c4d13b-afc6-4252-833d-0c0efca62110",
+            "BorrowerKey": "947427949",
+            "InquiryDate": "2026-07-13+05:30"
+          },
+          "amount": "20000",
+          "bureau": "",
+          "description": "",
+          "inquiryDate": "2025-12-19+05:30",
+          "inquiryType": "10",
+          "IndustryCode": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          },
+          "enqControlNum": "10241770329",
+          "subscriberName": "IDFC FIRST BANK",
+          "subscriberNumber": ""
+        }
+      },
+      {
+        "Inquiry": {
+          "Source": {
+            "Bureau": {
+              "rank": "100000",
+              "symbol": "CIBIL",
+              "description": "",
+              "abbreviation": ""
+            },
+            "Locale": "en_IN",
+            "Reference": "69c4d13b-afc6-4252-833d-0c0efca62110",
+            "BorrowerKey": "947427949",
+            "InquiryDate": "2026-07-13+05:30"
+          },
+          "amount": "1000",
+          "bureau": "",
+          "description": "",
+          "inquiryDate": "2025-07-22+05:30",
+          "inquiryType": "10",
+          "IndustryCode": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          },
+          "enqControlNum": "9362991186",
+          "subscriberName": "HDFC BANK",
+          "subscriberNumber": ""
+        }
+      },
+      {
+        "Inquiry": {
+          "Source": {
+            "Bureau": {
+              "rank": "100000",
+              "symbol": "CIBIL",
+              "description": "",
+              "abbreviation": ""
+            },
+            "Locale": "en_IN",
+            "Reference": "69c4d13b-afc6-4252-833d-0c0efca62110",
+            "BorrowerKey": "947427949",
+            "InquiryDate": "2026-07-13+05:30"
+          },
+          "amount": "100000",
+          "bureau": "",
+          "description": "",
+          "inquiryDate": "2025-01-25+05:30",
+          "inquiryType": "10",
+          "IndustryCode": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          },
+          "enqControlNum": "8649745607",
+          "subscriberName": "ICICI BANK",
+          "subscriberNumber": ""
+        }
+      },
+      {
+        "Inquiry": {
+          "Source": {
+            "Bureau": {
+              "rank": "100000",
+              "symbol": "CIBIL",
+              "description": "",
+              "abbreviation": ""
+            },
+            "Locale": "en_IN",
+            "Reference": "69c4d13b-afc6-4252-833d-0c0efca62110",
+            "BorrowerKey": "947427949",
+            "InquiryDate": "2026-07-13+05:30"
+          },
+          "amount": "400000",
+          "bureau": "",
+          "description": "",
+          "inquiryDate": "2024-09-13+05:30",
+          "inquiryType": "10",
+          "IndustryCode": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          },
+          "enqControlNum": "8098576062",
+          "subscriberName": "ADITYA BIRLA F L LICENCECANCELLED",
+          "subscriberNumber": ""
+        }
+      },
+      {
+        "Inquiry": {
+          "Source": {
+            "Bureau": {
+              "rank": "100000",
+              "symbol": "CIBIL",
+              "description": "",
+              "abbreviation": ""
+            },
+            "Locale": "en_IN",
+            "Reference": "69c4d13b-afc6-4252-833d-0c0efca62110",
+            "BorrowerKey": "947427949",
+            "InquiryDate": "2026-07-13+05:30"
+          },
+          "amount": "709000",
+          "bureau": "",
+          "description": "",
+          "inquiryDate": "2024-08-14+05:30",
+          "inquiryType": "05",
+          "IndustryCode": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          },
+          "enqControlNum": "7966141746",
+          "subscriberName": "TCL",
+          "subscriberNumber": ""
+        }
+      },
+      {
+        "Inquiry": {
+          "Source": {
+            "Bureau": {
+              "rank": "100000",
+              "symbol": "CIBIL",
+              "description": "",
+              "abbreviation": ""
+            },
+            "Locale": "en_IN",
+            "Reference": "69c4d13b-afc6-4252-833d-0c0efca62110",
+            "BorrowerKey": "947427949",
+            "InquiryDate": "2026-07-13+05:30"
+          },
+          "amount": "1000000",
+          "bureau": "",
+          "description": "",
+          "inquiryDate": "2024-04-16+05:30",
+          "inquiryType": "10",
+          "IndustryCode": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          },
+          "enqControlNum": "7447304844",
+          "subscriberName": "ICICI BANK",
+          "subscriberNumber": ""
+        }
+      },
+      {
+        "Inquiry": {
+          "Source": {
+            "Bureau": {
+              "rank": "100000",
+              "symbol": "CIBIL",
+              "description": "",
+              "abbreviation": ""
+            },
+            "Locale": "en_IN",
+            "Reference": "69c4d13b-afc6-4252-833d-0c0efca62110",
+            "BorrowerKey": "947427949",
+            "InquiryDate": "2026-07-13+05:30"
+          },
+          "amount": "1000",
+          "bureau": "",
+          "description": "",
+          "inquiryDate": "2024-03-15+05:30",
+          "inquiryType": "10",
+          "IndustryCode": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          },
+          "enqControlNum": "7304534411",
+          "subscriberName": "HDFC BANK",
+          "subscriberNumber": ""
+        }
+      },
+      {
+        "Inquiry": {
+          "Source": {
+            "Bureau": {
+              "rank": "100000",
+              "symbol": "CIBIL",
+              "description": "",
+              "abbreviation": ""
+            },
+            "Locale": "en_IN",
+            "Reference": "69c4d13b-afc6-4252-833d-0c0efca62110",
+            "BorrowerKey": "947427949",
+            "InquiryDate": "2026-07-13+05:30"
+          },
+          "amount": "20000",
+          "bureau": "",
+          "description": "",
+          "inquiryDate": "2023-08-01+05:30",
+          "inquiryType": "10",
+          "IndustryCode": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          },
+          "enqControlNum": "6221983982",
+          "subscriberName": "IDFC FIRST BANK",
+          "subscriberNumbHDFC Banker": ""
+        }
+      }
+    ],
+    "DeceasedIndicator": false,
+    "SafetyCheckPassed": true,
+    "TradeLinePartition": [
+      {
+        "Tradeline": {
+          "Source": {
+            "Bureau": {
+              "rank": "100000",
+              "symbol": "CIBIL",
+              "description": "",
+              "abbreviation": ""
+            },
+            "Locale": "en_IN",
+            "Reference": "69c4d13b-afc6-4252-833d-0c0efca62110",
+            "BorrowerKey": "947427949",
+            "InquiryDate": "2026-07-13+05:30"
+          },
+          "branch": "",
+          "bureau": "",
+          "position": "0",
+          "PayStatus": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          },
+          "OpenClosed": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          },
+          "dateOpened": "2026-02-04+05:30",
+          "DisputeFlag": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          },
+          "highBalance": "51132",
+          "GrantedTrade": {
+            "TermType": {
+              "rank": "100000",
+              "symbol": "",
+              "description": "",
+              "abbreviation": ""
+            },
+            "CashLimit": "-1",
+            "EMIAmount": "-1",
+            "CreditType": {
+              "rank": "100000",
+              "symbol": "10",
+              "description": "",
+              "abbreviation": ""
+            },
+            "collateral": "-1",
+            "termMonths": "-1",
+            "AccountType": {
+              "rank": "100000",
+              "symbol": "10",
+              "description": "",
+              "abbreviation": ""
+            },
+            "CreditLimit": "189000",
+            "interestRate": "-1.00",
+            "serialNumber": "4041035028",
+            "amountPastDue": "-1",
+            "CollateralType": {
+              "rank": "100000",
+              "symbol": "",
+              "description": "",
+              "abbreviation": ""
+            },
+            "WorstPayStatus": {
+              "rank": "100000",
+              "symbol": "",
+              "description": "",
+              "abbreviation": ""
+            },
+            "dateLastPayment": "2026-06-05+05:30",
+            "PayStatusHistory": {
+              "status": "0,0,0,0,0,0,",
+              "endDate": "2026-02-01+05:30",
+              "startDate": "2026-07-01+05:30",
+              "MonthlyPayStatus": [
+                {
+                  "date": "2026-07-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2026-06-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2026-05-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2026-04-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2026-03-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2026-02-01+05:30",
+                  "status": "0"
+                }
+              ]
+            },
+            "PaymentFrequency": {
+              "rank": "100000",
+              "symbol": "",
+              "description": "",
+              "abbreviation": ""
+            },
+            "actualPaymentAmount": "-1"
+          },
+          "IndustryCode": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          },
+          "creditorName": "HDFC BANK",
+          "dateReported": "2026-07-10+05:30",
+          "accountNumber": "0001010430016158565",
+          "accountsSoldTo": "",
+          "currentBalance": "51132",
+          "subscriberCode": "3080001",
+          "thirdPartyName": "",
+          "AccountCondition": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          },
+          "noOfParticipants": "",
+          "settlementAmount": "-1",
+          "AccountDesignator": {
+            "rank": "100000",
+            "symbol": "1",
+            "description": "",
+            "abbreviation": ""
+          },
+          "dateAccountStatus": "2026-06-05+05:30",
+          "writtenOffAmtTotal": "-1",
+          "writtenOffPrincipal": "-1",
+          "VerificationIndicator": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          }
+        },
+        "accountTypeSymbol": "10",
+        "accountTypeDescription": "",
+        "accountTypeAbbreviation": ""
+      },
+      {
+        "Tradeline": {
+          "Source": {
+            "Bureau": {
+              "rank": "100000",
+              "symbol": "CIBIL",
+              "description": "",
+              "abbreviation": ""
+            },
+            "Locale": "en_IN",
+            "Reference": "69c4d13b-afc6-4252-833d-0c0efca62110",
+            "BorrowerKey": "947427949",
+            "InquiryDate": "2026-07-13+05:30"
+          },
+          "branch": "",
+          "bureau": "",
+          "position": "1",
+          "PayStatus": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          },
+          "OpenClosed": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          },
+          "dateOpened": "2025-12-19+05:30",
+          "DisputeFlag": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          },
+          "highBalance": "146682",
+          "GrantedTrade": {
+            "TermType": {
+              "rank": "100000",
+              "symbol": "",
+              "description": "",
+              "abbreviation": ""
+            },
+            "CashLimit": "50000",
+            "EMIAmount": "-1",
+            "CreditType": {
+              "rank": "100000",
+              "symbol": "10",
+              "description": "",
+              "abbreviation": ""
+            },
+            "collateral": "-1",
+            "termMonths": "3",
+            "AccountType": {
+              "rank": "100000",
+              "symbol": "10",
+              "description": "",
+              "abbreviation": ""
+            },
+            "CreditLimit": "500000",
+            "interestRate": "45.00",
+            "serialNumber": "3966198856",
+            "amountPastDue": "0",
+            "CollateralType": {
+              "rank": "100000",
+              "symbol": "",
+              "description": "",
+              "abbreviation": ""
+            },
+            "WorstPayStatus": {
+              "rank": "100000",
+              "symbol": "",
+              "description": "",
+              "abbreviation": ""
+            },
+            "PayStatusHistory": {
+              "status": "0,0,0,0,0,0,0,0,",
+              "endDate": "2025-12-01+05:30",
+              "startDate": "2026-07-01+05:30",
+              "MonthlyPayStatus": [
+                {
+                  "date": "2026-07-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2026-06-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2026-05-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2026-04-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2026-03-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2026-02-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2026-01-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2025-12-01+05:30",
+                  "status": "0"
+                }
+              ]
+            },
+            "PaymentFrequency": {
+              "rank": "100000",
+              "symbol": "",
+              "description": "",
+              "abbreviation": ""
+            },
+            "actualPaymentAmount": "-1"
+          },
+          "IndustryCode": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          },
+          "creditorName": "IDFC FIRST BANK",
+          "dateReported": "2026-07-09+05:30",
+          "accountNumber": "40000002143834",
+          "accountsSoldTo": "",
+          "currentBalance": "8850",
+          "subscriberCode": "3360001",
+          "thirdPartyName": "",
+          "AccountCondition": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          },
+          "noOfParticipants": "",
+          "settlementAmount": "-1",
+          "AccountDesignator": {
+            "rank": "100000",
+            "symbol": "1",
+            "description": "",
+            "abbreviation": ""
+          },
+          "writtenOffAmtTotal": "-1",
+          "writtenOffPrincipal": "-1",
+          "VerificationIndicator": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          }
+        },
+        "accountTypeSymbol": "10",
+        "accountTypeDescription": "",
+        "accountTypeAbbreviation": ""
+      },
+      {
+        "Tradeline": {
+          "Source": {
+            "Bureau": {
+              "rank": "100000",
+              "symbol": "CIBIL",
+              "description": "",
+              "abbreviation": ""
+            },
+            "Locale": "en_IN",
+            "Reference": "69c4d13b-afc6-4252-833d-0c0efca62110",
+            "BorrowerKey": "947427949",
+            "InquiryDate": "2026-07-13+05:30"
+          },
+          "branch": "",
+          "bureau": "",
+          "position": "2",
+          "PayStatus": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          },
+          "OpenClosed": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          },
+          "dateOpened": "2025-10-28+05:30",
+          "DisputeFlag": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          },
+          "highBalance": "4282",
+          "GrantedTrade": {
+            "TermType": {
+              "rank": "100000",
+              "symbol": "",
+              "description": "",
+              "abbreviation": ""
+            },
+            "CashLimit": "-1",
+            "EMIAmount": "-1",
+            "CreditType": {
+              "rank": "100000",
+              "symbol": "06",
+              "description": "",
+              "abbreviation": ""
+            },
+            "collateral": "-1",
+            "termMonths": "-1",
+            "AccountType": {
+              "rank": "100000",
+              "symbol": "06",
+              "description": "",
+              "abbreviation": ""
+            },
+            "CreditLimit": "-1",
+            "interestRate": "-1.00",
+            "serialNumber": "3854677055",
+            "amountPastDue": "0",
+            "CollateralType": {
+              "rank": "100000",
+              "symbol": "00",
+              "description": "",
+              "abbreviation": ""
+            },
+            "WorstPayStatus": {
+              "rank": "100000",
+              "symbol": "",
+              "description": "",
+              "abbreviation": ""
+            },
+            "dateLastPayment": "2026-05-30+05:30",
+            "PayStatusHistory": {
+              "status": "0,0,0,0,0,0,0,0,0,",
+              "endDate": "2025-10-01+05:30",
+              "startDate": "2026-06-01+05:30",
+              "MonthlyPayStatus": [
+                {
+                  "date": "2026-06-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2026-05-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2026-04-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2026-03-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2026-02-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2026-01-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2025-12-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2025-11-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2025-10-01+05:30",
+                  "status": "0"
+                }
+              ]
+            },
+            "PaymentFrequency": {
+              "rank": "100000",
+              "symbol": "03",
+              "description": "",
+              "abbreviation": ""
+            },
+            "actualPaymentAmount": "-1"
+          },
+          "IndustryCode": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          },
+          "creditorName": "SNAPMINTFIN",
+          "dateReported": "2026-06-30+05:30",
+          "accountNumber": "4812720310202506",
+          "accountsSoldTo": "",
+          "currentBalance": "3742",
+          "subscriberCode": "9610001",
+          "thirdPartyName": "",
+          "AccountCondition": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          },
+          "noOfParticipants": "",
+          "settlementAmount": "-1",
+          "AccountDesignator": {
+            "rank": "100000",
+            "symbol": "1",
+            "description": "",
+            "abbreviation": ""
+          },
+          "dateAccountStatus": "2026-05-30+05:30",
+          "writtenOffAmtTotal": "-1",
+          "writtenOffPrincipal": "-1",
+          "VerificationIndicator": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          }
+        },
+        "accountTypeSymbol": "06",
+        "accountTypeDescription": "",
+        "accountTypeAbbreviation": ""
+      },
+      {
+        "Tradeline": {
+          "Source": {
+            "Bureau": {
+              "rank": "100000",
+              "symbol": "CIBIL",
+              "description": "",
+              "abbreviation": ""
+            },
+            "Locale": "en_IN",
+            "Reference": "69c4d13b-afc6-4252-833d-0c0efca62110",
+            "BorrowerKey": "947427949",
+            "InquiryDate": "2026-07-13+05:30"
+          },
+          "branch": "",
+          "bureau": "",
+          "position": "3",
+          "PayStatus": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          },
+          "OpenClosed": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          },
+          "dateClosed": "2024-10-08+05:30",
+          "dateOpened": "2024-09-13+05:30",
+          "DisputeFlag": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          },
+          "highBalance": "100000",
+          "GrantedTrade": {
+            "TermType": {
+              "rank": "100000",
+              "symbol": "",
+              "description": "",
+              "abbreviation": ""
+            },
+            "CashLimit": "-1",
+            "EMIAmount": "9168",
+            "CreditType": {
+              "rank": "100000",
+              "symbol": "05",
+              "description": "",
+              "abbreviation": ""
+            },
+            "collateral": "-1",
+            "termMonths": "-1",
+            "AccountType": {
+              "rank": "100000",
+              "symbol": "05",
+              "description": "",
+              "abbreviation": ""
+            },
+            "CreditLimit": "-1",
+            "interestRate": "-1.00",
+            "serialNumber": "3231403975",
+            "amountPastDue": "0",
+            "CollateralType": {
+              "rank": "100000",
+              "symbol": "",
+              "description": "",
+              "abbreviation": ""
+            },
+            "WorstPayStatus": {
+              "rank": "100000",
+              "symbol": "",
+              "description": "",
+              "abbreviation": ""
+            },
+            "PayStatusHistory": {
+              "status": "0,0,0,0,0,",
+              "endDate": "2024-09-01+05:30",
+              "startDate": "2025-01-01+05:30",
+              "MonthlyPayStatus": [
+                {
+                  "date": "2025-01-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2024-12-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2024-11-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2024-10-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2024-09-01+05:30",
+                  "status": "0"
+                }
+              ]
+            },
+            "PaymentFrequency": {
+              "rank": "100000",
+              "symbol": "",
+              "description": "",
+              "abbreviation": ""
+            },
+            "actualPaymentAmount": "-1"
+          },
+          "IndustryCode": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          },
+          "creditorName": "ADBIRLACAP",
+          "dateReported": "2025-01-15+05:30",
+          "accountNumber": "LXW-M11924-253308372",
+          "accountsSoldTo": "",
+          "currentBalance": "0",
+          "subscriberCode": "89470001",
+          "thirdPartyName": "",
+          "AccountCondition": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          },
+          "noOfParticipants": "",
+          "settlementAmount": "-1",
+          "AccountDesignator": {
+            "rank": "100000",
+            "symbol": "1",
+            "description": "",
+            "abbreviation": ""
+          },
+          "writtenOffAmtTotal": "-1",
+          "writtenOffPrincipal": "-1",
+          "VerificationIndicator": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          }
+        },
+        "accountTypeSymbol": "05",
+        "accountTypeDescription": "",
+        "accountTypeAbbreviation": ""
+      },
+      {
+        "Tradeline": {
+          "Source": {
+            "Bureau": {
+              "rank": "100000",
+              "symbol": "CIBIL",
+              "description": "",
+              "abbreviation": ""
+            },
+            "Locale": "en_IN",
+            "Reference": "69c4d13b-afc6-4252-833d-0c0efca62110",
+            "BorrowerKey": "947427949",
+            "InquiryDate": "2026-07-13+05:30"
+          },
+          "branch": "",
+          "bureau": "",
+          "position": "4",
+          "PayStatus": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          },
+          "OpenClosed": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          },
+          "dateOpened": "2022-12-30+05:30",
+          "DisputeFlag": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          },
+          "highBalance": "95358",
+          "GrantedTrade": {
+            "TermType": {
+              "rank": "100000",
+              "symbol": "",
+              "description": "",
+              "abbreviation": ""
+            },
+            "CashLimit": "50000",
+            "EMIAmount": "-1",
+            "CreditType": {
+              "rank": "100000",
+              "symbol": "10",
+              "description": "",
+              "abbreviation": ""
+            },
+            "collateral": "-1",
+            "termMonths": "-1",
+            "AccountType": {
+              "rank": "100000",
+              "symbol": "10",
+              "description": "",
+              "abbreviation": ""
+            },
+            "CreditLimit": "500000",
+            "interestRate": "-1.00",
+            "serialNumber": "2387227060",
+            "amountPastDue": "0",
+            "CollateralType": {
+              "rank": "100000",
+              "symbol": "",
+              "description": "",
+              "abbreviation": ""
+            },
+            "WorstPayStatus": {
+              "rank": "100000",
+              "symbol": "",
+              "description": "",
+              "abbreviation": ""
+            },
+            "dateLastPayment": "2025-02-01+05:30",
+            "PayStatusHistory": {
+              "status": "0,0,XXX,XXX,0,XXX,XXX,XXX,XXX,XXX,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,",
+              "endDate": "2023-02-01+05:30",
+              "startDate": "2026-01-01+05:30",
+              "MonthlyPayStatus": [
+                {
+                  "date": "2026-01-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2025-12-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2025-11-01+05:30",
+                  "status": "XXX"
+                },
+                {
+                  "date": "2025-10-01+05:30",
+                  "status": "XXX"
+                },
+                {
+                  "date": "2025-09-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2025-08-01+05:30",
+                  "status": "XXX"
+                },
+                {
+                  "date": "2025-07-01+05:30",
+                  "status": "XXX"
+                },
+                {
+                  "date": "2025-06-01+05:30",
+                  "status": "XXX"
+                },
+                {
+                  "date": "2025-05-01+05:30",
+                  "status": "XXX"
+                },
+                {
+                  "date": "2025-04-01+05:30",
+                  "status": "XXX"
+                },
+                {
+                  "date": "2025-03-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2025-02-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2025-01-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2024-12-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2024-11-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2024-10-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2024-09-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2024-08-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2024-07-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2024-06-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2024-05-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2024-04-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2024-03-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2024-02-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2024-01-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2023-12-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2023-11-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2023-10-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2023-09-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2023-08-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2023-07-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2023-06-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2023-05-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2023-04-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2023-03-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2023-02-01+05:30",
+                  "status": "0"
+                }
+              ]
+            },
+            "PaymentFrequency": {
+              "rank": "100000",
+              "symbol": "",
+              "description": "",
+              "abbreviation": ""
+            },
+            "actualPaymentAmount": "-1"
+          },
+          "IndustryCode": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          },
+          "creditorName": "ICICI BANK",
+          "dateReported": "2026-01-31+05:30",
+          "accountNumber": "0000000025648747",
+          "accountsSoldTo": "",
+          "currentBalance": "0",
+          "subscriberCode": "3090001",
+          "thirdPartyName": "",
+          "AccountCondition": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          },
+          "noOfParticipants": "",
+          "settlementAmount": "-1",
+          "AccountDesignator": {
+            "rank": "100000",
+            "symbol": "1",
+            "description": "",
+            "abbreviation": ""
+          },
+          "dateAccountStatus": "2025-02-01+05:30",
+          "writtenOffAmtTotal": "-1",
+          "writtenOffPrincipal": "-1",
+          "VerificationIndicator": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          }
+        },
+        "accountTypeSymbol": "10",
+        "accountTypeDescription": "",
+        "accountTypeAbbreviation": ""
+      },
+      {
+        "Tradeline": {
+          "Source": {
+            "Bureau": {
+              "rank": "100000",
+              "symbol": "CIBIL",
+              "description": "",
+              "abbreviation": ""
+            },
+            "Locale": "en_IN",
+            "Reference": "69c4d13b-afc6-4252-833d-0c0efca62110",
+            "BorrowerKey": "947427949",
+            "InquiryDate": "2026-07-13+05:30"
+          },
+          "branch": "",
+          "bureau": "",
+          "position": "5",
+          "PayStatus": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          },
+          "OpenClosed": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          },
+          "dateOpened": "2022-09-01+05:30",
+          "DisputeFlag": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          },
+          "highBalance": "5600",
+          "GrantedTrade": {
+            "TermType": {
+              "rank": "100000",
+              "symbol": "",
+              "description": "",
+              "abbreviation": ""
+            },
+            "CashLimit": "-1",
+            "EMIAmount": "-1",
+            "CreditType": {
+              "rank": "100000",
+              "symbol": "06",
+              "description": "",
+              "abbreviation": ""
+            },
+            "collateral": "-1",
+            "termMonths": "1",
+            "AccountType": {
+              "rank": "100000",
+              "symbol": "06",
+              "description": "",
+              "abbreviation": ""
+            },
+            "CreditLimit": "-1",
+            "interestRate": "36.00",
+            "serialNumber": "2225244871",
+            "amountPastDue": "-1",
+            "CollateralType": {
+              "rank": "100000",
+              "symbol": "",
+              "description": "",
+              "abbreviation": ""
+            },
+            "WorstPayStatus": {
+              "rank": "100000",
+              "symbol": "",
+              "description": "",
+              "abbreviation": ""
+            },
+            "dateLastPayment": "2026-06-01+05:30",
+            "PayStatusHistory": {
+              "status": "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,",
+              "endDate": "2023-07-01+05:30",
+              "startDate": "2026-06-01+05:30",
+              "MonthlyPayStatus": [
+                {
+                  "date": "2026-06-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2026-05-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2026-04-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2026-03-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2026-02-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2026-01-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2025-12-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2025-11-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2025-10-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2025-09-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2025-08-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2025-07-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2025-06-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2025-05-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2025-04-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2025-03-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2025-02-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2025-01-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2024-12-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2024-11-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2024-10-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2024-09-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2024-08-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2024-07-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2024-06-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2024-05-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2024-04-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2024-03-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2024-02-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2024-01-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2023-12-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2023-11-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2023-10-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2023-09-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2023-08-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2023-07-01+05:30",
+                  "status": "0"
+                }
+              ]
+            },
+            "PaymentFrequency": {
+              "rank": "100000",
+              "symbol": "03",
+              "description": "",
+              "abbreviation": ""
+            },
+            "actualPaymentAmount": "-1"
+          },
+          "IndustryCode": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          },
+          "creditorName": "PAYUFINAN",
+          "dateReported": "2026-06-30+05:30",
+          "accountNumber": "LPPLUS8680950",
+          "accountsSoldTo": "",
+          "currentBalance": "0",
+          "subscriberCode": "72010001",
+          "thirdPartyName": "",
+          "AccountCondition": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          },
+          "noOfParticipants": "",
+          "settlementAmount": "-1",
+          "AccountDesignator": {
+            "rank": "100000",
+            "symbol": "1",
+            "description": "",
+            "abbreviation": ""
+          },
+          "dateAccountStatus": "2026-06-01+05:30",
+          "writtenOffAmtTotal": "-1",
+          "writtenOffPrincipal": "-1",
+          "VerificationIndicator": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          }
+        },
+        "accountTypeSymbol": "06",
+        "accountTypeDescription": "",
+        "accountTypeAbbreviation": ""
+      },
+      {
+        "Tradeline": {
+          "Source": {
+            "Bureau": {
+              "rank": "100000",
+              "symbol": "CIBIL",
+              "description": "",
+              "abbreviation": ""
+            },
+            "Locale": "en_IN",
+            "Reference": "69c4d13b-afc6-4252-833d-0c0efca62110",
+            "BorrowerKey": "947427949",
+            "InquiryDate": "2026-07-13+05:30"
+          },
+          "branch": "",
+          "bureau": "",
+          "position": "6",
+          "PayStatus": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          },
+          "OpenClosed": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          },
+          "dateOpened": "2022-06-14+05:30",
+          "DisputeFlag": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          },
+          "highBalance": "403125",
+          "GrantedTrade": {
+            "TermType": {
+              "rank": "100000",
+              "symbol": "",
+              "description": "",
+              "abbreviation": ""
+            },
+            "CashLimit": "50000",
+            "EMIAmount": "-1",
+            "CreditType": {
+              "rank": "100000",
+              "symbol": "10",
+              "description": "",
+              "abbreviation": ""
+            },
+            "collateral": "-1",
+            "termMonths": "-1",
+            "AccountType": {
+              "rank": "100000",
+              "symbol": "10",
+              "description": "",
+              "abbreviation": ""
+            },
+            "CreditLimit": "500000",
+            "interestRate": "-1.00",
+            "serialNumber": "2101064839",
+            "amountPastDue": "0",
+            "CollateralType": {
+              "rank": "100000",
+              "symbol": "",
+              "description": "",
+              "abbreviation": ""
+            },
+            "WorstPayStatus": {
+              "rank": "100000",
+              "symbol": "",
+              "description": "",
+              "abbreviation": ""
+            },
+            "dateLastPayment": "2026-05-29+05:30",
+            "PayStatusHistory": {
+              "status": "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,",
+              "endDate": "2023-07-01+05:30",
+              "startDate": "2026-06-01+05:30",
+              "MonthlyPayStatus": [
+                {
+                  "date": "2026-06-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2026-05-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2026-04-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2026-03-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2026-02-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2026-01-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2025-12-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2025-11-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2025-10-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2025-09-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2025-08-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2025-07-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2025-06-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2025-05-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2025-04-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2025-03-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2025-02-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2025-01-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2024-12-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2024-11-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2024-10-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2024-09-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2024-08-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2024-07-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2024-06-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2024-05-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2024-04-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2024-03-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2024-02-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2024-01-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2023-12-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2023-11-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2023-10-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2023-09-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2023-08-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2023-07-01+05:30",
+                  "status": "0"
+                }
+              ]
+            },
+            "PaymentFrequency": {
+              "rank": "100000",
+              "symbol": "",
+              "description": "",
+              "abbreviation": ""
+            },
+            "actualPaymentAmount": "-1"
+          },
+          "IndustryCode": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          },
+          "creditorName": "ICICI BANK",
+          "dateReported": "2026-06-30+05:30",
+          "accountNumber": "0000000023581784",
+          "accountsSoldTo": "",
+          "currentBalance": "47330",
+          "subscriberCode": "3090001",
+          "thirdPartyName": "",
+          "AccountCondition": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          },
+          "noOfParticipants": "",
+          "settlementAmount": "-1",
+          "AccountDesignator": {
+            "rank": "100000",
+            "symbol": "1",
+            "description": "",
+            "abbreviation": ""
+          },
+          "dateAccountStatus": "2026-05-29+05:30",
+          "writtenOffAmtTotal": "-1",
+          "writtenOffPrincipal": "-1",
+          "VerificationIndicator": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          }
+        },
+        "accountTypeSymbol": "10",
+        "accountTypeDescription": "",
+        "accountTypeAbbreviation": ""
+      },
+      {
+        "Tradeline": {
+          "Source": {
+            "Bureau": {
+              "rank": "100000",
+              "symbol": "CIBIL",
+              "description": "",
+              "abbreviation": ""
+            },
+            "Locale": "en_IN",
+            "Reference": "69c4d13b-afc6-4252-833d-0c0efca62110",
+            "BorrowerKey": "947427949",
+            "InquiryDate": "2026-07-13+05:30"
+          },
+          "branch": "",
+          "bureau": "",
+          "position": "7",
+          "PayStatus": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          },
+          "OpenClosed": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          },
+          "dateClosed": "2025-06-04+05:30",
+          "dateOpened": "2022-04-06+05:30",
+          "DisputeFlag": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          },
+          "highBalance": "30000",
+          "GrantedTrade": {
+            "TermType": {
+              "rank": "100000",
+              "symbol": "",
+              "description": "",
+              "abbreviation": ""
+            },
+            "CashLimit": "-1",
+            "EMIAmount": "-1",
+            "CreditType": {
+              "rank": "100000",
+              "symbol": "06",
+              "description": "",
+              "abbreviation": ""
+            },
+            "collateral": "-1",
+            "termMonths": "60",
+            "AccountType": {
+              "rank": "100000",
+              "symbol": "06",
+              "description": "",
+              "abbreviation": ""
+            },
+            "CreditLimit": "-1",
+            "interestRate": "-1.00",
+            "serialNumber": "2040398662",
+            "amountPastDue": "0",
+            "CollateralType": {
+              "rank": "100000",
+              "symbol": "",
+              "description": "",
+              "abbreviation": ""
+            },
+            "WorstPayStatus": {
+              "rank": "100000",
+              "symbol": "",
+              "description": "",
+              "abbreviation": ""
+            },
+            "dateLastPayment": "2024-07-01+05:30",
+            "PayStatusHistory": {
+              "status": "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,",
+              "endDate": "2022-07-01+05:30",
+              "startDate": "2025-06-01+05:30",
+              "MonthlyPayStatus": [
+                {
+                  "date": "2025-06-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2025-05-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2025-04-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2025-03-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2025-02-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2025-01-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2024-12-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2024-11-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2024-10-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2024-09-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2024-08-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2024-07-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2024-06-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2024-05-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2024-04-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2024-03-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2024-02-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2024-01-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2023-12-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2023-11-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2023-10-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2023-09-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2023-08-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2023-07-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2023-06-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2023-05-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2023-04-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2023-03-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2023-02-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2023-01-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2022-12-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2022-11-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2022-10-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2022-09-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2022-08-01+05:30",
+                  "status": "0"
+                },
+                {
+                  "date": "2022-07-01+05:30",
+                  "status": "0"
+                }
+              ]
+            },
+            "PaymentFrequency": {
+              "rank": "100000",
+              "symbol": "03",
+              "description": "",
+              "abbreviation": ""
+            },
+            "actualPaymentAmount": "19243"
+          },
+          "IndustryCode": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          },
+          "creditorName": "IDFC FIRST BANK",
+          "dateReported": "2025-06-04+05:30",
+          "accountNumber": "OLA-70277049",
+          "accountsSoldTo": "",
+          "currentBalance": "0",
+          "subscriberCode": "3360001",
+          "thirdPartyName": "",
+          "AccountCondition": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          },
+          "noOfParticipants": "",
+          "settlementAmount": "-1",
+          "AccountDesignator": {
+            "rank": "100000",
+            "symbol": "1",
+            "description": "",
+            "abbreviation": ""
+          },
+          "dateAccountStatus": "2024-07-01+05:30",
+          "writtenOffAmtTotal": "-1",
+          "writtenOffPrincipal": "-1",
+          "VerificationIndicator": {
+            "rank": "100000",
+            "symbol": "",
+            "description": "",
+            "abbreviation": ""
+          }
+        },
+        "accountTypeSymbol": "06",
+        "accountTypeDescription": "",
+        "accountTypeAbbreviation": ""
+      }
+    ]
+  }
+}

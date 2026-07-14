@@ -6,7 +6,7 @@ import {
   IconArrowUp,
   IconAward,
   IconChevronRight,
-  IconFileDownload,
+  IconFileSearch,
   IconFileText,
   IconHelpCircle,
   IconInfoCircle,
@@ -271,7 +271,9 @@ export default function CreditScore() {
   const router = useRouter();
   const refreshAvailable = useAtomValue(debugFlagAtoms.refreshAvailable);
   const [score, setScore] = useState(SCORE_MIN);
-  const [direction, setDirection] = useState("up");
+  // Entrance roll always goes upward; the refresh flow now redirects to
+  // /fetching instead of rolling in place.
+  const direction = "up";
   const [refreshSheetOpen, setRefreshSheetOpen] = useState(false);
   const [breakdownSheetOpen, setBreakdownSheetOpen] = useState(false);
   const [activeImpact, setActiveImpact] = useState(null);
@@ -283,19 +285,6 @@ export default function CreditScore() {
   useEffect(() => {
     setScore(mock.currentScore);
   }, []);
-
-  // Roll the score to a new value — drives the slot-text animation. Direction
-  // follows the delta so digits roll up on an increase, down on a decrease.
-  function refreshScore() {
-    let next = score;
-    while (next === score) {
-      next =
-        Math.floor(Math.random() * (SCORE_MAX - SCORE_MIN + 1)) + SCORE_MIN;
-    }
-    setDirection(next > score ? "up" : "down");
-    setScore(next);
-    setRefreshSheetOpen(false);
-  }
 
   return (
     <div className="flex flex-1 flex-col bg-background-secondary">
@@ -393,7 +382,7 @@ export default function CreditScore() {
                 onClick={() => setRefreshSheetOpen(true)}
                 className="cursor-pointer text-[14px] leading-5 font-bold text-content-brand"
               >
-                Update
+                Refresh Now
               </button>
             )}
           </div>
@@ -526,8 +515,8 @@ export default function CreditScore() {
               onClick={() => router.push("/faq")}
             />
             <ActionRow
-              icon={IconFileDownload}
-              label="Download full report"
+              icon={IconFileSearch}
+              label="View full report"
               onClick={() => router.push("/report")}
               last
             />
@@ -548,7 +537,6 @@ export default function CreditScore() {
       <RefreshScoreSheet
         open={refreshSheetOpen}
         onOpenChange={setRefreshSheetOpen}
-        onConfirm={refreshScore}
       />
 
       <ScoreBreakdownSheet
