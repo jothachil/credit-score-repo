@@ -229,3 +229,60 @@ button,
   -webkit-user-select: none;
   user-select: none;
 }
+
+/* Border-path glow: every 4s a bright arc fades in, sweeps once around the
+   element's border, and fades out, then rests until the next cycle. Apply
+   `glow-ring` to a rounded, relatively positioned element; the ring is
+   masked to the border area so the content is never tinted. */
+@property --glow-ring-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+/* Sweep runs 0–30% of the cycle (~1.2s of 4s); the rest is idle. The angle
+   holds at 360deg (= 0deg) through the idle stretch so the next cycle starts
+   without a jump. */
+@keyframes glow-ring-sweep {
+  0% {
+    --glow-ring-angle: 0deg;
+    opacity: 0;
+  }
+  5% {
+    opacity: 1;
+  }
+  25% {
+    opacity: 1;
+  }
+  30%,
+  100% {
+    --glow-ring-angle: 360deg;
+    opacity: 0;
+  }
+}
+
+.glow-ring::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 2px;
+  background: conic-gradient(
+    from var(--glow-ring-angle),
+    transparent 0%,
+    transparent 80%,
+    var(--content-brand) 88%,
+    transparent 100%
+  );
+  /* Keep only the ring: punch the padding-box out of the fill. */
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#3d3b3b 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  animation: glow-ring-sweep 6s linear infinite;
+}

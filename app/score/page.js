@@ -445,7 +445,7 @@ export default function CreditScore() {
           </section>
 
           {/* Predict score banner */}
-          <section className="flex items-center justify-between gap-4 overflow-hidden rounded-2xl border border-border-primary bg-background-primary p-2">
+          <section className="glow-ring relative flex items-center justify-between gap-4 overflow-hidden rounded-2xl border border-border-primary bg-background-primary p-2">
             <div className="flex flex-col items-start gap-1 py-4 pl-4">
               <h2 className="text-base leading-6 font-bold text-content-primary">
                 {mock.scorePrediction.title}
