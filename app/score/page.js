@@ -6,7 +6,6 @@ import {
   IconArrowUp,
   IconAward,
   IconChevronRight,
-  IconCrystalBall,
   IconFileDownload,
   IconFileText,
   IconHelpCircle,
@@ -403,75 +402,76 @@ export default function CreditScore() {
 
       {/* Body */}
       <div className="flex flex-col gap-6 px-4 py-6">
-        <section className="flex flex-col gap-2">
-          <h2 className="text-sm leading-6 font-semibold text-content-secondary">
-            Score history
-          </h2>
-          <div className="overflow-hidden rounded-2xl border border-border-primary bg-background-primary">
-            {/* Percentile standing */}
-            <div className="flex items-center gap-3 px-4 py-3">
-              <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-background-light-postive">
-                <IconAward
-                  size={20}
-                  stroke={2}
-                  className="text-content-postive"
-                />
-              </span>
-              <p className="text-[14px] leading-5 text-content-primary">
-                Cheers! You're in the top{" "}
-                <span className="font-bold text-content-postive">
-                  {mock.userPercentile}%
-                </span>{" "}
-                of 3M+ users
-              </p>
-            </div>
-            <div className="border-t border-border-primary" />
-            {/* Change since last month */}
-            <div className="flex items-center gap-3 px-4 py-3">
-              <span className="flex shrink-0 items-center gap-1 rounded-full bg-background-postive px-2.5 py-1 text-[14px] leading-5 font-bold text-content-inverse-primary">
-                <IconArrowUp size={16} stroke={2.5} />
-                {mock.scoreDelta} pts
-              </span>
-              <span className="text-[14px] leading-5 text-content-secondary">
-                since last month
-              </span>
-            </div>
-            <div className="border-t border-border-primary" />
-            {/* Monthly trend */}
-            <div className="p-4">
-              <ScoreTrendChart data={mock.scoreHistory} />
-            </div>
-          </div>
-        </section>
-
-        {/* Predict score banner. Illustration is a placeholder icon until
-            the Figma asset lands. */}
-        <section className="flex items-center justify-between gap-4 rounded-2xl border border-border-primary bg-background-primary p-4">
-          <div className="flex flex-col items-start gap-1">
-            <h2 className="text-base leading-6 font-bold text-content-primary">
-              {mock.scorePrediction.title}
+        <div className="flex flex-col gap-2">
+          <section className="flex flex-col gap-2">
+            <h2 className="text-sm leading-6 font-semibold text-content-secondary">
+              Score history
             </h2>
-            <p className="text-[14px] leading-5 text-content-secondary">
-              {mock.scorePrediction.subtitle}
-            </p>
-            <button
-              type="button"
-              onClick={() => router.push("/predict")}
-              className="mt-3 flex cursor-pointer items-center gap-2.5 text-[15px] leading-5 font-bold text-content-primary"
-            >
-              {mock.scorePrediction.cta}
-              <span className="flex size-5 items-center justify-center rounded-full bg-background-inverse-primary text-content-inverse-primary">
-                <IconArrowRight size={10} stroke={2.5} />
-              </span>
-            </button>
-          </div>
-          <IconCrystalBall
-            size={80}
-            stroke={1.25}
-            aria-hidden
-            className="shrink-0 text-content-brand"
-          />
-        </section>
+            <div className="overflow-hidden rounded-2xl border border-border-primary bg-background-primary">
+              {/* Percentile standing */}
+              <div className="flex items-center gap-3 px-4 py-3">
+                <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-background-light-postive">
+                  <IconAward
+                    size={20}
+                    stroke={2}
+                    className="text-content-postive"
+                  />
+                </span>
+                <p className="text-[14px] leading-5 text-content-primary">
+                  Cheers! You're in the top{" "}
+                  <span className="font-bold text-content-postive">
+                    {mock.userPercentile}%
+                  </span>{" "}
+                  of 3M+ users
+                </p>
+              </div>
+              <div className="border-t border-border-primary" />
+              {/* Change since last month */}
+              <div className="flex items-center gap-3 px-4 py-3">
+                <span className="flex shrink-0 items-center gap-1 rounded-full bg-background-postive px-2.5 py-1 text-[14px] leading-5 font-bold text-content-inverse-primary">
+                  <IconArrowUp size={16} stroke={2.5} />
+                  {mock.scoreDelta} pts
+                </span>
+                <span className="text-[14px] leading-5 text-content-secondary">
+                  since last month
+                </span>
+              </div>
+              <div className="border-t border-border-primary" />
+              {/* Monthly trend */}
+              <div className="p-4">
+                <ScoreTrendChart data={mock.scoreHistory} />
+              </div>
+            </div>
+          </section>
+
+          {/* Predict score banner */}
+          <section className="flex items-center justify-between gap-4 overflow-hidden rounded-2xl border border-border-primary bg-background-primary p-2">
+            <div className="flex flex-col items-start gap-1 py-4 pl-4">
+              <h2 className="text-base leading-6 font-bold text-content-primary">
+                {mock.scorePrediction.title}
+              </h2>
+              <p className="text-[14px] leading-5 text-content-secondary">
+                {mock.scorePrediction.subtitle}
+              </p>
+              <button
+                type="button"
+                onClick={() => router.push("/predict")}
+                className="mt-3 flex cursor-pointer items-center gap-2.5 text-[15px] leading-5 font-bold text-content-primary"
+              >
+                {mock.scorePrediction.cta}
+                <span className="flex size-5 items-center justify-center rounded-full bg-background-inverse-primary text-content-inverse-primary">
+                  <IconArrowRight size={10} stroke={2.5} />
+                </span>
+              </button>
+            </div>
+            {/* biome-ignore lint/performance/noImgElement: prototype static asset */}
+            <img
+              src="/magic-glass-1.png"
+              alt=""
+              className="w-30 shrink-0 self-stretch object-cover"
+            />
+          </section>
+        </div>
 
         <section className="flex flex-col gap-2">
           <h2 className="text-sm leading-6 font-semibold text-content-secondary">
