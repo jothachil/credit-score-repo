@@ -43,10 +43,11 @@ const predictor = {
     kicker: "See how your score changes",
     title: "If you miss loan EMI or credit card bills",
     optionsLabel: "Miss payments for",
+    // Longer delinquency → bigger illustrative hit to the score.
     options: [
-      { id: "30", label: "30 days" },
-      { id: "60", label: "60 days" },
-      { id: "90", label: "90 days" },
+      { id: "30", label: "30 days", delta: -40 },
+      { id: "60", label: "60 days", delta: -58 },
+      { id: "90", label: "90 days", delta: -80 },
     ],
     cta: "Predict score",
   },
