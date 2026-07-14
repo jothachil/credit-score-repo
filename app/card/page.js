@@ -13,9 +13,7 @@ import NavBar from "../components/NavBar";
 import { Tabs, TabsList, TabsPanel, TabsTab } from "../components/TabsField";
 import { mock } from "../data/mock";
 
-const PAYMENT_MONTHS = mock.paymentMonths;
 const LEGEND = mock.paymentLegend;
-const PAYMENT_YEARS = mock.paymentYears;
 
 // Active reads green; anything else (e.g. Closed) reads muted/neutral.
 function statusBadgeClass(status) {
@@ -47,6 +45,9 @@ function CardDetailContent() {
   const router = useRouter();
   const id = useSearchParams().get("id");
   const CARD = mock.findAccount(id) ?? mock.card;
+  // Per-account calendar derived from the bureau's MonthlyPayStatus window;
+  // years run newest → oldest, so default the tab to the latest reported year.
+  const { years: paymentYears, byYear: paymentsByYear } = CARD.payments;
 
   return (
     <div className="flex flex-1 flex-col bg-background-secondary">
@@ -129,9 +130,12 @@ function CardDetailContent() {
             Payment history
           </h2>
           <div className="flex flex-col rounded-2xl border border-border-primary bg-background-primary">
-            <Tabs defaultValue={String(CARD.year)} className="flex flex-col">
+            <Tabs
+              defaultValue={String(paymentYears[0])}
+              className="flex flex-col"
+            >
               <TabsList>
-                {PAYMENT_YEARS.map((year) => (
+                {paymentYears.map((year) => (
                   <TabsTab
                     key={year}
                     value={String(year)}
@@ -142,10 +146,10 @@ function CardDetailContent() {
                 ))}
               </TabsList>
 
-              {PAYMENT_YEARS.map((year) => (
+              {paymentYears.map((year) => (
                 <TabsPanel key={year} value={String(year)} className="p-4">
                   <div className="grid grid-cols-6 gap-y-5">
-                    {PAYMENT_MONTHS.map(({ month, status }) => (
+                    {paymentsByYear[year].map(({ month, status }) => (
                       <div
                         key={month}
                         className="flex flex-col items-center gap-2"

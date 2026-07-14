@@ -3,22 +3,34 @@ import { IconBuildingBank, IconCreditCard } from "@tabler/icons-react";
 // Single source of mock data for the whole prototype. Presentation logic
 // (colours, charts, classification tones) lives in the components; this file
 // only holds the numbers, copy, and lists the screens render.
+//
+// Values are derived from a real CIBIL (TrueLink) report pulled on
+// 13 Jul 2026: riskScore 784, populationRank 15, 8 tradelines (6 open,
+// 2 closed — closure detected via `dateClosed`), 9 inquiries.
 
 // ---- Score ----
-const currentScore = 789;
-const reportFetchDate = "24 Jun 2026";
-const userPercentile = 20;
+const currentScore = 784;
+const reportFetchDate = "13 Jul 2026";
+const userPercentile = 15; // populationRank — top 15% of scored borrowers
 
-// Month-by-month history (oldest → newest); spans several bands for colour.
+// Month-by-month history (oldest → newest). The bureau report only carries
+// the latest score, so earlier months are a plausible ramp up to 784.
 const scoreHistory = [
-  { month: "Feb", score: 560 }, // Poor
-  { month: "Mar", score: 620 }, // Fair
-  { month: "Apr", score: 685 }, // Good
-  { month: "May", score: 730 }, // Good
-  { month: "Jun", score: 765 }, // Very Good
-  { month: "Jul", score: 789 }, // Very Good
+  { month: "Feb", score: 712 }, // Good
+  { month: "Mar", score: 728 }, // Good
+  { month: "Apr", score: 741 }, // Good
+  { month: "May", score: 756 }, // Very Good
+  { month: "Jun", score: 770 }, // Very Good
+  { month: "Jul", score: 784 }, // Very Good
 ];
 const scoreDelta = scoreHistory.at(-1).score - scoreHistory.at(-2).score;
+
+// Copy for the "Predict score" banner on the score page.
+const scorePrediction = {
+  title: "Predict score",
+  subtitle: "Check your future score if your portfolio changes",
+  cta: "Check now",
+};
 
 // ---- Impact factors ----
 // Classification bands per factor (PayUFin's rating scale), Excellent → Poor.
@@ -94,6 +106,14 @@ function classifyRecentInquiries(n) {
 }
 
 // Impact tiles — `rating` is derived from `value` so the two stay in sync.
+// Numbers computed from the report:
+// - Payment history: every MonthlyPayStatus across all 8 tradelines is "0"
+//   (on time) or "XXX" (not reported) → 100%.
+// - Utilization: revolving (type 10) accounts only —
+//   (51,132 + 8,850 + 0 + 47,330) / (1,89,000 + 3 × 5,00,000) ≈ 6%.
+// - History: oldest tradeline opened 06 Apr 2022 → ~4 years.
+// - Mix: all accounts are unsecured (cards + consumer/personal loans) → 0%.
+// - Inquiries: 1 in the last 6 months (HDFC, 29 Jan 2026).
 const impacts = [
   {
     id: "payment-history",
@@ -107,9 +127,9 @@ const impacts = [
   },
   {
     id: "credit-utilization",
-    rating: classifyCreditUtilization(24),
+    rating: classifyCreditUtilization(6),
     label: ["Credit utilization"],
-    value: "24%",
+    value: "6%",
     title: "Credit utilization",
     description:
       "How much of your available credit limit you're using. The lower, the better.",
@@ -117,9 +137,9 @@ const impacts = [
   },
   {
     id: "credit-history",
-    rating: classifyCreditHistory(2),
+    rating: classifyCreditHistory(4),
     label: ["Credit history"],
-    value: "2 years",
+    value: "4 years",
     title: "Credit history",
     description:
       "How long you've had active credit accounts. A longer history helps your score.",
@@ -127,9 +147,9 @@ const impacts = [
   },
   {
     id: "credit-mix",
-    rating: classifyCreditMix(42),
+    rating: classifyCreditMix(0),
     label: ["Credit mix"],
-    value: "42%",
+    value: "0%",
     title: "Credit mix",
     description:
       "The share of secured vs unsecured credit you hold. A healthier balance helps your score.",
@@ -137,9 +157,9 @@ const impacts = [
   },
   {
     id: "recent-inquiries",
-    rating: classifyRecentInquiries(7),
+    rating: classifyRecentInquiries(1),
     label: ["Recent inquiries"],
-    value: "7",
+    value: "1",
     title: "Recent inquiries",
     description:
       "Hard inquiries from new credit applications in the last 6 months. Fewer is better.",
@@ -147,65 +167,207 @@ const impacts = [
   },
 ];
 
+// ---- Payment history ----
+const MONTH_LABELS = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
+
+// Builds the per-year payment calendar from a tradeline's MonthlyPayStatus
+// window ("YYYY-MM", inclusive). Months inside the window default to on-time —
+// this report has status "0" everywhere — except explicit overrides
+// ({ "YYYY-MM": status }) for the "XXX" (not-reported) gaps. Months outside
+// the reported window render as not-reported.
+function buildPayments(from, to, overrides = {}) {
+  const [fromYear, fromMonth] = from.split("-").map(Number);
+  const [toYear, toMonth] = to.split("-").map(Number);
+  const years = [];
+  const byYear = {};
+  for (let year = toYear; year >= fromYear; year--) {
+    years.push(year);
+    byYear[year] = MONTH_LABELS.map((month, i) => {
+      const m = i + 1;
+      const inWindow =
+        (year > fromYear || m >= fromMonth) && (year < toYear || m <= toMonth);
+      const key = `${year}-${String(m).padStart(2, "0")}`;
+      const status = overrides[key] ?? (inWindow ? "on-time" : "not-reported");
+      return { month, status };
+    });
+  }
+  return { years, byYear };
+}
+
 // ---- Loans & credit lines ----
-// `detail` containing "Card" routes to the card detail, else the loan detail.
-// Each entry holds both the row fields (icon/name/detail/status/tone) and the
-// detail-page fields, so the list and the detail screens share one record.
-// `type` decides which detail layout renders it.
+// One record per tradeline in the report. `type` decides which detail layout
+// renders it ("card" → CreditLimit-based, "loan" → highBalance-based).
+// Open vs closed follows the bureau's `dateClosed` field. `payments` mirrors
+// each tradeline's actual MonthlyPayStatus range.
 const loans = {
   active: [
     {
-      id: "hdfc-diners",
+      id: "hdfc-card",
       type: "card",
       icon: IconCreditCard,
-      name: "HDFC Diners Club International",
-      detail: "₹5,070 · Credit Card",
+      name: "HDFC Bank Credit Card",
+      detail: "₹1,89,000 · Credit Card",
       status: "Active",
       tone: "positive",
       bank: "HDFC Bank",
-      totalSpends: "₹5,070",
-      creditLimit: "₹9,75,000",
-      limitUsedPct: 1,
-      limitUsedAmount: "₹5,070",
+      totalSpends: "₹51,132",
+      creditLimit: "₹1,89,000",
+      limitUsedPct: 27,
+      limitUsedAmount: "₹51,132",
       year: 2026,
       updatedBy: "HDFC Bank",
-      updatedOn: "17 Jun 2026",
+      updatedOn: "10 Jul 2026",
+      payments: buildPayments("2026-02", "2026-07"),
     },
     {
-      id: "payu-personal",
+      id: "idfc-card",
+      type: "card",
+      icon: IconCreditCard,
+      name: "IDFC First Bank Credit Card",
+      detail: "₹5,00,000 · Credit Card",
+      status: "Active",
+      tone: "positive",
+      bank: "IDFC First Bank",
+      totalSpends: "₹8,850",
+      creditLimit: "₹5,00,000",
+      limitUsedPct: 2,
+      limitUsedAmount: "₹8,850",
+      year: 2025,
+      updatedBy: "IDFC First Bank",
+      updatedOn: "09 Jul 2026",
+      payments: buildPayments("2025-12", "2026-07"),
+    },
+    {
+      id: "snapmint-loan",
       type: "loan",
       icon: IconBuildingBank,
-      name: "PayU Finance Private Ltd",
-      detail: "₹48,000 · Personal Loan",
+      name: "Snapmint Financial Services",
+      detail: "₹4,282 · Consumer Loan",
+      status: "Active",
+      tone: "positive",
+      bank: "Snapmint",
+      outstanding: "₹3,742",
+      loanAmount: "₹4,282",
+      paidPct: 13,
+      principalPaid: "₹540",
+      year: 2025,
+      updatedBy: "Snapmint",
+      updatedOn: "30 Jun 2026",
+      payments: buildPayments("2025-10", "2026-06"),
+    },
+    {
+      id: "icici-card-8747",
+      type: "card",
+      icon: IconCreditCard,
+      name: "ICICI Bank Credit Card ••8747",
+      detail: "₹5,00,000 · Credit Card",
+      status: "Active",
+      tone: "positive",
+      bank: "ICICI Bank",
+      totalSpends: "₹0",
+      creditLimit: "₹5,00,000",
+      limitUsedPct: 0,
+      limitUsedAmount: "₹0",
+      year: 2022,
+      updatedBy: "ICICI Bank",
+      updatedOn: "31 Jan 2026",
+      // "XXX" gaps in the bureau data: Apr–Aug 2025 and Oct–Nov 2025.
+      payments: buildPayments("2023-02", "2026-01", {
+        "2025-04": "not-reported",
+        "2025-05": "not-reported",
+        "2025-06": "not-reported",
+        "2025-07": "not-reported",
+        "2025-08": "not-reported",
+        "2025-10": "not-reported",
+        "2025-11": "not-reported",
+      }),
+    },
+    {
+      id: "lazypay-loan",
+      type: "loan",
+      icon: IconBuildingBank,
+      name: "PayU Finance (LazyPay)",
+      detail: "₹5,600 · Consumer Loan",
       status: "Active",
       tone: "positive",
       bank: "PayU Finance",
-      outstanding: "₹48,000",
-      loanAmount: "₹64,000",
-      paidPct: 25,
-      principalPaid: "₹16,000",
-      year: 2026,
+      outstanding: "₹0",
+      loanAmount: "₹5,600",
+      paidPct: 100,
+      principalPaid: "₹5,600",
+      year: 2022,
       updatedBy: "PayU Finance",
-      updatedOn: "17 Jun 2026",
+      updatedOn: "30 Jun 2026",
+      payments: buildPayments("2023-07", "2026-06"),
+    },
+    {
+      id: "icici-card-1784",
+      type: "card",
+      icon: IconCreditCard,
+      name: "ICICI Bank Credit Card ••1784",
+      detail: "₹5,00,000 · Credit Card",
+      status: "Active",
+      tone: "positive",
+      bank: "ICICI Bank",
+      totalSpends: "₹47,330",
+      creditLimit: "₹5,00,000",
+      limitUsedPct: 9,
+      limitUsedAmount: "₹47,330",
+      year: 2022,
+      updatedBy: "ICICI Bank",
+      updatedOn: "30 Jun 2026",
+      payments: buildPayments("2023-07", "2026-06"),
     },
   ],
   closed: [
     {
-      id: "payu-closed",
+      id: "adityabirla-loan",
       type: "loan",
       icon: IconBuildingBank,
-      name: "PayU Finance Private Ltd",
-      detail: "₹64,000 · Personal Loan",
+      name: "Aditya Birla Capital",
+      detail: "₹1,00,000 · Personal Loan",
       status: "Closed",
       tone: "negative",
-      bank: "PayU Finance",
+      bank: "Aditya Birla Capital",
       outstanding: "₹0",
-      loanAmount: "₹64,000",
+      loanAmount: "₹1,00,000",
       paidPct: 100,
-      principalPaid: "₹64,000",
-      year: 2026,
-      updatedBy: "PayU Finance",
-      updatedOn: "17 Jun 2026",
+      principalPaid: "₹1,00,000",
+      year: 2024,
+      updatedBy: "Aditya Birla Capital",
+      updatedOn: "15 Jan 2025",
+      payments: buildPayments("2024-09", "2025-01"),
+    },
+    {
+      id: "idfc-ola-loan",
+      type: "loan",
+      icon: IconBuildingBank,
+      name: "IDFC First Bank (OLA)",
+      detail: "₹30,000 · Consumer Loan",
+      status: "Closed",
+      tone: "negative",
+      bank: "IDFC First Bank",
+      outstanding: "₹0",
+      loanAmount: "₹30,000",
+      paidPct: 100,
+      principalPaid: "₹30,000",
+      year: 2022,
+      updatedBy: "IDFC First Bank",
+      updatedOn: "04 Jun 2025",
+      payments: buildPayments("2022-07", "2025-06"),
     },
   ],
 };
@@ -214,30 +376,12 @@ const loans = {
 const card = loans.active.find((l) => l.type === "card");
 const loan = loans.active.find((l) => l.type === "loan");
 
-// Shared payment-history calendar used by both detail pages.
-const paymentMonths = [
-  { month: "Jan", status: "on-time" },
-  { month: "Feb", status: "on-time" },
-  { month: "Mar", status: "delayed" },
-  { month: "Apr", status: "on-time" },
-  { month: "May", status: "overdue" },
-  { month: "Jun", status: "on-time" },
-  { month: "Jul", status: "on-time" },
-  { month: "Aug", status: "delayed" },
-  { month: "Sep", status: "on-time" },
-  { month: "Oct", status: "not-reported" },
-  { month: "Nov", status: "not-reported" },
-  { month: "Dec", status: "not-reported" },
-];
-
 const paymentLegend = [
   { id: "on-time", label: "On time" },
   { id: "delayed", label: "Delayed" },
   { id: "overdue", label: "Overdue" },
   { id: "not-reported", label: "Not reported" },
 ];
-
-const paymentYears = [2026, 2025, 2024];
 
 // Look up any account (active or closed) by id — used by the detail pages.
 function findAccount(id) {
@@ -250,12 +394,11 @@ export const mock = {
   userPercentile,
   scoreHistory,
   scoreDelta,
+  scorePrediction,
   impacts,
   loans,
   card,
   loan,
   findAccount,
-  paymentMonths,
   paymentLegend,
-  paymentYears,
 };
