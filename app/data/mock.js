@@ -1,4 +1,10 @@
-import { IconBuildingBank, IconCreditCard } from "@tabler/icons-react";
+import {
+  IconBellRinging,
+  IconBuildingBank,
+  IconCalendarCheck,
+  IconCoinRupee,
+  IconCreditCard,
+} from "@tabler/icons-react";
 
 // Single source of mock data for the whole prototype. Presentation logic
 // (colours, charts, classification tones) lives in the components; this file
@@ -50,6 +56,28 @@ const predictor = {
       { id: "90", label: "90 days", delta: -80 },
     ],
     cta: "Predict score",
+    // Shown on the result screen — how to avoid the missed-payment hit.
+    tipsTitle: "Tips to stay on track",
+    tips: [
+      {
+        id: "auto-pay",
+        icon: IconCalendarCheck,
+        title: "Set up auto-pay",
+        detail: "Automate EMIs & card bills so due dates never slip.",
+      },
+      {
+        id: "total-due",
+        icon: IconCoinRupee,
+        title: "Pay the total amount due",
+        detail: "Clearing the full bill avoids interest and late marks.",
+      },
+      {
+        id: "reminders",
+        icon: IconBellRinging,
+        title: "Turn on due-date reminders",
+        detail: "A nudge 3 days early gives you time to arrange funds.",
+      },
+    ],
   },
   choices: [
     {

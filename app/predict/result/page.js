@@ -33,14 +33,20 @@ const SCORE_BANDS = [
   },
 ];
 
+// 16 evenly spaced scale ticks under the gauge, same as the score page.
+const SCORE_TICKS = Array.from({ length: 16 }, (_, i) => `tick-${i}`);
+
 function resolveScore(score) {
+  const range = SCORE_MAX - SCORE_MIN;
   const segments = SCORE_BANDS.map((band, i) => {
     const max = SCORE_BANDS[i + 1]?.min ?? SCORE_MAX;
     return { ...band, span: max - band.min };
   }).reverse();
   const band =
     [...SCORE_BANDS].reverse().find((b) => score >= b.min) ?? SCORE_BANDS[0];
-  return { segments, band };
+  const fraction = Math.min(Math.max((score - SCORE_MIN) / range, 0), 1);
+  const activeTick = Math.round((1 - fraction) * (SCORE_TICKS.length - 1));
+  return { segments, band, activeTick };
 }
 
 function PredictResultContent() {
@@ -59,65 +65,119 @@ function PredictResultContent() {
     setScore(predicted);
   }, [predicted]);
 
-  const { segments, band } = resolveScore(score);
+  const { segments, band, activeTick } = resolveScore(score);
   const delta = predicted - mock.currentScore;
 
   return (
     <div className="flex flex-1 flex-col bg-background-secondary">
       <NavBar backHref="/predict/miss-payment" border={false} />
 
-      {/* Predicted score module — light-mode take on the score page hero */}
-      <section className="flex flex-col gap-4 bg-background-primary px-4 pt-2 pb-6">
-        <div className="flex flex-col items-center gap-0.5 text-center">
-          <p className="text-[10px] leading-4 font-medium tracking-[1px] text-content-secondary uppercase">
+      {/* Predicted score module — light-mode take on the score page hero.
+          Bottom tint follows the delta (green for gains, red for drops) and
+          fades to white going up, same treatment as the onboarding gradient. */}
+      <section
+        className={`flex flex-col gap-8 bg-background-primary bg-gradient-to-t to-background-primary to-75% px-4 pt-2 pb-6 border-b border-border-primary ${
+          delta >= 0
+            ? "from-background-postive/10"
+            : "from-background-negative/10"
+        }`}
+      >
+        <div className="flex flex-col items-center gap-0.5 my-5 text-center">
+          <p className="text-2xl leading-4 font-bold  text-content-primary ">
             Predicted score
+          </p>
+          <p className="mt-4 text-sm leading-6 text-content-secondary">
+            If you miss loan EMI or credit card bills for{" "}
+            <span>{option.label}</span>
           </p>
           {/* Fixed height so the SSR-empty → built → rolling states of the
               slot-text number never change the row height. */}
-          <p className="flex h-14 items-baseline justify-center gap-2">
+          <p className=" mt-10 flex h-14 items-baseline justify-center gap-8">
             <SlotText
               text={String(score)}
               options={{ direction: delta >= 0 ? "up" : "down" }}
               className="text-3xl font-bold text-content-primary"
             />
-            <span
-              className={`flex items-center gap-0.5 self-baseline rounded-full px-2 py-0.5 text-[13px] leading-4 font-bold text-content-inverse-primary ${
-                delta >= 0 ? "bg-background-postive" : "bg-background-negative"
-              }`}
-            >
-              {delta >= 0 ? (
-                <IconArrowUp size={14} stroke={2.5} />
-              ) : (
-                <IconArrowDown size={14} stroke={2.5} />
-              )}
-              {Math.abs(delta)} pts
-            </span>
           </p>
+          {/* Delta on its own line under the score */}
+          <span
+            className={`flex items-center gap-0.5 rounded-full px-4 py-2 text-lg leading-4 font-bold text-content-inverse-primary ${
+              delta >= 0 ? "bg-background-postive" : "bg-background-negative"
+            }`}
+          >
+            {delta >= 0 ? (
+              <IconArrowUp size={16} stroke={2.5} />
+            ) : (
+              <IconArrowDown size={16} stroke={2.5} />
+            )}
+            {Math.abs(delta)} pts
+          </span>
         </div>
 
-        <div className="flex h-8 w-full items-end gap-0.5">
-          {segments.map((segment) => (
-            <span
-              key={segment.id}
-              style={{ flexGrow: segment.span }}
-              className={`basis-0 transition-all duration-500 ease-out ${segment.color} ${
-                segment.id === band.id ? "h-full" : "h-3/4"
-              }`}
-            />
-          ))}
+        <div className="flex flex-col gap-2">
+          <div className="flex h-8 w-full items-end gap-0.5">
+            {segments.map((segment) => (
+              <span
+                key={segment.id}
+                style={{ flexGrow: segment.span }}
+                className={`basis-0 transition-all duration-500 ease-out ${segment.color} ${
+                  segment.id === band.id ? "h-full" : "h-3/4"
+                }`}
+              />
+            ))}
+          </div>
+          {/* Score range — same tick scale as the main score page, light mode */}
+          <div className="flex w-full items-center justify-between px-px">
+            {SCORE_TICKS.map((tick, i) => {
+              if (i === 0 || i === SCORE_TICKS.length - 1) {
+                return (
+                  <span
+                    key={tick}
+                    className="text-[13px] leading-4 font-medium text-content-primary"
+                  >
+                    {i === 0 ? 900 : 300}
+                  </span>
+                );
+              }
+              return (
+                <span
+                  key={tick}
+                  className={`size-1.5 rounded-full transition-colors duration-500 ${
+                    i === activeTick
+                      ? "bg-content-primary"
+                      : "bg-content-tertiary"
+                  }`}
+                />
+              );
+            })}
+          </div>
         </div>
 
         {/* Scenario recap */}
-        <p className="text-sm leading-6 text-content-secondary">
-          If you miss loan EMI or credit card bills for{" "}
-          <span className="font-bold text-content-primary">{option.label}</span>
-          , your score could drop from{" "}
-          <span className="font-bold text-content-primary">
-            {mock.currentScore}
-          </span>{" "}
-          to <span className="font-bold text-content-primary">{predicted}</span>
-          .
-        </p>
+      </section>
+
+      {/* Tips based on the chosen scenario */}
+      <section className="flex flex-col gap-2 px-4 py-6">
+        <h2 className="text-sm leading-6 font-semibold text-content-secondary">
+          {COPY.tipsTitle}
+        </h2>
+        <div className="flex flex-col divide-y divide-border-primary rounded-2xl border border-border-primary bg-background-primary">
+          {COPY.tips.map(({ id, icon: Icon, title, detail }) => (
+            <div key={id} className="flex items-center gap-4 p-4">
+              <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-background-light-brand">
+                <Icon size={24} stroke={2} className="text-content-brand" />
+              </span>
+              <div className="flex flex-col gap-0.5">
+                <p className="text-[15px] leading-5 font-bold text-content-primary">
+                  {title}
+                </p>
+                <p className="text-xs leading-5 text-content-secondary">
+                  {detail}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
       </section>
 
       {/* CTA — pinned to the bottom of the screen */}
