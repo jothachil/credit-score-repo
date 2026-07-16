@@ -119,6 +119,35 @@ const predictor = {
   ],
 };
 
+// ---- Payment history detail page ----
+const paymentHistoryDetail = {
+  factorLabel: "High-impact factor",
+  description:
+    "It's a percentage of your repayments towards your credit cards & loans on time.",
+  onTimeLabel: "On-time payments",
+  tipsTitle: "Tips to boost credit score",
+  tips: [
+    {
+      id: "avoid-late",
+      title: "Avoid Late Payments",
+      detail:
+        "Even neutral payment histories with on-time payments are critical to maintaining your score.",
+    },
+    {
+      id: "limit-new",
+      title: "Limit New Applications",
+      detail:
+        "Opening fewer new accounts keeps your focus on a predictable payment schedule.",
+    },
+    {
+      id: "keep-old",
+      title: "Keep Old Accounts Open",
+      detail:
+        "Long-standing accounts with clean histories anchor your track record.",
+    },
+  ],
+};
+
 // ---- Impact factors ----
 // Classification bands per factor (PayUFin's rating scale), Excellent → Poor.
 const paymentHistoryRanges = [
@@ -483,6 +512,7 @@ export const mock = {
   scoreDelta,
   scorePrediction,
   predictor,
+  paymentHistoryDetail,
   impacts,
   loans,
   card,
