@@ -43,6 +43,18 @@ const debugPages = [
     path: "/credit-usage",
   },
   {
+    id: "inquiries",
+    path: "/inquiries",
+  },
+  {
+    id: "credit-age",
+    path: "/credit-age",
+  },
+  {
+    id: "credit-mix",
+    path: "/credit-mix",
+  },
+  {
     id: "loans",
     path: "/loans",
   },
@@ -76,7 +88,7 @@ const tabClassName =
   "relative z-10 flex h-8 flex-1 cursor-pointer items-center justify-center rounded-lg px-2 text-[11px] leading-4 font-semibold text-zinc-500 outline-none transition-colors hover:text-zinc-950 focus-visible:outline-2 focus-visible:outline-zinc-950 data-active:text-zinc-950";
 
 const panelClassName =
-  "mt-3 outline-none focus-visible:outline-2 focus-visible:outline-zinc-950 [[hidden]]:hidden";
+  "mt-3 min-h-0 flex-1 overflow-y-auto outline-none focus-visible:outline-2 focus-visible:outline-zinc-950 [[hidden]]:hidden";
 
 function DebugFlagSwitch({ flag }) {
   const [checked, setChecked] = useAtom(flag.atom);
@@ -141,7 +153,7 @@ export default function DebugNavigationSidebar() {
           <Tabs.Root
             value={activeTab}
             onValueChange={setActiveTab}
-            className="min-h-0 flex-1"
+            className="flex min-h-0 flex-1 flex-col"
           >
             <Tabs.List className="relative isolate mt-3 flex rounded-xl border border-zinc-200 bg-zinc-50 p-1">
               <Tabs.Tab className={tabClassName} value="pages">

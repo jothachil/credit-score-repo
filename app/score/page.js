@@ -60,6 +60,15 @@ const BAND_FILL = {
 // 16 evenly spaced scale ticks under the gauge.
 const SCORE_TICKS = Array.from({ length: 16 }, (_, i) => `tick-${i}`);
 
+// Impact tile id → its detail page.
+const IMPACT_ROUTES = {
+  "payment-history": "/payment-history",
+  "credit-utilization": "/credit-usage",
+  "recent-inquiries": "/inquiries",
+  "credit-history": "/credit-age",
+  "credit-mix": "/credit-mix",
+};
+
 // Resolve a raw score into its band, gauge segments, and tick position. The
 // gauge runs high → low (Exceptional on the left, Poor on the right), so the
 // segments and the tick marker are both measured from the high end.
@@ -473,13 +482,12 @@ export default function CreditScore() {
               <ImpactCard
                 key={impact.id}
                 {...impact}
-                // Factors with a full detail page navigate there; the rest
-                // open the breakdown sheet.
+                // Factors with a full detail page navigate there; anything
+                // without one falls back to the breakdown sheet.
                 onClick={() => {
-                  if (impact.id === "payment-history") {
-                    router.push("/payment-history");
-                  } else if (impact.id === "credit-utilization") {
-                    router.push("/credit-usage");
+                  const route = IMPACT_ROUTES[impact.id];
+                  if (route) {
+                    router.push(route);
                   } else {
                     setActiveImpact(impact);
                   }

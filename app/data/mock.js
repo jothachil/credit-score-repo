@@ -159,6 +159,106 @@ const creditUsageDetail = {
   pctLabel: "Credit utilized",
 };
 
+// ---- Recent inquiries detail page ----
+const inquiriesDetail = {
+  title: "Recent inquiries",
+  factorLabel: "Low-impact factor",
+  description:
+    "Hard inquiries lenders make when you apply for new credit. Too many in a short period can pull your score down.",
+  countLabel: "Inquiries in last 6 months",
+  recentTitle: "Last 6 months",
+  olderTitle: "Older inquiries",
+};
+
+// From the report's InquiryPartition — newest first. `recent` marks the
+// 6-month window before the report fetch (13 Jul 2026).
+const inquiries = [
+  {
+    id: "hdfc-2026-01",
+    lender: "HDFC Bank",
+    date: "29 Jan 2026",
+    amount: "₹10,000",
+    recent: true,
+  },
+  {
+    id: "idfc-2025-12",
+    lender: "IDFC First Bank",
+    date: "19 Dec 2025",
+    amount: "₹20,000",
+    recent: false,
+  },
+  {
+    id: "hdfc-2025-07",
+    lender: "HDFC Bank",
+    date: "22 Jul 2025",
+    amount: "₹1,000",
+    recent: false,
+  },
+  {
+    id: "icici-2025-01",
+    lender: "ICICI Bank",
+    date: "25 Jan 2025",
+    amount: "₹1,00,000",
+    recent: false,
+  },
+  {
+    id: "adityabirla-2024-09",
+    lender: "Aditya Birla Finance",
+    date: "13 Sep 2024",
+    amount: "₹4,00,000",
+    recent: false,
+  },
+  {
+    id: "tcl-2024-08",
+    lender: "Tata Capital",
+    date: "14 Aug 2024",
+    amount: "₹7,09,000",
+    recent: false,
+  },
+  {
+    id: "icici-2024-04",
+    lender: "ICICI Bank",
+    date: "16 Apr 2024",
+    amount: "₹10,00,000",
+    recent: false,
+  },
+  {
+    id: "hdfc-2024-03",
+    lender: "HDFC Bank",
+    date: "15 Mar 2024",
+    amount: "₹1,000",
+    recent: false,
+  },
+  {
+    id: "idfc-2023-08",
+    lender: "IDFC First Bank",
+    date: "01 Aug 2023",
+    amount: "₹20,000",
+    recent: false,
+  },
+];
+
+// ---- Credit age detail page ----
+const creditAgeDetail = {
+  title: "Credit age",
+  factorLabel: "Medium-impact factor",
+  description:
+    "Credit age refers to the age of your oldest active credit card or loan account.",
+  ageLabel: "Credit age",
+};
+
+// ---- Credit mix detail page ----
+const creditMixDetail = {
+  title: "Credit mix",
+  factorLabel: "Low-impact factor",
+  description:
+    "The share of secured vs unsecured credit you hold. A healthier balance helps your score.",
+  shareLabel: "Secured credit share",
+  securedTitle: "Secured",
+  unsecuredTitle: "Unsecured",
+  emptySecured: "No secured accounts yet — e.g. home, auto or gold loans.",
+};
+
 // ---- Impact factors ----
 // Classification bands per factor (PayUFin's rating scale), Excellent → Poor.
 const paymentHistoryRanges = [
@@ -344,6 +444,7 @@ const loans = {
     {
       id: "hdfc-card",
       type: "card",
+      opened: "2026-02-04",
       icon: IconCreditCard,
       name: "HDFC Bank Credit Card",
       detail: "₹1,89,000 · Credit Card",
@@ -362,6 +463,7 @@ const loans = {
     {
       id: "idfc-card",
       type: "card",
+      opened: "2025-12-19",
       icon: IconCreditCard,
       name: "IDFC First Bank Credit Card",
       detail: "₹5,00,000 · Credit Card",
@@ -380,6 +482,7 @@ const loans = {
     {
       id: "snapmint-loan",
       type: "loan",
+      opened: "2025-10-28",
       icon: IconBuildingBank,
       name: "Snapmint Financial Services",
       detail: "₹4,282 · Consumer Loan",
@@ -398,6 +501,7 @@ const loans = {
     {
       id: "icici-card-8747",
       type: "card",
+      opened: "2022-12-30",
       icon: IconCreditCard,
       name: "ICICI Bank Credit Card ••8747",
       detail: "₹5,00,000 · Credit Card",
@@ -425,6 +529,7 @@ const loans = {
     {
       id: "lazypay-loan",
       type: "loan",
+      opened: "2022-09-01",
       icon: IconBuildingBank,
       name: "PayU Finance (LazyPay)",
       detail: "₹5,600 · Consumer Loan",
@@ -443,6 +548,7 @@ const loans = {
     {
       id: "icici-card-1784",
       type: "card",
+      opened: "2022-06-14",
       icon: IconCreditCard,
       name: "ICICI Bank Credit Card ••1784",
       detail: "₹5,00,000 · Credit Card",
@@ -463,6 +569,7 @@ const loans = {
     {
       id: "adityabirla-loan",
       type: "loan",
+      opened: "2024-09-13",
       icon: IconBuildingBank,
       name: "Aditya Birla Capital",
       detail: "₹1,00,000 · Personal Loan",
@@ -481,6 +588,7 @@ const loans = {
     {
       id: "idfc-ola-loan",
       type: "loan",
+      opened: "2022-04-06",
       icon: IconBuildingBank,
       name: "IDFC First Bank (OLA)",
       detail: "₹30,000 · Consumer Loan",
@@ -525,6 +633,10 @@ export const mock = {
   predictor,
   paymentHistoryDetail,
   creditUsageDetail,
+  inquiriesDetail,
+  inquiries,
+  creditAgeDetail,
+  creditMixDetail,
   impacts,
   loans,
   card,
