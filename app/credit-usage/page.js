@@ -7,35 +7,40 @@ import ImpactBreakdownSheet from "../components/ImpactBreakdownSheet";
 import NavBar from "../components/NavBar";
 import { mock } from "../data/mock";
 
-const COPY = mock.paymentHistoryDetail;
+const COPY = mock.creditUsageDetail;
 
-// Count each account's reported months (anything but not-reported) and how
-// many of those were on time. In this report every reported month is on
-// time, so the two match everywhere — but delayed/overdue months would
-// lower `onTime` below `total`.
-function paymentCounts(account) {
-  const months = Object.values(account.payments.byYear).flat();
-  const total = months.filter((m) => m.status !== "not-reported").length;
-  const onTime = months.filter((m) => m.status === "on-time").length;
-  return { onTime, total };
-}
-
-const ALL_ACCOUNTS = [...mock.loans.active, ...mock.loans.closed];
-const CARDS = ALL_ACCOUNTS.filter((a) => a.type === "card");
-const LOANS = ALL_ACCOUNTS.filter((a) => a.type === "loan");
-const TOTAL_ON_TIME = ALL_ACCOUNTS.reduce(
-  (n, a) => n + paymentCounts(a).onTime,
-  0,
+// Utilization only applies to revolving accounts — loans have no limit.
+const CARDS = [...mock.loans.active, ...mock.loans.closed].filter(
+  (a) => a.type === "card",
 );
 
-// The badge and breakdown sheet reuse the payment-history impact tile's data.
-const IMPACT = mock.impacts.find((i) => i.id === "payment-history");
+// Amounts in the mock are display strings ("₹51,132"); parse them back for
+// the math, format again for the header row.
+function parseINR(s) {
+  return Number(s.replace(/[₹,]/g, ""));
+}
+function formatINR(n) {
+  return `₹${n.toLocaleString("en-IN", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })}`;
+}
+function usedPct(account) {
+  const used = parseINR(account.limitUsedAmount);
+  const limit = parseINR(account.creditLimit);
+  return limit > 0 ? (used / limit) * 100 : 0;
+}
 
-// Account row: logo tile + name on the left, on-time count + chevron on the
-// right. Loans also show their product type (parsed off the row detail).
-function AccountRow({ account, subtitle, last, onClick }) {
+const TOTAL_USED = CARDS.reduce((n, a) => n + parseINR(a.limitUsedAmount), 0);
+const TOTAL_LIMIT = CARDS.reduce((n, a) => n + parseINR(a.creditLimit), 0);
+const TOTAL_PCT = (TOTAL_USED / TOTAL_LIMIT) * 100;
+
+// The badge and breakdown sheet reuse the credit-utilization impact data.
+const IMPACT = mock.impacts.find((i) => i.id === "credit-utilization");
+
+// Card row: logo tile + bank on the left, used % + chevron on the right.
+function CardRow({ account, last, onClick }) {
   const Icon = account.icon;
-  const { onTime, total } = paymentCounts(account);
   return (
     <button
       type="button"
@@ -48,29 +53,17 @@ function AccountRow({ account, subtitle, last, onClick }) {
         <span className="grid size-10 shrink-0 place-items-center rounded-lg border border-border-primary bg-background-secondary text-content-primary">
           <Icon size={22} stroke={1.5} />
         </span>
-        <span className="flex flex-col">
-          <span className="text-[14px] leading-5 font-semibold text-content-primary">
-            {account.bank}
-          </span>
-          {subtitle && (
-            <span className="text-[14px] leading-5 text-content-secondary">
-              {subtitle}
-            </span>
-          )}
+        <span className="text-[14px] leading-5 font-semibold text-content-primary">
+          {account.bank}
         </span>
       </span>
       <span className="flex items-center gap-1">
         <span className="flex flex-col items-end">
-          {/* All months on time reads green; any misses read amber */}
-          <span
-            className={`text-[15px] leading-5 font-bold ${
-              onTime === total ? "text-content-postive" : "text-content-warning"
-            }`}
-          >
-            {onTime}/{total}
+          <span className="text-[15px] leading-5 font-bold text-content-primary">
+            {usedPct(account).toFixed(2)}%
           </span>
           <span className="text-[12px] leading-4 text-content-secondary">
-            On-time
+            Credit used
           </span>
         </span>
         <IconChevronRight
@@ -83,7 +76,7 @@ function AccountRow({ account, subtitle, last, onClick }) {
   );
 }
 
-export default function PaymentHistory() {
+export default function CreditUsage() {
   const router = useRouter();
   const [breakdownOpen, setBreakdownOpen] = useState(false);
 
@@ -92,10 +85,10 @@ export default function PaymentHistory() {
       <NavBar backHref="/score" border={false} />
 
       {/* Hero — factor summary */}
-      <section className="flex flex-col gap-6 px-4 pt-2 pb-8 bg-white border-b border-border-primary">
+      <section className="flex flex-col gap-6 border-b border-border-primary bg-white px-4 pt-2 pb-8">
         <div className="flex flex-col gap-1">
           <h1 className="text-2xl leading-8 font-bold text-content-primary">
-            Payment history
+            {COPY.title}
           </h1>
           <p className="text-[15px] leading-6 font-medium text-content-primary">
             {COPY.factorLabel}
@@ -105,22 +98,47 @@ export default function PaymentHistory() {
           </p>
         </div>
 
+        {/* Utilized vs max limit */}
+        <div className="flex flex-col gap-3">
+          <div className="h-8 w-full overflow-hidden rounded-lg bg-background-secondary">
+            <div
+              className="h-full rounded-l-lg bg-background-postive"
+              style={{ width: `${Math.max(TOTAL_PCT, 1)}%` }}
+            />
+          </div>
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex flex-col">
+              <span className="text-[17px] leading-6 font-bold text-content-primary">
+                {formatINR(TOTAL_USED)}
+              </span>
+              <span className="text-sm leading-5 text-content-secondary">
+                {COPY.utilizedLabel}
+              </span>
+            </div>
+            <div className="flex flex-col items-end">
+              <span className="text-[17px] leading-6 font-bold text-content-primary">
+                {formatINR(TOTAL_LIMIT)}
+              </span>
+              <span className="text-sm leading-5 text-content-secondary">
+                {COPY.maxLabel}
+              </span>
+            </div>
+          </div>
+        </div>
+
         <div className="flex flex-col gap-1">
           <p className=" text-[10px] leading-4 font-medium tracking-[1px] text-content-secondary uppercase">
-            {COPY.onTimeLabel}
+            {COPY.pctLabel}
           </p>
           <div className="flex flex-col items-start gap-2">
             <p className="text-2xl leading-9 font-bold text-content-primary">
-              {TOTAL_ON_TIME}/{TOTAL_ON_TIME}{" "}
-              <span className="text-lg font-medium text-content-secondary">
-                (100%)
-              </span>
+              {TOTAL_PCT.toFixed(2)}%
             </p>
             <span className="flex items-center gap-1.5 rounded-full bg-background-postive px-3 py-1 text-[14px] leading-5 font-semibold text-content-inverse-primary">
               {IMPACT.rating}
               <button
                 type="button"
-                aria-label="How payment history is classified"
+                aria-label="How credit utilization is classified"
                 onClick={() => setBreakdownOpen(true)}
                 className="flex cursor-pointer items-center"
               >
@@ -132,35 +150,17 @@ export default function PaymentHistory() {
       </section>
 
       {/* Credit cards */}
-      <section className="flex flex-col gap-2 px-4 pb-6 mt-8">
+      <section className="mt-6 flex flex-col gap-2 px-4 pb-8">
         <h2 className="text-sm leading-6 font-semibold text-content-secondary">
           Credit cards
         </h2>
         <div className="overflow-hidden rounded-2xl border border-border-primary bg-background-primary">
           {CARDS.map((account, i) => (
-            <AccountRow
+            <CardRow
               key={account.id}
               account={account}
               last={i === CARDS.length - 1}
               onClick={() => router.push(`/card?id=${account.id}`)}
-            />
-          ))}
-        </div>
-      </section>
-
-      {/* Loans */}
-      <section className="flex flex-col gap-2 px-4 pb-8">
-        <h2 className="text-sm leading-6 font-semibold text-content-secondary">
-          Loans
-        </h2>
-        <div className="overflow-hidden rounded-2xl border border-border-primary bg-background-primary">
-          {LOANS.map((account, i) => (
-            <AccountRow
-              key={account.id}
-              account={account}
-              subtitle={account.detail.split("·")[1]?.trim()}
-              last={i === LOANS.length - 1}
-              onClick={() => router.push(`/loan?id=${account.id}`)}
             />
           ))}
         </div>

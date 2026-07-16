@@ -39,6 +39,10 @@ const debugPages = [
     path: "/payment-history",
   },
   {
+    id: "credit-usage",
+    path: "/credit-usage",
+  },
+  {
     id: "loans",
     path: "/loans",
   },

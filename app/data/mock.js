@@ -148,6 +148,17 @@ const paymentHistoryDetail = {
   ],
 };
 
+// ---- Credit usage detail page ----
+const creditUsageDetail = {
+  title: "Credit usage",
+  factorLabel: "High-impact factor",
+  description:
+    "It's a measurement of how much of your available limit has been utilized.",
+  utilizedLabel: "Credit Utilized",
+  maxLabel: "Max Credit Limit",
+  pctLabel: "Credit utilized",
+};
+
 // ---- Impact factors ----
 // Classification bands per factor (PayUFin's rating scale), Excellent → Poor.
 const paymentHistoryRanges = [
@@ -513,6 +524,7 @@ export const mock = {
   scorePrediction,
   predictor,
   paymentHistoryDetail,
+  creditUsageDetail,
   impacts,
   loans,
   card,

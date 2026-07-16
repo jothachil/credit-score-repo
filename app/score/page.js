@@ -473,13 +473,17 @@ export default function CreditScore() {
               <ImpactCard
                 key={impact.id}
                 {...impact}
-                // Payment history has a full detail page; the other factors
+                // Factors with a full detail page navigate there; the rest
                 // open the breakdown sheet.
-                onClick={() =>
-                  impact.id === "payment-history"
-                    ? router.push("/payment-history")
-                    : setActiveImpact(impact)
-                }
+                onClick={() => {
+                  if (impact.id === "payment-history") {
+                    router.push("/payment-history");
+                  } else if (impact.id === "credit-utilization") {
+                    router.push("/credit-usage");
+                  } else {
+                    setActiveImpact(impact);
+                  }
+                }}
               />
             ))}
           </div>
