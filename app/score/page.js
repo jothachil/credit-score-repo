@@ -433,8 +433,12 @@ export default function CreditScore() {
             </div>
           </section>
 
-          {/* Predict score banner */}
-          <section className="glow-ring relative flex items-center justify-between gap-4 overflow-hidden rounded-2xl border border-border-primary bg-background-primary p-2">
+          {/* Predict score banner — the whole card navigates to /predict */}
+          <button
+            type="button"
+            onClick={() => router.push("/predict")}
+            className="glow-ring relative flex cursor-pointer items-center justify-between gap-4 overflow-hidden rounded-2xl border border-border-primary bg-background-primary p-2 text-left"
+          >
             <div className="flex flex-col items-start gap-1 py-4 pl-4">
               <h2 className="text-base leading-6 font-bold text-content-primary">
                 {mock.scorePrediction.title}
@@ -442,16 +446,12 @@ export default function CreditScore() {
               <p className="text-[14px] leading-5 text-content-secondary">
                 {mock.scorePrediction.subtitle}
               </p>
-              <button
-                type="button"
-                onClick={() => router.push("/predict")}
-                className="mt-3 flex cursor-pointer items-center gap-2.5 text-[15px] leading-5 font-bold text-content-primary"
-              >
+              <span className="mt-3 flex items-center gap-2.5 text-[15px] leading-5 font-bold text-content-primary">
                 {mock.scorePrediction.cta}
                 <span className="flex size-5 items-center justify-center rounded-full bg-background-inverse-primary text-content-inverse-primary">
                   <IconArrowRight size={10} stroke={2.5} />
                 </span>
-              </button>
+              </span>
             </div>
             {/* biome-ignore lint/performance/noImgElement: prototype static asset */}
             <img
@@ -459,7 +459,7 @@ export default function CreditScore() {
               alt=""
               className="w-30 shrink-0 self-stretch object-cover"
             />
-          </section>
+          </button>
         </div>
 
         <section className="flex flex-col gap-2">
