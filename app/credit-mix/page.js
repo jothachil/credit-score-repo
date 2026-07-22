@@ -120,7 +120,7 @@ export default function CreditMix() {
       </section>
 
       {/* All active accounts in one list, each labelled by category */}
-      <section className="mt-8 flex flex-col px-4 pb-8">
+      <section className="pt-4 flex flex-col px-4 pb-8">
         <div className="overflow-hidden rounded-2xl border border-border-primary bg-background-primary">
           {ALL.map((account, i) => (
             <AccountRow

@@ -79,6 +79,36 @@ export default function Onboarding() {
 
       {/* Consent + CTA — pinned to the bottom of the screen */}
       <div className="sticky bottom-0 mt-auto flex flex-col gap-3 border-t border-border-primary bg-background-primary px-4 pt-4 pb-[calc(1rem+env(safe-area-inset-bottom))]">
+        {/* Bureau consent — unchecking disables the CTA */}
+        <label
+          htmlFor="bureau-consent"
+          className="flex cursor-pointer items-start gap-3"
+        >
+          <Checkbox
+            id="bureau-consent"
+            checked={consented}
+            onCheckedChange={setConsented}
+            className="mt-0.5"
+          />
+          <span className="text-[13px] leading-5 text-content-secondary">
+            I agree to the{" "}
+            <button
+              type="button"
+              className="cursor-pointer font-bold text-content-brand"
+            >
+              Terms and Conditions
+            </button>{" "}
+            of{" "}
+            <button
+              type="button"
+              className="cursor-pointer font-bold text-content-brand"
+            >
+              TUCIBIL
+            </button>{" "}
+            and hereby provide explicit consent to share my Credit Information
+            with PayU Finance India Private Limited.
+          </span>
+        </label>
         <Button
           variant="primary"
           disabled={!consented}
