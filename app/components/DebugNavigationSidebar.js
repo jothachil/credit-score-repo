@@ -15,6 +15,10 @@ const debugPages = [
     path: "/",
   },
   {
+    id: "basic-details",
+    path: "/basic-details",
+  },
+  {
     id: "fetching",
     path: "/fetching",
   },

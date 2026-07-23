@@ -9,6 +9,8 @@ import { useId, useRef, useState } from "react";
  *
  * Controlled: pass `value` and `onChange(nextValue)`.
  * Pass `error` (a string) to switch into the invalid state.
+ * Pass `helper` for supporting text under the field; the error replaces it
+ * while invalid.
  *
  * The label floats up when the field is focused or has a value. Extra props
  * (type, inputMode, maxLength, placeholder, transform, …) pass through to the
@@ -20,7 +22,12 @@ export default function TextField({
   value,
   onChange,
   error = "",
+  helper = "",
   className = "",
+  // Composed with the internal focus tracking — spreading them straight
+  // through would overwrite it and leave the field stuck in focus styling.
+  onFocus,
+  onBlur,
   ...inputProps
 }) {
   const reactId = useId();
@@ -71,8 +78,14 @@ export default function TextField({
           id={fieldId}
           value={value}
           onValueChange={onChange}
-          onFocus={() => setFocused(true)}
-          onBlur={() => setFocused(false)}
+          onFocus={(event) => {
+            setFocused(true);
+            onFocus?.(event);
+          }}
+          onBlur={(event) => {
+            setFocused(false);
+            onBlur?.(event);
+          }}
           aria-label={label}
           aria-invalid={invalid || undefined}
           aria-describedby={invalid ? `${fieldId}-error` : undefined}
@@ -82,7 +95,7 @@ export default function TextField({
           {...inputProps}
         />
       </motion.div>
-      {invalid && (
+      {invalid ? (
         <motion.p
           id={`${fieldId}-error`}
           initial={{ opacity: 0, y: -2 }}
@@ -91,6 +104,12 @@ export default function TextField({
         >
           {error}
         </motion.p>
+      ) : (
+        helper && (
+          <p className="mt-1 px-4 text-[12px] leading-4 text-content-secondary">
+            {helper}
+          </p>
+        )
       )}
     </div>
   );
