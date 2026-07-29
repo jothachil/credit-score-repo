@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Button from "../components/Button";
+import Checkbox from "../components/Checkbox";
 import NavBar from "../components/NavBar";
 import TextField from "../components/TextField";
 
@@ -15,6 +16,7 @@ export default function BasicDetails() {
   const [lastName, setLastName] = useState("");
   const [pan, setPan] = useState("");
   const [panTouched, setPanTouched] = useState(false);
+  const [consented, setConsented] = useState(true);
 
   const panValid = PAN_RE.test(pan);
   // Complain once the field is complete or the user has left it — not on
@@ -23,7 +25,8 @@ export default function BasicDetails() {
     pan && !panValid && (panTouched || pan.length === 10)
       ? "Enter a valid PAN, e.g. ABCDE1234F"
       : "";
-  const canContinue = firstName.trim() && lastName.trim() && panValid;
+  const canContinue =
+    firstName.trim() && lastName.trim() && panValid && consented;
 
   return (
     <div className="flex flex-1 flex-col bg-background-primary">
@@ -70,8 +73,38 @@ export default function BasicDetails() {
         </div>
       </div>
 
-      {/* CTA — pinned to the bottom of the screen */}
-      <div className="sticky bottom-0 mt-auto flex flex-col border-t border-border-primary bg-background-primary px-4 pt-4 pb-[calc(1rem+env(safe-area-inset-bottom))]">
+      {/* Consent + CTA — pinned to the bottom of the screen */}
+      <div className="sticky bottom-0 mt-auto flex flex-col gap-3 border-t border-border-primary bg-background-primary px-4 pt-4 pb-[calc(1rem+env(safe-area-inset-bottom))]">
+        {/* Bureau consent — unchecking disables the CTA */}
+        <label
+          htmlFor="bureau-consent"
+          className="flex cursor-pointer items-start gap-3"
+        >
+          <Checkbox
+            id="bureau-consent"
+            checked={consented}
+            onCheckedChange={setConsented}
+            className="mt-0.5"
+          />
+          <span className="text-[13px] leading-5 text-content-secondary">
+            I agree to the{" "}
+            <button
+              type="button"
+              className="cursor-pointer font-bold text-content-brand"
+            >
+              Terms and Conditions
+            </button>{" "}
+            of{" "}
+            <button
+              type="button"
+              className="cursor-pointer font-bold text-content-brand"
+            >
+              TUCIBIL
+            </button>{" "}
+            and hereby provide explicit consent to share my Credit Information
+            with PayU Finance India Private Limited.
+          </span>
+        </label>
         <Button
           variant="primary"
           disabled={!canContinue}

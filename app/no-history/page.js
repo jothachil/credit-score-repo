@@ -22,7 +22,7 @@ export default function NoCreditHistory() {
         />
         <div className="flex flex-col items-center gap-2">
           <h1 className="text-xl leading-8 font-bold text-content-primary">
-            No credit history
+            No history (NH)
           </h1>
           <div className="flex items-center justify-center gap-2 text-[14px] leading-5 text-content-secondary">
             <IconFileText size={20} stroke={2} className="shrink-0" />
