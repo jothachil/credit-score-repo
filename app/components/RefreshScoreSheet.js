@@ -1,14 +1,18 @@
 "use client";
 
 import {
+  IconAlertTriangle,
   IconBulb,
   IconCircleCheckFilled,
   IconLoader2,
   IconShieldCheckFilled,
   IconTrendingUp,
 } from "@tabler/icons-react";
+import { useAtomValue } from "jotai";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { mock } from "../data/mock";
+import { debugFlagAtoms } from "../state/debugFlags";
 import BottomSheet from "./BottomSheet";
 import Button from "./Button";
 
@@ -36,9 +40,13 @@ const SUCCESS_MS = 1400;
  * Refresh-score upsell sheet — opens from the score screen's refresh CTA.
  * The CTA runs a dummy payment flow (loader → success) and then hands off
  * to the /fetching loader to pull the refreshed report.
+ *
+ * When the last refresh was <15 days ago (debug flag "recent_refresh"),
+ * the offer carries a disclaimer that the score is unlikely to have moved.
  */
 export default function RefreshScoreSheet({ open, onOpenChange }) {
   const router = useRouter();
+  const recentRefresh = useAtomValue(debugFlagAtoms.recentRefresh);
   const [phase, setPhase] = useState("offer");
 
   // Fresh offer state every time the sheet opens.
@@ -105,7 +113,7 @@ export default function RefreshScoreSheet({ open, onOpenChange }) {
           <img
             src="/no-credit-score-3.png"
             alt="Credit score being refreshed"
-            className="size-[200PX] object-contain"
+            className="size-[150PX] object-contain"
           />
 
           {/* Heading + subtitle */}
@@ -137,6 +145,22 @@ export default function RefreshScoreSheet({ open, onOpenChange }) {
               </div>
             ))}
           </div>
+
+          {/* Disclaimer — last refresh was <15 days ago */}
+          {recentRefresh && (
+            <div className="mt-4 flex w-full items-start gap-3 rounded-xl bg-background-light-warning p-3">
+              <IconAlertTriangle
+                size={20}
+                stroke={2}
+                className="mt-0.5 shrink-0 text-content-warning"
+              />
+              <p className="text-[13px] leading-5 text-content-primary">
+                Your score was last updated on {mock.reportFetchDate}. Credit
+                scores rarely move within 15 days, so refreshing now will likely
+                show the same score.
+              </p>
+            </div>
+          )}
 
           {/* CTA */}
           <div className="flex w-full flex-col items-center gap-3 mt-4">

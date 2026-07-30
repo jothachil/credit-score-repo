@@ -4,6 +4,9 @@ import { atomWithStorage } from "jotai/utils";
 // flag survives reloads while you iterate on a flow.
 export const debugFlagAtoms = {
   refreshAvailable: atomWithStorage("debug.refreshAvailable", false),
+  // Last refresh was <15 days ago → the refresh sheet leads with a
+  // "score won't change much yet" warning before the paid offer.
+  recentRefresh: atomWithStorage("debug.recentRefresh", false),
 };
 
 // Surfaced as switches in the debug panel's "flags" tab.
@@ -12,5 +15,10 @@ export const debugFlags = [
     id: "refresh_available",
     label: "Refresh available",
     atom: debugFlagAtoms.refreshAvailable,
+  },
+  {
+    id: "recent_refresh",
+    label: "Refreshed < 15 days ago",
+    atom: debugFlagAtoms.recentRefresh,
   },
 ];
