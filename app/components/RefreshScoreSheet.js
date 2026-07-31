@@ -42,7 +42,8 @@ const SUCCESS_MS = 1400;
  * to the /fetching loader to pull the refreshed report.
  *
  * When the last refresh was <15 days ago (debug flag "recent_refresh"),
- * the offer carries a disclaimer that the score is unlikely to have moved.
+ * tapping the paid CTA interjects a warning that the score is unlikely to
+ * have moved — payment only starts if the user insists.
  */
 export default function RefreshScoreSheet({ open, onOpenChange }) {
   const router = useRouter();
@@ -74,6 +75,37 @@ export default function RefreshScoreSheet({ open, onOpenChange }) {
       title="Unlock Your Latest CIBIL Score"
       titleHidden
     >
+      {phase === "warning" && (
+        <div className="flex flex-col items-center gap-4 pt-6 text-center">
+          <span className="flex size-16 items-center justify-center rounded-full bg-background-light-warning">
+            <IconAlertTriangle
+              size={32}
+              stroke={2}
+              className="text-content-warning"
+            />
+          </span>
+          <div className="flex flex-col gap-1">
+            <h2 className="text-xl leading-8 font-bold text-content-primary">
+              You refreshed recently
+            </h2>
+            <p className="text-sm leading-6 text-content-secondary">
+              Your score was last updated on {mock.reportFetchDate}. Credit
+              scores rarely move within 15 days, so refreshing now will likely
+              show the same score.
+            </p>
+          </div>
+          <div className="mt-2 flex w-full flex-col gap-2">
+            {/* Skip the offer pitch — straight into the payment flow */}
+            <Button variant="primary" onClick={() => setPhase("processing")}>
+              Refresh anyway
+            </Button>
+            <Button variant="secondary" onClick={() => onOpenChange(false)}>
+              Maybe later
+            </Button>
+          </div>
+        </div>
+      )}
+
       {phase === "processing" && (
         <div className="flex flex-col items-center gap-4 py-16 text-center">
           <IconLoader2
@@ -146,27 +178,12 @@ export default function RefreshScoreSheet({ open, onOpenChange }) {
             ))}
           </div>
 
-          {/* Disclaimer — last refresh was <15 days ago */}
-          {recentRefresh && (
-            <div className="mt-4 flex w-full items-start gap-3 rounded-xl bg-background-light-warning p-3">
-              <IconAlertTriangle
-                size={20}
-                stroke={2}
-                className="mt-0.5 shrink-0 text-content-warning"
-              />
-              <p className="text-[13px] leading-5 text-content-primary">
-                Your score was last updated on {mock.reportFetchDate}. Credit
-                scores rarely move within 15 days, so refreshing now will likely
-                show the same score.
-              </p>
-            </div>
-          )}
-
           {/* CTA */}
           <div className="flex w-full flex-col items-center gap-3 mt-4">
             <Button
               variant="primary"
-              onClick={() => setPhase("processing")}
+              // Recently refreshed → warn before taking the payment
+              onClick={() => setPhase(recentRefresh ? "warning" : "processing")}
               className="flex items-center justify-center gap-2"
             >
               Instant refresh now for ₹49
