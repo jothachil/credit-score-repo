@@ -428,22 +428,6 @@ export default function CreditScore() {
       {/* Body */}
       <div className="flex flex-col gap-6 px-4 py-6">
         <section className="flex flex-col gap-2">
-          <h2 className="text-sm leading-6 font-semibold text-content-secondary">
-            Credit Overview
-          </h2>
-          {/* 2×3 grid — six impact factors, two per row. */}
-          <div className="grid grid-cols-2 gap-3">
-            {IMPACTS.map((impact) => (
-              <ImpactCard
-                key={impact.id}
-                {...impact}
-                onClick={() => setActiveImpact(impact)}
-              />
-            ))}
-          </div>
-        </section>
-
-        <section className="flex flex-col gap-2">
           <div className="flex items-center justify-between gap-4">
             <h2 className="text-sm leading-6 font-semibold text-content-secondary">
               Loans &amp; Credit lines
@@ -498,7 +482,7 @@ export default function CreditScore() {
         <div className="flex items-center justify-center pt-2 pb-4">
           {/* biome-ignore lint/performance/noImgElement: prototype static asset */}
           <img
-            src="/cibil.png"
+            src="/experian-logo.png"
             alt="Powered by CIBIL"
             className="h-auto w-full max-w-[64px] object-contain"
           />

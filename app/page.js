@@ -40,7 +40,7 @@ export default function Onboarding() {
       <div className="flex items-center justify-center">
         {/* biome-ignore lint/performance/noImgElement: prototype static asset */}
         <img
-          src="/onboarding-6.png"
+          src="./experian.png"
           alt="Credit score meter"
           className="h-auto w-full max-w-[360px] object-contain"
         />
@@ -49,7 +49,7 @@ export default function Onboarding() {
       {/* Heading */}
       <div className="mt-10 flex flex-col items-center gap-2 px-6 text-center">
         <h1 className="text-2xl leading-9 font-bold tracking-tight text-content-primary">
-          Check your CIBIL Score for free!
+          Check your Experian Score for free!
         </h1>
         <p className="text-sm text-content-secondary">
           Get detailed insights on your credit report
@@ -96,7 +96,7 @@ export default function Onboarding() {
             >
               Terms and Conditions
             </a>{" "}
-            of TUCIBIL and hereby provide explicit consent to share my Credit
+            of Experian and hereby provide explicit consent to share my Credit
             Information with PayU Finance India Private Limited.
           </label>
         </div>
