@@ -341,7 +341,7 @@ export default function CreditScore() {
         <div className="relative flex flex-col gap-4 px-4 pt-1 pb-5">
           <div className="flex flex-col gap-0.5">
             <p className="mt-10 text-[10px] leading-4 font-medium tracking-[1px] text-content-inverse-primary uppercase">
-              CIBIL Score
+              Experian Score
             </p>
             {/* Fixed height so the SSR-empty → built → rolling states of the
                 slot-text number never change the row height (slot-text injects
