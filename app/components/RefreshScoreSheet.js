@@ -4,6 +4,7 @@ import {
   IconAlertTriangle,
   IconBulb,
   IconCircleCheckFilled,
+  IconClockHour4,
   IconLoader2,
   IconShieldCheckFilled,
   IconTrendingUp,
@@ -44,16 +45,22 @@ const SUCCESS_MS = 1400;
  * When the last refresh was <15 days ago (debug flag "recent_refresh"),
  * tapping the paid CTA interjects a warning that the score is unlikely to
  * have moved — payment only starts if the user insists.
+ *
+ * When the report was fetched <2 days ago (debug flag "recent_fetch"),
+ * nothing can have changed yet — the sheet opens straight into a blocked
+ * state with no offer and no way to pay.
  */
 export default function RefreshScoreSheet({ open, onOpenChange }) {
   const router = useRouter();
   const recentRefresh = useAtomValue(debugFlagAtoms.recentRefresh);
+  const recentFetch = useAtomValue(debugFlagAtoms.recentFetch);
   const [phase, setPhase] = useState("offer");
 
-  // Fresh offer state every time the sheet opens.
+  // Fresh state every time the sheet opens — a <2-day-old report skips the
+  // offer entirely.
   useEffect(() => {
-    if (open) setPhase("offer");
-  }, [open]);
+    if (open) setPhase(recentFetch ? "blocked" : "offer");
+  }, [open, recentFetch]);
 
   // Drive the dummy flow: linger on the loader, flash success, then hand
   // off to the fetching page.
@@ -75,6 +82,32 @@ export default function RefreshScoreSheet({ open, onOpenChange }) {
       title="Unlock Your Latest CIBIL Score"
       titleHidden
     >
+      {phase === "blocked" && (
+        <div className="flex flex-col items-center gap-4 pt-6 text-center">
+          <span className="flex size-16 items-center justify-center rounded-full bg-background-light-brand">
+            <IconClockHour4
+              size={32}
+              stroke={2}
+              className="text-content-brand"
+            />
+          </span>
+          <div className="flex flex-col gap-1">
+            <h2 className="text-xl leading-8 font-bold text-content-primary">
+              Nothing new to fetch yet
+            </h2>
+            <p className="text-sm leading-6 text-content-secondary">
+              Lenders report to the bureau in cycles, so your score won&apos;t
+              change within 2 days. Try again after a few days.
+            </p>
+          </div>
+          <div className="mt-2 w-full">
+            <Button variant="primary" onClick={() => onOpenChange(false)}>
+              Got it
+            </Button>
+          </div>
+        </div>
+      )}
+
       {phase === "warning" && (
         <div className="flex flex-col items-center gap-4 pt-6 text-center">
           <span className="flex size-16 items-center justify-center rounded-full bg-background-light-warning">
