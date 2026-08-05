@@ -71,6 +71,10 @@ const debugPages = [
     path: "/loan",
   },
   {
+    id: "payment-pending",
+    path: "/payment-in-progress",
+  },
+  {
     id: "error",
     path: "/error-state",
   },
