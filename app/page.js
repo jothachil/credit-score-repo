@@ -11,6 +11,10 @@ import { useState } from "react";
 import Button from "./components/Button";
 import Checkbox from "./components/Checkbox";
 
+// TUCIBIL consent terms, opened from the consent checkbox.
+const TERMS_URL =
+  "https://assets.payufin.com/docs/cibil-consent-credit-report-feature-05082026.pdf";
+
 // Labels are split into two lines so every column is the same height.
 const FEATURES = [
   { id: "insights", icon: IconFileText, lines: ["Detailed", "insights"] },
@@ -92,21 +96,18 @@ export default function Onboarding() {
           />
           <span className="text-[13px] leading-5 text-content-secondary">
             I agree to the{" "}
-            <button
-              type="button"
-              className="cursor-pointer font-bold text-content-brand"
+            {/* Inside the label — stop the click from toggling the checkbox */}
+            <a
+              href={TERMS_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="font-bold text-content-brand underline underline-offset-2"
             >
               Terms and Conditions
-            </button>{" "}
-            of{" "}
-            <button
-              type="button"
-              className="cursor-pointer font-bold text-content-brand"
-            >
-              TUCIBIL
-            </button>{" "}
-            and hereby provide explicit consent to share my Credit Information
-            with PayU Finance India Private Limited.
+            </a>{" "}
+            of TUCIBIL and hereby provide explicit consent to share my Credit
+            Information with PayU Finance India Private Limited.
           </span>
         </label>
         <Button

@@ -10,6 +10,10 @@ import TextField from "../components/TextField";
 // PAN format: 5 letters, 4 digits, 1 letter (e.g. ABCDE1234F).
 const PAN_RE = /^[A-Z]{5}[0-9]{4}[A-Z]$/;
 
+// TUCIBIL consent terms, opened from the consent checkbox.
+const TERMS_URL =
+  "https://assets.payufin.com/docs/cibil-consent-credit-report-feature-05082026.pdf";
+
 export default function BasicDetails() {
   const router = useRouter();
   const [firstName, setFirstName] = useState("");
@@ -88,12 +92,16 @@ export default function BasicDetails() {
           />
           <span className="text-[13px] leading-5 text-content-secondary">
             I agree to the{" "}
-            <button
-              type="button"
-              className="cursor-pointer font-bold text-content-brand"
+            {/* Inside the label — stop the click from toggling the checkbox */}
+            <a
+              href={TERMS_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="font-bold text-content-brand underline underline-offset-2"
             >
               Terms and Conditions
-            </button>{" "}
+            </a>{" "}
             of{" "}
             <button
               type="button"
