@@ -102,15 +102,8 @@ export default function BasicDetails() {
             >
               Terms and Conditions
             </a>{" "}
-            of{" "}
-            <button
-              type="button"
-              className="cursor-pointer font-bold text-content-brand"
-            >
-              TUCIBIL
-            </button>{" "}
-            and hereby provide explicit consent to share my Credit Information
-            with PayU Finance India Private Limited.
+            of TUCIBIL and hereby provide explicit consent to share my Credit
+            Information with PayU Finance India Private Limited.
           </span>
         </label>
         <Button
