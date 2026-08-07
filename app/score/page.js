@@ -49,18 +49,18 @@ const SCORE_BANDS = [
 const SCORE_TICKS = Array.from({ length: 16 }, (_, i) => `tick-${i}`);
 
 // Resolve a raw score into its band, gauge segments, and tick position. The
-// gauge runs high → low (Exceptional on the left, Poor on the right), so the
-// segments and the tick marker are both measured from the high end.
+// gauge runs low → high (Poor on the left, Exceptional on the right), so the
+// segments and the tick marker are both measured from the low end.
 function resolveScore(score) {
   const range = SCORE_MAX - SCORE_MIN;
   const segments = SCORE_BANDS.map((band, i) => {
     const max = SCORE_BANDS[i + 1]?.min ?? SCORE_MAX;
     return { ...band, span: max - band.min };
-  }).reverse();
+  });
   const band =
     [...SCORE_BANDS].reverse().find((b) => score >= b.min) ?? SCORE_BANDS[0];
   const fraction = Math.min(Math.max((score - SCORE_MIN) / range, 0), 1);
-  const activeTick = Math.round((1 - fraction) * (SCORE_TICKS.length - 1));
+  const activeTick = Math.round(fraction * (SCORE_TICKS.length - 1));
   return { segments, band, activeTick };
 }
 
@@ -89,7 +89,7 @@ const CREDIT_UTILIZATION_RANGES = [
   { tone: "fair", label: "Fair", range: "51 – 75%" },
   { tone: "poor", label: "Poor", range: "Above 76%" },
 ];
-const CREDIT_UTILIZATION_VALUE = 24; // % of limit used (lower is better)
+const CREDIT_UTILIZATION_VALUE = 0; // % of limit used (lower is better)
 function classifyCreditUtilization(pct) {
   if (pct <= 10) return "Excellent";
   if (pct <= 30) return "Very Good";
@@ -120,7 +120,7 @@ const CREDIT_MIX_RANGES = [
   { tone: "poor", label: "Poor", range: "0 – 5%" },
 ];
 
-const CREDIT_MIX_VALUE = 42;
+const CREDIT_MIX_VALUE = 0;
 function classifyCreditMix(pct) {
   if (pct >= 40) return "Excellent";
   if (pct >= 5) return "Good";
@@ -134,7 +134,7 @@ const RECENT_INQUIRIES_RANGES = [
   { tone: "fair", label: "Fair", range: "4 – 5 enquiries" },
   { tone: "poor", label: "Poor", range: "6+ enquiries" },
 ];
-const RECENT_INQUIRIES_VALUE = 7; // hard enquiries in last 6 months
+const RECENT_INQUIRIES_VALUE = 0; // hard enquiries in last 6 months
 function classifyRecentInquiries(n) {
   if (n <= 1) return "Excellent";
   if (n === 2) return "Very Good";
@@ -161,7 +161,7 @@ const IMPACTS = [
     id: "credit-utilization",
     rating: classifyCreditUtilization(CREDIT_UTILIZATION_VALUE),
     label: ["Credit utilization"],
-    value: `${CREDIT_UTILIZATION_VALUE}%`,
+    value: `${CREDIT_UTILIZATION_VALUE.toFixed(2)}%`,
     title: "Credit utilization",
     description:
       "How much of your available credit limit you're using. The lower, the better.",
@@ -171,7 +171,7 @@ const IMPACTS = [
     id: "credit-history",
     rating: classifyCreditHistory(CREDIT_HISTORY_VALUE),
     label: ["Credit history"],
-    value: `${CREDIT_HISTORY_VALUE} years`,
+    value: `${CREDIT_HISTORY_VALUE}+ years`,
     title: "Credit history",
     description:
       "How long you've had active credit accounts. A longer history helps your score.",
@@ -181,7 +181,7 @@ const IMPACTS = [
     id: "credit-mix",
     rating: classifyCreditMix(CREDIT_MIX_VALUE),
     label: ["Credit mix"],
-    value: `${CREDIT_MIX_VALUE}%`,
+    value: `${CREDIT_MIX_VALUE.toFixed(2)}%`,
     title: "Credit mix",
     description:
       "The share of secured vs unsecured credit you hold. A healthier balance helps your score.",
@@ -287,10 +287,10 @@ function ActionRow({ icon: Icon, label, onClick, last }) {
   );
 }
 
-const CURRENT_SCORE = 789;
+const CURRENT_SCORE = 719;
 
 // Date this credit report was last fetched from the bureau.
-const REPORT_FETCH_DATE = "24 Jun 2026";
+const REPORT_FETCH_DATE = "9 Jul 2026";
 
 export default function CreditScore() {
   const router = useRouter();
@@ -380,7 +380,7 @@ export default function CreditScore() {
             </div>
             <div className="flex w-full items-center justify-between px-px">
               {SCORE_TICKS.map((tick, i) => {
-                // Endpoints show the score range (high end left, low end right);
+                // Endpoints show the score range (low end left, high end right);
                 // the rest stay as dots, with the active one highlighted.
                 if (i === 0 || i === SCORE_TICKS.length - 1) {
                   return (
@@ -388,7 +388,7 @@ export default function CreditScore() {
                       key={tick}
                       className="text-[13px] leading-4 font-medium text-content-inverse-primary"
                     >
-                      {i === 0 ? 900 : 300}
+                      {i === 0 ? 300 : 900}
                     </span>
                   );
                 }

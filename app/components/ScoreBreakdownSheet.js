@@ -82,9 +82,14 @@ export default function ScoreBreakdownSheet({
         </div>
 
         <p className="text-xss leading-4 text-content-inactive">
-          Above classification is PayUFin's educational opinion and does not
-          ensure or imply any guarantee of credit approval from partner or
-          non-partner financial institutions.
+          The broad classification of the CIBIL score and insights across
+          different ranges (i.e., Excellent, Very Good, Good, Fair, Poor) is
+          solely based on the CIBIL report details and does not consider any
+          other external parameters. These classifications are defined as per
+          PayU Finance’s internal criteria for categorizing scores into the
+          above-mentioned ranges. This classification represents PayU Finance’s
+          opinion provided for educational purposes only and does not guarantee
+          any credit approval from lending institutions
         </p>
 
         <Button variant="primary" onClick={() => onOpenChange(false)}>
