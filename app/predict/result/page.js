@@ -9,8 +9,6 @@ import Button from "../../components/Button";
 import NavBar from "../../components/NavBar";
 import { mock } from "../../data/mock";
 
-const COPY = mock.predictor.missPayment;
-
 // Same FICO band model as the score page (see score/page.js) — duplicated
 // locally like the detail pages duplicate StatusMarker.
 const SCORE_MIN = 300;
@@ -50,12 +48,44 @@ function resolveScore(score) {
   return { segments, band, activeTick };
 }
 
+// Resolve the scenario and its delta from the query string.
+//   ?scenario=<id>          — which scenario's copy to show
+//   ?days=<30|60|90>        — select scenarios: which option was picked
+// Defaults to miss-payment so the older ?days-only links still resolve.
+function resolveScenario(params) {
+  const scenario =
+    mock.predictor.scenarios[params.get("scenario")] ??
+    mock.predictor.scenarios["miss-payment"];
+
+  // A `select` scenario's delta comes from the option picked; a `direct` one
+  // takes no input, so its own delta applies as-is.
+  if (scenario.kind === "select") {
+    const option =
+      scenario.options.find((o) => o.id === params.get("days")) ??
+      scenario.options[0];
+    return {
+      scenario,
+      delta: option.delta,
+      summary: `${scenario.resultPrefix} for ${option.label}`,
+    };
+  }
+
+  return {
+    scenario,
+    delta: scenario.delta,
+    summary: scenario.resultPrefix,
+  };
+}
+
 function PredictResultContent() {
   const router = useRouter();
-  const days = useSearchParams().get("days");
-  const option = COPY.options.find((o) => o.id === days) ?? COPY.options[0];
+  const {
+    scenario,
+    delta: scenarioDelta,
+    summary,
+  } = resolveScenario(useSearchParams());
   const predicted = Math.min(
-    Math.max(mock.currentScore + option.delta, SCORE_MIN),
+    Math.max(mock.currentScore + scenarioDelta, SCORE_MIN),
     SCORE_MAX,
   );
 
@@ -71,7 +101,7 @@ function PredictResultContent() {
 
   return (
     <div className="flex flex-1 flex-col bg-background-secondary">
-      <NavBar backHref="/predict/miss-payment" border={false} />
+      <NavBar backHref="/predict" border={false} />
 
       {/* Predicted score module — light-mode take on the score page hero.
           Bottom tint follows the delta (green for gains, red for drops) and
@@ -88,8 +118,7 @@ function PredictResultContent() {
             Predicted score
           </p>
           <p className="mt-4 text-sm leading-6 text-content-secondary">
-            If you miss loan EMI or credit card bills for{" "}
-            <span>{option.label}</span>
+            {summary}
           </p>
           {/* Fixed height so the SSR-empty → built → rolling states of the
               slot-text number never change the row height. */}
@@ -160,10 +189,10 @@ function PredictResultContent() {
       {/* Tips based on the chosen scenario */}
       <section className="flex flex-col gap-2 px-4 py-6">
         <h2 className="text-sm leading-6 font-semibold text-content-secondary">
-          {COPY.tipsTitle}
+          {scenario.tipsTitle}
         </h2>
         <div className="flex flex-col divide-y divide-border-primary rounded-2xl border border-border-primary bg-background-primary">
-          {COPY.tips.map(({ id, icon: Icon, title, detail }) => (
+          {scenario.tips.map(({ id, icon: Icon, title, detail }) => (
             <div key={id} className="flex items-center gap-4 p-4">
               <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-background-light-brand">
                 <Icon size={24} stroke={2} className="text-content-brand" />

@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import MissPaymentSheet from "../components/MissPaymentSheet";
 import NavBar from "../components/NavBar";
 import { mock } from "../data/mock";
 
@@ -46,15 +47,28 @@ function ChoiceCard({ choice, active, onClick }) {
   );
 }
 
+// Choices that take no input — tapping them predicts straight away.
+const DIRECT_SCENARIOS = new Set([
+  "close-oldest-card",
+  "pay-off-cards",
+  "pay-all-outstanding",
+]);
+
 export default function PredictScore() {
   const router = useRouter();
   const [activeId, setActiveId] = useState(null);
+  const [missPaymentOpen, setMissPaymentOpen] = useState(false);
 
-  // Choices with a built detail screen navigate there; the rest just toggle
-  // their selected state until their input screen exists.
+  // Miss-a-payment needs a data point, so it opens a sheet first. The two
+  // all-or-nothing scenarios go straight to the result; the rest just toggle
+  // their selected state until they have an input of their own.
   function choose(choice) {
-    if (choice.route) {
-      router.push(choice.route);
+    if (choice.id === "miss-payment") {
+      setMissPaymentOpen(true);
+      return;
+    }
+    if (DIRECT_SCENARIOS.has(choice.id)) {
+      router.push(`/predict/result?scenario=${choice.id}`);
       return;
     }
     setActiveId(activeId === choice.id ? null : choice.id);
@@ -86,6 +100,11 @@ export default function PredictScore() {
           ))}
         </div>
       </section>
+
+      <MissPaymentSheet
+        open={missPaymentOpen}
+        onOpenChange={setMissPaymentOpen}
+      />
     </div>
   );
 }

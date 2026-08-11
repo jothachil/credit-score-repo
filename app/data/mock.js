@@ -4,6 +4,11 @@ import {
   IconCalendarCheck,
   IconCoinRupee,
   IconCreditCard,
+  IconCreditCardOff,
+  IconHistory,
+  IconPercentage,
+  IconReceipt,
+  IconWallet,
 } from "@tabler/icons-react";
 
 // Single source of mock data for the whole prototype. Presentation logic
@@ -50,12 +55,23 @@ const missPaymentOptions = [
   { id: "90", label: "90 days", delta: -80 },
 ];
 
-const predictor = {
-  heading: "Make a choice. See where it takes you",
-  // Detail screen for the "miss a payment" choice.
-  missPayment: {
+// Copy for each scenario the predictor can run, keyed by choice id. The
+// result page reads whichever the `scenario` query param names.
+//
+// `kind` is how the scenario gets its number: `select` collects an option
+// first (miss-payment, via its sheet) and takes that option's delta; `direct`
+// takes no input at all and applies its own delta as soon as it's tapped.
+//
+// `resultPrefix` opens the recap sentence on the result page. For a `select`
+// scenario the chosen option's label is appended ("…for 60 days"); a `direct`
+// prefix is already a whole sentence and stands alone.
+const scenarios = {
+  "miss-payment": {
+    id: "miss-payment",
+    kind: "select",
     kicker: "See how your score changes",
     title: "If you miss loan EMI or credit card bills",
+    resultPrefix: "If you miss loan EMI or credit card bills",
     optionsLabel: "Miss payments for",
     options: missPaymentOptions,
     cta: "Predict score",
@@ -82,6 +98,96 @@ const predictor = {
       },
     ],
   },
+  "close-oldest-card": {
+    id: "close-oldest-card",
+    kind: "direct",
+    resultPrefix: "If you close your oldest credit card",
+    delta: -24,
+    tipsTitle: "Before you close it",
+    tips: [
+      {
+        id: "keep-open",
+        icon: IconHistory,
+        title: "Keep your oldest account open",
+        detail: "Account age is a scoring factor — closing it shortens it.",
+      },
+      {
+        id: "use-lightly",
+        icon: IconCreditCard,
+        title: "Use it lightly instead",
+        detail: "One small recurring charge keeps the card active.",
+      },
+      {
+        id: "close-newer",
+        icon: IconCreditCardOff,
+        title: "Close a newer card first",
+        detail: "If you must close one, pick your most recent account.",
+      },
+    ],
+  },
+  "pay-off-cards": {
+    id: "pay-off-cards",
+    kind: "direct",
+    resultPrefix: "If you pay off all your credit cards",
+    delta: 32,
+    tipsTitle: "Tips to keep it there",
+    tips: [
+      {
+        id: "under-30",
+        icon: IconPercentage,
+        title: "Stay under 30% utilisation",
+        detail: "Using less of your limit keeps this factor healthy.",
+      },
+      {
+        id: "before-statement",
+        icon: IconCalendarCheck,
+        title: "Pay before the statement date",
+        detail: "Bureaus see the statement balance, not the due-date one.",
+      },
+      {
+        id: "avoid-rebuild",
+        icon: IconWallet,
+        title: "Avoid rebuilding balances",
+        detail: "Clearing cards only helps while they stay cleared.",
+      },
+    ],
+  },
+  // Broader than pay-off-cards — loans as well as cards — so the gain is
+  // larger. See the overlap note on the choices list.
+  "pay-all-outstanding": {
+    id: "pay-all-outstanding",
+    kind: "direct",
+    resultPrefix: "If you pay all your outstanding balances",
+    delta: 38,
+    tipsTitle: "Tips to stay debt-free",
+    tips: [
+      {
+        id: "high-interest-first",
+        icon: IconReceipt,
+        title: "Clear high-interest debt first",
+        detail: "Cards and personal loans cost the most to carry.",
+      },
+      {
+        id: "keep-accounts-open",
+        icon: IconHistory,
+        title: "Keep the accounts open",
+        detail: "A paid-off account still adds to your credit history.",
+      },
+      {
+        id: "buffer",
+        icon: IconWallet,
+        title: "Build a small buffer",
+        detail: "Savings you can dip into keep new debt from creeping back.",
+      },
+    ],
+  },
+};
+
+const predictor = {
+  heading: "Make a choice. See where it takes you",
+  scenarios,
+  // Alias — MissPaymentSheet reads this scenario's copy directly.
+  missPayment: scenarios["miss-payment"],
   // The ten simulation options the predictor supports. Each carries the
   // control the detail screen should render (`input.kind`) plus the limits
   // that control has to enforce:
@@ -90,8 +196,9 @@ const predictor = {
   //   amount          — rupee amount, clamped to [min, max]
   //   account-amount  — pick an account, then a rupee amount ≤ its balance
   //   enquiry         — product type + rupee amount
-  // `image` names the illustration in /public (several options share one —
-  // see the note below). `route` is set once a detail screen exists.
+  // `image` names the illustration in /public (several options share one).
+  // Inputs are collected in a bottom sheet on the predict grid; only
+  // miss-payment has one built so far.
   choices: [
     {
       id: "miss-payment",
@@ -99,7 +206,6 @@ const predictor = {
       image: "miss-payment",
       delta: -58,
       tone: "negative",
-      route: "/predict/miss-payment",
       input: {
         kind: "select",
         label: "Days past due",
