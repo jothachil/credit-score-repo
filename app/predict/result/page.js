@@ -5,6 +5,7 @@ import { IconArrowDown, IconArrowUp } from "@tabler/icons-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import { SlotText } from "slot-text/react";
+import { formatAmount } from "../../components/AmountRuler";
 import Button from "../../components/Button";
 import NavBar from "../../components/NavBar";
 import { mock } from "../../data/mock";
@@ -51,14 +52,14 @@ function resolveScore(score) {
 // Resolve the scenario and its delta from the query string.
 //   ?scenario=<id>          — which scenario's copy to show
 //   ?days=<30|60|90>        — select scenarios: which option was picked
+//   ?amount=<rupees>        — amount scenarios: the figure set on the ruler
 // Defaults to miss-payment so the older ?days-only links still resolve.
 function resolveScenario(params) {
   const scenario =
     mock.predictor.scenarios[params.get("scenario")] ??
     mock.predictor.scenarios["miss-payment"];
 
-  // A `select` scenario's delta comes from the option picked; a `direct` one
-  // takes no input, so its own delta applies as-is.
+  // A `select` scenario's delta comes from the option picked.
   if (scenario.kind === "select") {
     const option =
       scenario.options.find((o) => o.id === params.get("days")) ??
@@ -70,6 +71,26 @@ function resolveScenario(params) {
     };
   }
 
+  // An `amount` scenario scales its delta by where the figure sits in the
+  // range — a bigger commitment moves the score further.
+  if (scenario.kind === "amount") {
+    const raw = Number(params.get("amount"));
+    const amount = Number.isFinite(raw)
+      ? Math.min(Math.max(raw, scenario.min), scenario.max)
+      : scenario.defaultAmount;
+    const fraction = (amount - scenario.min) / (scenario.max - scenario.min);
+    const delta = Math.round(
+      scenario.deltaAtMin +
+        fraction * (scenario.deltaAtMax - scenario.deltaAtMin),
+    );
+    return {
+      scenario,
+      delta,
+      summary: `${scenario.resultPrefix} ${formatAmount(amount)}`,
+    };
+  }
+
+  // A `direct` scenario takes no input, so its own delta applies as-is.
   return {
     scenario,
     delta: scenario.delta,

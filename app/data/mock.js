@@ -2,12 +2,16 @@ import {
   IconBellRinging,
   IconBuildingBank,
   IconCalendarCheck,
+  IconChartPie,
+  IconClockHour4,
   IconCoinRupee,
   IconCreditCard,
   IconCreditCardOff,
   IconHistory,
   IconPercentage,
   IconReceipt,
+  IconScale,
+  IconSearch,
   IconWallet,
 } from "@tabler/icons-react";
 
@@ -55,12 +59,177 @@ const missPaymentOptions = [
   { id: "90", label: "90 days", delta: -80 },
 ];
 
+// The four "obtain new credit" scenarios. Each collects a rupee amount on a
+// ruler in a sheet, so it carries the range that ruler spans plus the `step`
+// it snaps to — chosen to keep the tick count sane over these wide ranges.
+//
+// Taking on new credit dips the score, and a bigger commitment dips it more,
+// so the delta is interpolated between `deltaAtMin` and `deltaAtMax` rather
+// than being flat. `defaultAmount` is where the ruler opens and must land on
+// a step.
+const amountScenarios = {
+  "obtain-credit-card": {
+    id: "obtain-credit-card",
+    kind: "amount",
+    image: "new-credit",
+    tone: "brand",
+    kicker: "See how your score changes",
+    title: "If you obtain a new credit card",
+    resultPrefix: "If you obtain a new credit card of",
+    amountLabel: "Credit limit",
+    min: 20_000,
+    max: 15_00_000,
+    step: 10_000,
+    defaultAmount: 2_00_000,
+    deltaAtMin: -6,
+    deltaAtMax: -18,
+    cta: "Predict score",
+    tipsTitle: "If you take the card",
+    tips: [
+      {
+        id: "headroom",
+        icon: IconPercentage,
+        title: "A bigger limit can help",
+        detail: "Extra headroom lowers utilisation, once the enquiry settles.",
+      },
+      {
+        id: "space-applications",
+        icon: IconSearch,
+        title: "Space out applications",
+        detail: "Each application adds an enquiry — avoid clustering them.",
+      },
+      {
+        id: "first-bill",
+        icon: IconCalendarCheck,
+        title: "Never miss the first bill",
+        detail: "Early misses on a new account hurt more than later ones.",
+      },
+    ],
+  },
+  "obtain-home-loan": {
+    id: "obtain-home-loan",
+    kind: "amount",
+    image: "pay-outstanding",
+    tone: "brand",
+    kicker: "See how your score changes",
+    title: "If you obtain a home loan",
+    resultPrefix: "If you obtain a home loan of",
+    amountLabel: "Loan amount",
+    min: 10_00_000,
+    max: 5_00_00_000,
+    step: 1_00_000,
+    defaultAmount: 50_00_000,
+    deltaAtMin: -12,
+    deltaAtMax: -30,
+    cta: "Predict score",
+    tipsTitle: "Before you borrow",
+    tips: [
+      {
+        id: "secured-mix",
+        icon: IconScale,
+        title: "It improves your credit mix",
+        detail: "A secured loan balances an all-unsecured portfolio.",
+      },
+      {
+        id: "emi-affordable",
+        icon: IconChartPie,
+        title: "Keep the EMI affordable",
+        detail: "Lenders look at how much of your income is committed.",
+      },
+      {
+        id: "recovers",
+        icon: IconHistory,
+        title: "The dip is temporary",
+        detail: "On-time EMIs rebuild the score over the following months.",
+      },
+    ],
+  },
+  "obtain-auto-loan": {
+    id: "obtain-auto-loan",
+    kind: "amount",
+    image: "new-credit",
+    tone: "brand",
+    kicker: "See how your score changes",
+    title: "If you obtain an auto loan",
+    resultPrefix: "If you obtain an auto loan of",
+    amountLabel: "Loan amount",
+    min: 1_00_000,
+    max: 20_00_000,
+    step: 25_000,
+    defaultAmount: 8_00_000,
+    deltaAtMin: -10,
+    deltaAtMax: -22,
+    cta: "Predict score",
+    tipsTitle: "Before you borrow",
+    tips: [
+      {
+        id: "bigger-downpayment",
+        icon: IconCoinRupee,
+        title: "Put more down",
+        detail: "A smaller loan means a smaller dip and a lighter EMI.",
+      },
+      {
+        id: "one-lender",
+        icon: IconSearch,
+        title: "Compare without applying",
+        detail: "Quotes are fine — it's the applications that add enquiries.",
+      },
+      {
+        id: "auto-debit",
+        icon: IconCalendarCheck,
+        title: "Set up auto-debit",
+        detail: "Consistent EMIs turn this into a positive over time.",
+      },
+    ],
+  },
+  "obtain-personal-loan": {
+    id: "obtain-personal-loan",
+    kind: "amount",
+    image: "default-loan",
+    tone: "brand",
+    kicker: "See how your score changes",
+    title: "If you obtain a personal loan",
+    resultPrefix: "If you obtain a personal loan of",
+    amountLabel: "Loan amount",
+    min: 5_000,
+    max: 10_00_000,
+    step: 5_000,
+    defaultAmount: 3_00_000,
+    deltaAtMin: -8,
+    deltaAtMax: -26,
+    cta: "Predict score",
+    tipsTitle: "Before you borrow",
+    tips: [
+      {
+        id: "unsecured-weight",
+        icon: IconScale,
+        title: "Unsecured debt weighs more",
+        detail: "It moves the score more than a secured loan of the same size.",
+      },
+      {
+        id: "borrow-less",
+        icon: IconWallet,
+        title: "Borrow only what you need",
+        detail: "The dip scales with the amount you take on.",
+      },
+      {
+        id: "close-early",
+        icon: IconClockHour4,
+        title: "Clear it on schedule",
+        detail: "A closed loan repaid on time leaves a positive record.",
+      },
+    ],
+  },
+};
+
 // Copy for each scenario the predictor can run, keyed by choice id. The
 // result page reads whichever the `scenario` query param names.
 //
 // `kind` is how the scenario gets its number: `select` collects an option
 // first (miss-payment, via its sheet) and takes that option's delta; `direct`
-// takes no input at all and applies its own delta as soon as it's tapped.
+// takes no input at all and applies its own delta as soon as it's tapped;
+// `amount` collects a rupee figure on a ruler and interpolates its delta from
+// where that figure sits in the range (see amountScenarios above).
 //
 // `resultPrefix` opens the recap sentence on the result page. For a `select`
 // scenario the chosen option's label is appended ("…for 60 days"); a `direct`
@@ -181,6 +350,7 @@ const scenarios = {
       },
     ],
   },
+  ...amountScenarios,
 };
 
 const predictor = {

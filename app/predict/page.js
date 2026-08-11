@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import AmountSheet from "../components/AmountSheet";
 import MissPaymentSheet from "../components/MissPaymentSheet";
 import NavBar from "../components/NavBar";
 import { mock } from "../data/mock";
@@ -58,13 +59,18 @@ export default function PredictScore() {
   const router = useRouter();
   const [activeId, setActiveId] = useState(null);
   const [missPaymentOpen, setMissPaymentOpen] = useState(false);
+  const [amountScenarioId, setAmountScenarioId] = useState(null);
 
-  // Miss-a-payment needs a data point, so it opens a sheet first. The two
-  // all-or-nothing scenarios go straight to the result; the rest just toggle
-  // their selected state until they have an input of their own.
+  // Miss-a-payment and the "obtain credit" scenarios each collect a data point
+  // in a sheet first. The all-or-nothing ones go straight to the result; the
+  // rest just toggle their selected state until they have an input of their own.
   function choose(choice) {
     if (choice.id === "miss-payment") {
       setMissPaymentOpen(true);
+      return;
+    }
+    if (mock.predictor.scenarios[choice.id]?.kind === "amount") {
+      setAmountScenarioId(choice.id);
       return;
     }
     if (DIRECT_SCENARIOS.has(choice.id)) {
@@ -104,6 +110,11 @@ export default function PredictScore() {
       <MissPaymentSheet
         open={missPaymentOpen}
         onOpenChange={setMissPaymentOpen}
+      />
+
+      <AmountSheet
+        scenarioId={amountScenarioId}
+        onOpenChange={(open) => !open && setAmountScenarioId(null)}
       />
     </div>
   );

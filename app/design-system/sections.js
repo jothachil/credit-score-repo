@@ -26,6 +26,11 @@ export const sections = [
     description: "Card-style radio group",
   },
   {
+    slug: "amount-ruler",
+    title: "Amount ruler",
+    description: "Horizontal scroll range selector",
+  },
+  {
     slug: "buttons",
     title: "Buttons",
     description: "Primary and secondary variants",
