@@ -1,8 +1,8 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { mock } from "../data/mock";
+import { outcomeForSelect } from "../lib/predict";
 import BottomSheet from "./BottomSheet";
 import Button from "./Button";
 import { RadioCard, RadioGroup } from "./RadioField";
@@ -16,13 +16,13 @@ import ScenarioSheetHero from "./ScenarioSheetHero";
  * `layout: "chips"` puts short values in one row; anything else stacks them,
  * which is what longer labels need.
  *
- * `scenarioId` is null when closed.
+ * `scenarioId` is null when closed. Confirming reports the outcome up via
+ * `onConfirm` rather than navigating — the result renders on the predict page.
  */
-export default function SelectSheet({ scenarioId, onOpenChange }) {
+export default function SelectSheet({ scenarioId, onOpenChange, onConfirm }) {
   const scenario = scenarioId
     ? mock.predictor.scenarios[scenarioId]
     : undefined;
-  const router = useRouter();
   const [selected, setSelected] = useState(scenario?.options[0].id ?? "");
 
   // Reopen on the first option rather than the last scenario's pick.
@@ -65,9 +65,7 @@ export default function SelectSheet({ scenarioId, onOpenChange }) {
             <Button
               variant="primary"
               onClick={() =>
-                router.push(
-                  `/predict/result?scenario=${scenario.id}&option=${selected}`,
-                )
+                onConfirm(scenario, outcomeForSelect(scenario, selected))
               }
             >
               {scenario.cta}

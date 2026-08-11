@@ -1,11 +1,15 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import "slot-text/style.css";
+import { IconArrowDown, IconArrowUp } from "@tabler/icons-react";
+import { useEffect, useState } from "react";
+import { SlotText } from "slot-text/react";
 import AmountSheet from "../components/AmountSheet";
 import NavBar from "../components/NavBar";
+import ScoreGauge, { clampScore } from "../components/ScoreGauge";
 import SelectSheet from "../components/SelectSheet";
 import { mock } from "../data/mock";
+import { outcomeForDirect } from "../lib/predict";
 
 // Tone → the choice card's bottom glow, using the light semantic tokens so
 // the cards stay on-brand in light mode.
@@ -49,10 +53,31 @@ function ChoiceCard({ choice, active, onClick }) {
 }
 
 export default function PredictScore() {
-  const router = useRouter();
   const [activeId, setActiveId] = useState(null);
   const [selectScenarioId, setSelectScenarioId] = useState(null);
   const [amountScenarioId, setAmountScenarioId] = useState(null);
+  // The simulation currently on the gauge: { scenarioId, delta, summary }.
+  // Null until the first choice is made, when the gauge shows today's score.
+  const [result, setResult] = useState(null);
+
+  const predicted = clampScore(mock.currentScore + (result?.delta ?? 0));
+
+  // Roll to the predicted score — slot-text only animates on text *changes*,
+  // so the gauge and number transition whenever a new scenario is confirmed.
+  const [score, setScore] = useState(mock.currentScore);
+  useEffect(() => {
+    setScore(predicted);
+  }, [predicted]);
+
+  const delta = predicted - mock.currentScore;
+
+  // Confirmed from a sheet, or straight from the card for `direct` scenarios.
+  function apply(scenario, outcome) {
+    setResult({ scenarioId: scenario.id, ...outcome });
+    setActiveId(scenario.id);
+    setSelectScenarioId(null);
+    setAmountScenarioId(null);
+  }
 
   // The scenario's `kind` decides what tapping a card does: `select` and
   // `amount` collect their data point in a sheet first, `direct` predicts
@@ -71,24 +96,73 @@ export default function PredictScore() {
       setAmountScenarioId(choice.id);
       return;
     }
-    router.push(`/predict/result?scenario=${choice.id}`);
+    apply(scenario, outcomeForDirect(scenario));
   }
 
   return (
     <div className="flex flex-1 flex-col bg-background-secondary">
       <NavBar backHref="/score" border={false} />
-      <div className="flex flex-col items-center gap-3 text-center bg-white py-4 pb-8">
-        {/* biome-ignore lint/performance/noImgElement: prototype static asset */}
-        <img src="/magic-glass-1.png" alt="" className="w-40 object-contain" />
-        <h1 className="px-8 text-xl leading-7 font-bold text-content-primary">
-          {mock.predictor.heading}
-        </h1>
-      </div>
+
+      {/* Predicted score — the gauge lives here rather than on its own screen,
+          so picking a scenario updates it in place. Bottom tint follows the
+          delta (green for gains, red for drops) and fades to white going up. */}
+      <section
+        className={`flex flex-col gap-4 border-b border-border-primary bg-background-primary bg-gradient-to-t to-background-primary to-75% px-4 pt-2 pb-6 ${
+          !result
+            ? "from-background-primary"
+            : delta >= 0
+              ? "from-background-postive/10"
+              : "from-background-negative/10"
+        }`}
+      >
+        {/* Score block — same left-aligned kicker → number + band reading
+            order as the score page hero, in light-mode colours. */}
+        <div className="mt-10 flex flex-col gap-0.5">
+          <p className="text-[10px] leading-4 font-medium tracking-[1px] text-content-secondary uppercase">
+            {result ? "Predicted score" : "CIBIL Score"}
+          </p>
+          {/* Fixed height so the SSR-empty → built → rolling states of the
+              slot-text number never change the row height. */}
+          <p className="flex h-14 items-baseline gap-2">
+            <SlotText
+              text={String(score)}
+              options={{ direction: delta >= 0 ? "up" : "down" }}
+              className="text-3xl font-bold text-content-primary"
+            />
+            {/* Delta sits where the score page shows its band label — only
+                once something has been simulated. */}
+            {result && (
+              <span
+                className={`flex items-center gap-0.5 rounded-full px-3 py-1.5 text-sm leading-4 font-bold text-content-inverse-primary ${
+                  delta >= 0
+                    ? "bg-background-postive"
+                    : "bg-background-negative"
+                }`}
+              >
+                {delta >= 0 ? (
+                  <IconArrowUp size={14} stroke={2.5} />
+                ) : (
+                  <IconArrowDown size={14} stroke={2.5} />
+                )}
+                {Math.abs(delta)} pts
+              </span>
+            )}
+          </p>
+          <p className="min-h-10 text-sm leading-5 text-content-secondary">
+            {result
+              ? result.summary
+              : "Pick a scenario below to see its effect"}
+          </p>
+        </div>
+
+        <ScoreGauge score={score} />
+      </section>
 
       {/* Choice grid */}
-      <section className="flex flex-col gap-4 p-4 pb-8 ">
-        {/* Header — predict-score illustration + heading */}
-
+      <section className="flex flex-col gap-2 p-4 pb-8">
+        <h2 className="text-sm leading-6 font-semibold text-content-secondary">
+          {result ? "Try another scenario" : "Scenarios"}
+        </h2>
         <div className="grid grid-cols-2 gap-3">
           {mock.predictor.choices.map((choice) => (
             <ChoiceCard
@@ -104,11 +178,13 @@ export default function PredictScore() {
       <SelectSheet
         scenarioId={selectScenarioId}
         onOpenChange={(open) => !open && setSelectScenarioId(null)}
+        onConfirm={apply}
       />
 
       <AmountSheet
         scenarioId={amountScenarioId}
         onOpenChange={(open) => !open && setAmountScenarioId(null)}
+        onConfirm={apply}
       />
     </div>
   );

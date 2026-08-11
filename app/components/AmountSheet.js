@@ -1,8 +1,8 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { mock } from "../data/mock";
+import { outcomeForAmount } from "../lib/predict";
 import AmountRuler, { formatAmount } from "./AmountRuler";
 import BottomSheet from "./BottomSheet";
 import Button from "./Button";
@@ -16,13 +16,13 @@ import ScenarioSheetHero from "./ScenarioSheetHero";
  * Layout matches SelectSheet: tinted hero, then the input, then the CTA.
  *
  * `scenarioId` is null when closed. The ruler is keyed by it so switching
- * scenarios remounts the scroller at the new range's default.
+ * scenarios remounts the scroller at the new range's default. Confirming
+ * reports the outcome up via `onConfirm` rather than navigating.
  */
-export default function AmountSheet({ scenarioId, onOpenChange }) {
+export default function AmountSheet({ scenarioId, onOpenChange, onConfirm }) {
   const scenario = scenarioId
     ? mock.predictor.scenarios[scenarioId]
     : undefined;
-  const router = useRouter();
   const [amount, setAmount] = useState(scenario?.defaultAmount ?? 0);
 
   // Reset to this scenario's default whenever a different one opens.
@@ -72,9 +72,7 @@ export default function AmountSheet({ scenarioId, onOpenChange }) {
             <Button
               variant="primary"
               onClick={() =>
-                router.push(
-                  `/predict/result?scenario=${scenario.id}&amount=${amount}`,
-                )
+                onConfirm(scenario, outcomeForAmount(scenario, amount))
               }
             >
               {scenario.cta}
