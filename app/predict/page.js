@@ -35,10 +35,10 @@ function ChoiceCard({ choice, active, onClick }) {
       <span className="relative text-[15px] leading-5 font-semibold text-content-primary">
         {choice.label}
       </span>
-      {/* Illustration named after the choice id in /public */}
+      {/* Illustration named by the choice's `image` in /public */}
       {/* biome-ignore lint/performance/noImgElement: prototype static asset */}
       <img
-        src={`/${choice.id}.png`}
+        src={`/${choice.image}.png`}
         alt=""
         className="relative w-32 object-contain"
       />
@@ -51,10 +51,10 @@ export default function PredictScore() {
   const [activeId, setActiveId] = useState(null);
 
   // Choices with a built detail screen navigate there; the rest just toggle
-  // their selected state for now.
+  // their selected state until their input screen exists.
   function choose(choice) {
-    if (choice.id === "miss-payment") {
-      router.push("/predict/miss-payment");
+    if (choice.route) {
+      router.push(choice.route);
       return;
     }
     setActiveId(activeId === choice.id ? null : choice.id);

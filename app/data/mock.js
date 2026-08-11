@@ -41,7 +41,15 @@ const scorePrediction = {
 // Score predictor page: each choice applies a delta to the current score.
 // Deltas are illustrative magnitudes — hits for missed payments/defaults,
 // modest gains for repayment/utilisation, small dips for new credit.
-// Card illustrations live in /public, named after each choice id.
+// Card illustrations live in /public, named by each choice's `image`.
+// Longer delinquency → bigger illustrative hit. Shared by the miss-payment
+// detail screen and that choice's `input.options`.
+const missPaymentOptions = [
+  { id: "30", label: "30 days", delta: -40 },
+  { id: "60", label: "60 days", delta: -58 },
+  { id: "90", label: "90 days", delta: -80 },
+];
+
 const predictor = {
   heading: "Make a choice. See where it takes you",
   // Detail screen for the "miss a payment" choice.
@@ -49,12 +57,7 @@ const predictor = {
     kicker: "See how your score changes",
     title: "If you miss loan EMI or credit card bills",
     optionsLabel: "Miss payments for",
-    // Longer delinquency → bigger illustrative hit to the score.
-    options: [
-      { id: "30", label: "30 days", delta: -40 },
-      { id: "60", label: "60 days", delta: -58 },
-      { id: "90", label: "90 days", delta: -80 },
-    ],
+    options: missPaymentOptions,
     cta: "Predict score",
     // Shown on the result screen — how to avoid the missed-payment hit.
     tipsTitle: "Tips to stay on track",
@@ -79,42 +82,139 @@ const predictor = {
       },
     ],
   },
+  // The ten simulation options the predictor supports. Each carries the
+  // control the detail screen should render (`input.kind`) plus the limits
+  // that control has to enforce:
+  //   select          — fixed list of choices, no free entry
+  //   toggle          — boolean yes/no
+  //   amount          — rupee amount, clamped to [min, max]
+  //   account-amount  — pick an account, then a rupee amount ≤ its balance
+  //   enquiry         — product type + rupee amount
+  // `image` names the illustration in /public (several options share one —
+  // see the note below). `route` is set once a detail screen exists.
   choices: [
     {
       id: "miss-payment",
       label: "Miss a payment due date",
+      image: "miss-payment",
       delta: -58,
       tone: "negative",
-    },
-    {
-      id: "pay-outstanding",
-      label: "Pay outstanding loans & cards",
-      delta: 32,
-      tone: "positive",
-    },
-    {
-      id: "lower-utilisation",
-      label: "Lower your credit utilisation",
-      delta: 18,
-      tone: "brand",
-    },
-    {
-      id: "default-loan",
-      label: "Default on a loan or card",
-      delta: -112,
-      tone: "negative",
+      route: "/predict/miss-payment",
+      input: {
+        kind: "select",
+        label: "Days past due",
+        options: missPaymentOptions,
+      },
     },
     {
       id: "close-oldest-card",
       label: "Close oldest credit card",
+      image: "close-oldest-card",
       delta: -24,
       tone: "warning",
+      input: { kind: "toggle", label: "Close the oldest card" },
     },
     {
-      id: "new-credit",
-      label: "Take a new credit card",
+      id: "pay-off-cards",
+      label: "Pay off all credit cards",
+      image: "pay-outstanding",
+      delta: 32,
+      tone: "positive",
+      input: { kind: "toggle", label: "Clear every card balance" },
+    },
+    {
+      id: "pay-specific-account",
+      label: "Pay a specific account",
+      image: "lower-utilisation",
+      delta: 14,
+      tone: "positive",
+      input: {
+        kind: "account-amount",
+        label: "Account & payment amount",
+        // Only accounts carrying a balance can be paid, and a payment can
+        // never exceed what's outstanding on the account picked.
+        minBalance: 1,
+        maxIsAccountBalance: true,
+      },
+    },
+    {
+      id: "pay-all-outstanding",
+      label: "Pay all outstanding balances",
+      image: "pay-outstanding",
+      delta: 38,
+      tone: "positive",
+      // NOTE: overlaps with "pay-off-cards" — cards are a subset of all
+      // outstanding balances. Field name and precedence still to be confirmed.
+      input: { kind: "toggle", label: "Clear every outstanding balance" },
+    },
+    {
+      id: "obtain-credit-card",
+      label: "Obtain a credit card",
+      image: "new-credit",
       delta: -12,
       tone: "brand",
+      input: {
+        kind: "amount",
+        label: "Credit limit",
+        min: 20_000,
+        max: 15_00_000,
+      },
+    },
+    {
+      id: "obtain-home-loan",
+      label: "Obtain a home loan",
+      image: "pay-outstanding",
+      delta: -18,
+      tone: "brand",
+      input: {
+        kind: "amount",
+        label: "Loan amount",
+        min: 10_00_000,
+        max: 5_00_00_000,
+      },
+    },
+    {
+      id: "obtain-auto-loan",
+      label: "Obtain an auto loan",
+      image: "new-credit",
+      delta: -14,
+      tone: "brand",
+      input: {
+        kind: "amount",
+        label: "Loan amount",
+        min: 1_00_000,
+        max: 20_00_000,
+      },
+    },
+    {
+      id: "obtain-personal-loan",
+      label: "Obtain a personal loan",
+      image: "default-loan",
+      delta: -16,
+      tone: "brand",
+      input: {
+        kind: "amount",
+        label: "Loan amount",
+        min: 5_000,
+        max: 10_00_000,
+      },
+    },
+    {
+      id: "add-enquiry",
+      label: "Add a new enquiry",
+      image: "lower-utilisation",
+      delta: -8,
+      tone: "warning",
+      input: {
+        kind: "enquiry",
+        label: "Product type & amount",
+        types: [
+          { id: "credit-card", label: "Credit card" },
+          { id: "mortgage", label: "Mortgage" },
+          { id: "vehicle", label: "Vehicle" },
+          { id: "personal", label: "Personal" },
+        ],
+      },
     },
   ],
 };

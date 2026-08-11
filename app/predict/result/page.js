@@ -36,16 +36,17 @@ const SCORE_BANDS = [
 // 16 evenly spaced scale ticks under the gauge, same as the score page.
 const SCORE_TICKS = Array.from({ length: 16 }, (_, i) => `tick-${i}`);
 
+// Gauge runs low → high, same orientation as the score page.
 function resolveScore(score) {
   const range = SCORE_MAX - SCORE_MIN;
   const segments = SCORE_BANDS.map((band, i) => {
     const max = SCORE_BANDS[i + 1]?.min ?? SCORE_MAX;
     return { ...band, span: max - band.min };
-  }).reverse();
+  });
   const band =
     [...SCORE_BANDS].reverse().find((b) => score >= b.min) ?? SCORE_BANDS[0];
   const fraction = Math.min(Math.max((score - SCORE_MIN) / range, 0), 1);
-  const activeTick = Math.round((1 - fraction) * (SCORE_TICKS.length - 1));
+  const activeTick = Math.round(fraction * (SCORE_TICKS.length - 1));
   return { segments, band, activeTick };
 }
 
@@ -135,7 +136,7 @@ function PredictResultContent() {
                     key={tick}
                     className="text-[13px] leading-4 font-medium text-content-primary"
                   >
-                    {i === 0 ? 900 : 300}
+                    {i === 0 ? 300 : 900}
                   </span>
                 );
               }
