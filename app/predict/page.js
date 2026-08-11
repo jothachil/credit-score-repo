@@ -3,8 +3,8 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import AmountSheet from "../components/AmountSheet";
-import MissPaymentSheet from "../components/MissPaymentSheet";
 import NavBar from "../components/NavBar";
+import SelectSheet from "../components/SelectSheet";
 import { mock } from "../data/mock";
 
 // Tone → the choice card's bottom glow, using the light semantic tokens so
@@ -48,36 +48,30 @@ function ChoiceCard({ choice, active, onClick }) {
   );
 }
 
-// Choices that take no input — tapping them predicts straight away.
-const DIRECT_SCENARIOS = new Set([
-  "close-oldest-card",
-  "pay-off-cards",
-  "pay-all-outstanding",
-]);
-
 export default function PredictScore() {
   const router = useRouter();
   const [activeId, setActiveId] = useState(null);
-  const [missPaymentOpen, setMissPaymentOpen] = useState(false);
+  const [selectScenarioId, setSelectScenarioId] = useState(null);
   const [amountScenarioId, setAmountScenarioId] = useState(null);
 
-  // Miss-a-payment and the "obtain credit" scenarios each collect a data point
-  // in a sheet first. The all-or-nothing ones go straight to the result; the
-  // rest just toggle their selected state until they have an input of their own.
+  // The scenario's `kind` decides what tapping a card does: `select` and
+  // `amount` collect their data point in a sheet first, `direct` predicts
+  // straight away. Choices with no scenario yet just toggle selected state.
   function choose(choice) {
-    if (choice.id === "miss-payment") {
-      setMissPaymentOpen(true);
+    const scenario = mock.predictor.scenarios[choice.id];
+    if (!scenario) {
+      setActiveId(activeId === choice.id ? null : choice.id);
       return;
     }
-    if (mock.predictor.scenarios[choice.id]?.kind === "amount") {
+    if (scenario.kind === "select") {
+      setSelectScenarioId(choice.id);
+      return;
+    }
+    if (scenario.kind === "amount") {
       setAmountScenarioId(choice.id);
       return;
     }
-    if (DIRECT_SCENARIOS.has(choice.id)) {
-      router.push(`/predict/result?scenario=${choice.id}`);
-      return;
-    }
-    setActiveId(activeId === choice.id ? null : choice.id);
+    router.push(`/predict/result?scenario=${choice.id}`);
   }
 
   return (
@@ -107,9 +101,9 @@ export default function PredictScore() {
         </div>
       </section>
 
-      <MissPaymentSheet
-        open={missPaymentOpen}
-        onOpenChange={setMissPaymentOpen}
+      <SelectSheet
+        scenarioId={selectScenarioId}
+        onOpenChange={(open) => !open && setSelectScenarioId(null)}
       />
 
       <AmountSheet

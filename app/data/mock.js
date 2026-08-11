@@ -2,6 +2,7 @@ import {
   IconBellRinging,
   IconBuildingBank,
   IconCalendarCheck,
+  IconCalendarRepeat,
   IconChartPie,
   IconClockHour4,
   IconCoinRupee,
@@ -13,6 +14,7 @@ import {
   IconScale,
   IconSearch,
   IconWallet,
+  IconZoomCheck,
 } from "@tabler/icons-react";
 
 // Single source of mock data for the whole prototype. Presentation logic
@@ -59,7 +61,7 @@ const missPaymentOptions = [
   { id: "90", label: "90 days", delta: -80 },
 ];
 
-// The four "obtain new credit" scenarios. Each collects a rupee amount on a
+// The four "take new credit" scenarios. Each collects a rupee amount on a
 // ruler in a sheet, so it carries the range that ruler spans plus the `step`
 // it snaps to — chosen to keep the tick count sane over these wide ranges.
 //
@@ -74,8 +76,8 @@ const amountScenarios = {
     image: "new-credit",
     tone: "brand",
     kicker: "See how your score changes",
-    title: "If you obtain a new credit card",
-    resultPrefix: "If you obtain a new credit card of",
+    title: "If you take a new credit card",
+    resultPrefix: "If you take a new credit card of",
     amountLabel: "Credit limit",
     min: 20_000,
     max: 15_00_000,
@@ -112,8 +114,8 @@ const amountScenarios = {
     image: "pay-outstanding",
     tone: "brand",
     kicker: "See how your score changes",
-    title: "If you obtain a home loan",
-    resultPrefix: "If you obtain a home loan of",
+    title: "If you take a home loan",
+    resultPrefix: "If you take a home loan of",
     amountLabel: "Loan amount",
     min: 10_00_000,
     max: 5_00_00_000,
@@ -150,8 +152,8 @@ const amountScenarios = {
     image: "new-credit",
     tone: "brand",
     kicker: "See how your score changes",
-    title: "If you obtain an auto loan",
-    resultPrefix: "If you obtain an auto loan of",
+    title: "If you take a car loan",
+    resultPrefix: "If you take a car loan of",
     amountLabel: "Loan amount",
     min: 1_00_000,
     max: 20_00_000,
@@ -188,8 +190,8 @@ const amountScenarios = {
     image: "default-loan",
     tone: "brand",
     kicker: "See how your score changes",
-    title: "If you obtain a personal loan",
-    resultPrefix: "If you obtain a personal loan of",
+    title: "If you take a personal loan",
+    resultPrefix: "If you take a personal loan of",
     amountLabel: "Loan amount",
     min: 5_000,
     max: 10_00_000,
@@ -238,9 +240,13 @@ const scenarios = {
   "miss-payment": {
     id: "miss-payment",
     kind: "select",
+    layout: "stack",
+    image: "miss-payment",
+    tone: "negative",
     kicker: "See how your score changes",
-    title: "If you miss loan EMI or credit card bills",
-    resultPrefix: "If you miss loan EMI or credit card bills",
+    title: "If you miss your EMIs or card bills",
+    resultPrefix: "If you miss your EMIs or card bills",
+    resultJoiner: "for",
     optionsLabel: "Miss payments for",
     options: missPaymentOptions,
     cta: "Predict score",
@@ -270,7 +276,7 @@ const scenarios = {
   "close-oldest-card": {
     id: "close-oldest-card",
     kind: "direct",
-    resultPrefix: "If you close your oldest credit card",
+    resultPrefix: "If you close your oldest card",
     delta: -24,
     tipsTitle: "Before you close it",
     tips: [
@@ -297,7 +303,7 @@ const scenarios = {
   "pay-off-cards": {
     id: "pay-off-cards",
     kind: "direct",
-    resultPrefix: "If you pay off all your credit cards",
+    resultPrefix: "If you pay off your credit cards",
     delta: 32,
     tipsTitle: "Tips to keep it there",
     tips: [
@@ -326,7 +332,7 @@ const scenarios = {
   "pay-all-outstanding": {
     id: "pay-all-outstanding",
     kind: "direct",
-    resultPrefix: "If you pay all your outstanding balances",
+    resultPrefix: "If you pay off everything you owe",
     delta: 38,
     tipsTitle: "Tips to stay debt-free",
     tips: [
@@ -350,14 +356,77 @@ const scenarios = {
       },
     ],
   },
+  // Applying for credit logs a hard enquiry. How much it stings depends on
+  // what you apply for, so the type is the data point this scenario collects.
+  // `summaryLabel` is the article-carrying form used in the result sentence,
+  // which the radio labels can't be without reading oddly.
+  "add-enquiry": {
+    id: "add-enquiry",
+    kind: "select",
+    // Four longer labels, so they stack rather than sit in a row.
+    layout: "stack",
+    image: "lower-utilisation",
+    tone: "warning",
+    kicker: "See how your score changes",
+    title: "If you apply for new credit",
+    resultPrefix: "If you apply for",
+    resultJoiner: "",
+    optionsLabel: "What are you applying for?",
+    options: [
+      {
+        id: "credit-card",
+        label: "Credit card",
+        summaryLabel: "a credit card",
+        delta: -8,
+      },
+      {
+        id: "personal-loan",
+        label: "Personal loan",
+        summaryLabel: "a personal loan",
+        delta: -10,
+      },
+      {
+        id: "home-loan",
+        label: "Home loan",
+        summaryLabel: "a home loan",
+        delta: -12,
+      },
+      {
+        id: "consumer-loan",
+        label: "Consumer loan",
+        summaryLabel: "a consumer loan",
+        delta: -5,
+      },
+    ],
+    cta: "Predict score",
+    tipsTitle: "Before you apply",
+    tips: [
+      {
+        id: "check-eligibility",
+        icon: IconZoomCheck,
+        title: "Check eligibility first",
+        detail: "Pre-approved offers use soft checks that don't count.",
+      },
+      {
+        id: "space-out",
+        icon: IconCalendarRepeat,
+        title: "Space out applications",
+        detail: "Several enquiries close together read as credit hunger.",
+      },
+      {
+        id: "fades",
+        icon: IconSearch,
+        title: "Enquiries fade",
+        detail: "They stop weighing on your score after about 12 months.",
+      },
+    ],
+  },
   ...amountScenarios,
 };
 
 const predictor = {
   heading: "Make a choice. See where it takes you",
   scenarios,
-  // Alias — MissPaymentSheet reads this scenario's copy directly.
-  missPayment: scenarios["miss-payment"],
   // The ten simulation options the predictor supports. Each carries the
   // control the detail screen should render (`input.kind`) plus the limits
   // that control has to enforce:
@@ -372,7 +441,7 @@ const predictor = {
   choices: [
     {
       id: "miss-payment",
-      label: "Miss a payment due date",
+      label: "Miss a payment",
       image: "miss-payment",
       delta: -58,
       tone: "negative",
@@ -384,7 +453,7 @@ const predictor = {
     },
     {
       id: "close-oldest-card",
-      label: "Close oldest credit card",
+      label: "Close my oldest card",
       image: "close-oldest-card",
       delta: -24,
       tone: "warning",
@@ -392,7 +461,7 @@ const predictor = {
     },
     {
       id: "pay-off-cards",
-      label: "Pay off all credit cards",
+      label: "Pay off my credit cards",
       image: "pay-outstanding",
       delta: 32,
       tone: "positive",
@@ -400,7 +469,7 @@ const predictor = {
     },
     {
       id: "pay-specific-account",
-      label: "Pay a specific account",
+      label: "Pay towards one account",
       image: "lower-utilisation",
       delta: 14,
       tone: "positive",
@@ -415,7 +484,7 @@ const predictor = {
     },
     {
       id: "pay-all-outstanding",
-      label: "Pay all outstanding balances",
+      label: "Pay off everything I owe",
       image: "pay-outstanding",
       delta: 38,
       tone: "positive",
@@ -425,7 +494,7 @@ const predictor = {
     },
     {
       id: "obtain-credit-card",
-      label: "Obtain a credit card",
+      label: "Take a new credit card",
       image: "new-credit",
       delta: -12,
       tone: "brand",
@@ -438,7 +507,7 @@ const predictor = {
     },
     {
       id: "obtain-home-loan",
-      label: "Obtain a home loan",
+      label: "Take a home loan",
       image: "pay-outstanding",
       delta: -18,
       tone: "brand",
@@ -451,7 +520,7 @@ const predictor = {
     },
     {
       id: "obtain-auto-loan",
-      label: "Obtain an auto loan",
+      label: "Take a car loan",
       image: "new-credit",
       delta: -14,
       tone: "brand",
@@ -464,7 +533,7 @@ const predictor = {
     },
     {
       id: "obtain-personal-loan",
-      label: "Obtain a personal loan",
+      label: "Take a personal loan",
       image: "default-loan",
       delta: -16,
       tone: "brand",
@@ -477,7 +546,7 @@ const predictor = {
     },
     {
       id: "add-enquiry",
-      label: "Add a new enquiry",
+      label: "Apply for new credit",
       image: "lower-utilisation",
       delta: -8,
       tone: "warning",

@@ -51,23 +51,32 @@ function resolveScore(score) {
 
 // Resolve the scenario and its delta from the query string.
 //   ?scenario=<id>          — which scenario's copy to show
-//   ?days=<30|60|90>        — select scenarios: which option was picked
+//   ?option=<id>            — select scenarios: which option was picked
 //   ?amount=<rupees>        — amount scenarios: the figure set on the ruler
-// Defaults to miss-payment so the older ?days-only links still resolve.
+// Defaults to miss-payment, and still accepts that scenario's older ?days
+// links, so a bare ?days=60 keeps resolving.
 function resolveScenario(params) {
   const scenario =
     mock.predictor.scenarios[params.get("scenario")] ??
     mock.predictor.scenarios["miss-payment"];
 
-  // A `select` scenario's delta comes from the option picked.
+  // A `select` scenario's delta comes from the option picked. The recap reads
+  // "<prefix> <joiner> <option>", with the joiner absorbing the difference
+  // between "…card bills for 60 days" and "If you apply for a home loan".
   if (scenario.kind === "select") {
+    const picked = params.get("option") ?? params.get("days");
     const option =
-      scenario.options.find((o) => o.id === params.get("days")) ??
-      scenario.options[0];
+      scenario.options.find((o) => o.id === picked) ?? scenario.options[0];
     return {
       scenario,
       delta: option.delta,
-      summary: `${scenario.resultPrefix} for ${option.label}`,
+      summary: [
+        scenario.resultPrefix,
+        scenario.resultJoiner,
+        option.summaryLabel ?? option.label,
+      ]
+        .filter(Boolean)
+        .join(" "),
     };
   }
 
