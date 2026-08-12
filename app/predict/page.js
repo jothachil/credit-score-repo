@@ -14,22 +14,19 @@ import { outcomeForDirect } from "../lib/predict";
 // Tone → the choice card's bottom glow, using the light semantic tokens so
 // the cards stay on-brand in light mode.
 //
-// Each glow fades to its *own* colour at zero alpha rather than to
-// `transparent`. CSS `transparent` is rgba(0,0,0,0) — transparent *black* — and
-// Safari interpolates that without premultiplying alpha, so the midpoints come
-// out as grey and the card picks up a dirty shadow. Fading a colour to its own
-// zero-alpha form keeps the hue constant the whole way down.
+// Each glow fades to the card's own surface colour, not to `transparent`.
+// CSS `transparent` is rgba(0,0,0,0) — transparent *black* — and Safari
+// renders the midpoints of a colour→transparent ramp as grey, which showed up
+// as a dirty shadow across the bottom of every card on iOS. Tailwind's `/0`
+// modifier is no better: it compiles to color-mix(…, transparent), landing on
+// the same transparent black. Ending on an opaque colour keeps alpha out of
+// the interpolation altogether, and since the glow sits on top of a
+// `background-primary` card the result is visually identical.
 const CHOICE_TONE = {
-  negative: {
-    glow: "from-background-light-negative to-background-light-negative/0",
-  },
-  positive: {
-    glow: "from-background-light-postive to-background-light-postive/0",
-  },
-  warning: {
-    glow: "from-background-light-warning to-background-light-warning/0",
-  },
-  brand: { glow: "from-background-light-brand to-background-light-brand/0" },
+  negative: { glow: "from-background-light-negative to-background-primary" },
+  positive: { glow: "from-background-light-postive to-background-primary" },
+  warning: { glow: "from-background-light-warning to-background-primary" },
+  brand: { glow: "from-background-light-brand to-background-primary" },
 };
 
 function ChoiceCard({ choice, active, onClick }) {
