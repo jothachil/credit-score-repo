@@ -13,11 +13,23 @@ import { outcomeForDirect } from "../lib/predict";
 
 // Tone → the choice card's bottom glow, using the light semantic tokens so
 // the cards stay on-brand in light mode.
+//
+// Each glow fades to its *own* colour at zero alpha rather than to
+// `transparent`. CSS `transparent` is rgba(0,0,0,0) — transparent *black* — and
+// Safari interpolates that without premultiplying alpha, so the midpoints come
+// out as grey and the card picks up a dirty shadow. Fading a colour to its own
+// zero-alpha form keeps the hue constant the whole way down.
 const CHOICE_TONE = {
-  negative: { glow: "from-background-light-negative" },
-  positive: { glow: "from-background-light-postive" },
-  warning: { glow: "from-background-light-warning" },
-  brand: { glow: "from-background-light-brand" },
+  negative: {
+    glow: "from-background-light-negative to-background-light-negative/0",
+  },
+  positive: {
+    glow: "from-background-light-postive to-background-light-postive/0",
+  },
+  warning: {
+    glow: "from-background-light-warning to-background-light-warning/0",
+  },
+  brand: { glow: "from-background-light-brand to-background-light-brand/0" },
 };
 
 function ChoiceCard({ choice, active, onClick }) {
@@ -36,7 +48,7 @@ function ChoiceCard({ choice, active, onClick }) {
       {/* Ambient glow behind the icon — tinted to the choice's tone */}
       <div
         aria-hidden
-        className={`pointer-events-none absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t to-transparent ${tone.glow}`}
+        className={`pointer-events-none absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t ${tone.glow}`}
       />
       <span className="relative text-[15px] leading-5 font-semibold text-content-primary">
         {choice.label}
