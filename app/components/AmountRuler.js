@@ -13,6 +13,27 @@ export function formatAmount(n) {
   return `₹${n.toLocaleString("en-IN", { maximumFractionDigits: 0 })}`;
 }
 
+// One detent's worth of haptic feedback, fired as the ruler crosses each tick
+// so it feels like a native picker wheel.
+//
+// This is the Vibration API, which iOS Safari does not implement — on iPhone
+// it's a silent no-op, and there is no web API that reaches the Taptic Engine.
+// Android Chrome does buzz. Kept deliberately short: a long pulse on a fast
+// flick queues up and lags behind the scroll.
+const HAPTIC_MS = 8;
+
+function tickHaptic() {
+  if (typeof navigator === "undefined") return;
+  // Guard rather than assume — `vibrate` is absent on desktop Safari too, and
+  // some browsers expose it but reject calls without user activation.
+  if (typeof navigator.vibrate !== "function") return;
+  try {
+    navigator.vibrate(HAPTIC_MS);
+  } catch {
+    // A blocked vibrate must never break scrolling.
+  }
+}
+
 /** Short form for the ruler's tick labels: ₹5K, ₹2.5L, ₹1.5Cr. */
 function formatTick(n) {
   const trim = (v) => String(Number(v.toFixed(1)));
@@ -51,6 +72,8 @@ export default function AmountRuler({
 }) {
   const viewportRef = useRef(null);
   const didInit = useRef(false);
+  // Last detent a haptic fired for, so one tick never buzzes twice.
+  const lastTick = useRef(null);
   const [pad, setPad] = useState(0);
 
   const count = Math.floor((max - min) / step) + 1;
@@ -72,13 +95,23 @@ export default function AmountRuler({
   useEffect(() => {
     const el = viewportRef.current;
     if (!el || pad === 0 || didInit.current) return;
-    el.scrollLeft = Math.round((value - min) / step) * TICK_PX;
+    // Seed the haptic ref too, so settling onto the opening value is silent.
+    lastTick.current = Math.round((value - min) / step);
+    el.scrollLeft = lastTick.current * TICK_PX;
     didInit.current = true;
   }, [pad, value, min, step]);
 
   function handleScroll(event) {
-    const i = Math.round(event.currentTarget.scrollLeft / TICK_PX);
-    const next = valueAt(Math.min(Math.max(i, 0), count - 1));
+    const raw = Math.round(event.currentTarget.scrollLeft / TICK_PX);
+    const i = Math.min(Math.max(raw, 0), count - 1);
+    // Haptics key off a ref, not the `value` prop: several scroll events can
+    // land in one frame during a fast flick, and `value` won't have caught up
+    // between them, so comparing against it double-fires on one detent.
+    if (i !== lastTick.current) {
+      lastTick.current = i;
+      tickHaptic();
+    }
+    const next = valueAt(i);
     if (next !== value) onChange(next);
   }
 
@@ -94,9 +127,11 @@ export default function AmountRuler({
     event.preventDefault();
     next = Math.min(Math.max(next, min), max);
     if (next === value) return;
+    lastTick.current = Math.round((next - min) / step);
+    tickHaptic();
     onChange(next);
     const el = viewportRef.current;
-    if (el) el.scrollLeft = Math.round((next - min) / step) * TICK_PX;
+    if (el) el.scrollLeft = lastTick.current * TICK_PX;
   }
 
   return (
