@@ -146,7 +146,7 @@ export default function PredictScore() {
         >
           {/* Score block — same left-aligned kicker → number reading order as
               the score page hero, in light-mode colours. */}
-          <div className="flex flex-col">
+          <div className="flex flex-col mt-6">
             <p className="text-[10px] leading-4 font-medium tracking-[1px] text-content-secondary uppercase">
               {result ? "Predicted score" : "CIBIL Score"}
             </p>
