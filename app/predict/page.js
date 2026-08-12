@@ -71,6 +71,12 @@ export default function PredictScore() {
 
   const delta = predicted - mock.currentScore;
 
+  // Drop the simulation — the gauge rolls back to the real score.
+  function reset() {
+    setResult(null);
+    setActiveId(null);
+  }
+
   // Confirmed from a sheet, or straight from the card for `direct` scenarios.
   function apply(scenario, outcome) {
     setResult({ scenarioId: scenario.id, ...outcome });
@@ -101,62 +107,88 @@ export default function PredictScore() {
 
   return (
     <div className="flex flex-1 flex-col bg-background-secondary">
-      <NavBar backHref="/score" border={false} />
-
-      {/* Predicted score — the gauge lives here rather than on its own screen,
-          so picking a scenario updates it in place. Bottom tint follows the
-          delta (green for gains, red for drops) and fades to white going up. */}
-      <section
-        className={`flex flex-col gap-4 border-b border-border-primary bg-background-primary bg-gradient-to-t to-background-primary to-75% px-4 pt-2 pb-6 ${
-          !result
-            ? "from-background-primary"
-            : delta >= 0
-              ? "from-background-postive/10"
-              : "from-background-negative/10"
-        }`}
-      >
-        {/* Score block — same left-aligned kicker → number + band reading
-            order as the score page hero, in light-mode colours. */}
-        <div className="mt-10 flex flex-col gap-0.5">
-          <p className="text-[10px] leading-4 font-medium tracking-[1px] text-content-secondary uppercase">
-            {result ? "Predicted score" : "CIBIL Score"}
-          </p>
-          {/* Fixed height so the SSR-empty → built → rolling states of the
-              slot-text number never change the row height. */}
-          <p className="flex h-14 items-baseline gap-2">
-            <SlotText
-              text={String(score)}
-              options={{ direction: delta >= 0 ? "up" : "down" }}
-              className="text-3xl font-bold text-content-primary"
-            />
-            {/* Delta sits where the score page shows its band label — only
-                once something has been simulated. */}
-            {result && (
-              <span
-                className={`flex items-center gap-0.5 rounded-full px-3 py-1.5 text-sm leading-4 font-bold text-content-inverse-primary ${
-                  delta >= 0
-                    ? "bg-background-postive"
-                    : "bg-background-negative"
-                }`}
+      {/* Nav + score stay pinned while the scenarios scroll underneath, so the
+          gauge is always visible as you try different options. Both live in one
+          sticky wrapper to keep the back button reachable. */}
+      <div className="sticky top-0 z-20 bg-background-primary">
+        {/* No scroll divider — the score section below draws the only one
+            this sticky header should have. Reset only appears once there's a
+            simulation to clear. */}
+        <NavBar
+          backHref="/score"
+          border={false}
+          scrollBorder={false}
+          action={
+            result ? (
+              <button
+                type="button"
+                onClick={reset}
+                className="cursor-pointer text-[14px] leading-5 font-bold text-content-brand"
               >
-                {delta >= 0 ? (
-                  <IconArrowUp size={14} stroke={2.5} />
-                ) : (
-                  <IconArrowDown size={14} stroke={2.5} />
-                )}
-                {Math.abs(delta)} pts
-              </span>
-            )}
-          </p>
-          <p className="min-h-10 text-sm leading-5 text-content-secondary">
-            {result
-              ? result.summary
-              : "Pick a scenario below to see its effect"}
-          </p>
-        </div>
+                Reset
+              </button>
+            ) : null
+          }
+        />
 
-        <ScoreGauge score={score} />
-      </section>
+        {/* Predicted score — the gauge lives here rather than on its own
+            screen, so picking a scenario updates it in place. Bottom tint
+            follows the delta (green for gains, red for drops) and fades to
+            white going up. */}
+        <section
+          className={`flex flex-col gap-4 border-b border-border-primary bg-background-primary bg-gradient-to-t to-background-primary to-75% px-4 pt-1 pb-5 ${
+            !result
+              ? "from-background-primary"
+              : delta >= 0
+                ? "from-background-postive/10"
+                : "from-background-negative/10"
+          }`}
+        >
+          {/* Score block — same left-aligned kicker → number reading order as
+              the score page hero, in light-mode colours. */}
+          <div className="flex flex-col">
+            <p className="text-[10px] leading-4 font-medium tracking-[1px] text-content-secondary uppercase">
+              {result ? "Predicted score" : "CIBIL Score"}
+            </p>
+            {/* Fixed height so the SSR-empty → built → rolling states of the
+                slot-text number never change the row height. */}
+            <p className="flex h-14 items-baseline gap-2">
+              <SlotText
+                text={String(score)}
+                options={{ direction: delta >= 0 ? "up" : "down" }}
+                className="text-3xl font-bold text-content-primary"
+              />
+              {/* Delta sits where the score page shows its band label — only
+                  once something has been simulated. */}
+              {result && (
+                <span
+                  className={`flex items-center gap-0.5 rounded-full px-3 py-1.5 text-sm leading-4 font-bold text-content-inverse-primary ${
+                    delta >= 0
+                      ? "bg-background-postive"
+                      : "bg-background-negative"
+                  }`}
+                >
+                  {delta >= 0 ? (
+                    <IconArrowUp size={14} stroke={2.5} />
+                  ) : (
+                    <IconArrowDown size={14} stroke={2.5} />
+                  )}
+                  {Math.abs(delta)} pts
+                </span>
+              )}
+            </p>
+            {/* Clamped to two lines and height-locked — a sticky header that
+                resized as summaries changed length would shift the page. */}
+            <p className="line-clamp-2 h-10 text-sm leading-5 text-content-secondary">
+              {result
+                ? result.summary
+                : "Pick a scenario below to see its effect"}
+            </p>
+          </div>
+
+          <ScoreGauge score={score} />
+        </section>
+      </div>
 
       {/* Choice grid */}
       <section className="flex flex-col gap-2 p-4 pb-8">

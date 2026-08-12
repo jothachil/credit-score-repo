@@ -13,15 +13,19 @@ import { useEffect, useState } from "react";
  * Pass `backHref` to navigate to a specific route, or omit it to go back in
  * history. Sticks to the top of the mobile frame. The bottom divider fades in
  * once the page starts scrolling; pass `border` to keep it visible at the top
- * too, or rely on the default scroll behaviour with `border={false}`. Set
- * `transparent` to remove the bar background, or `inverse` for a transparent
- * bar with white controls over a dark surface (e.g. the score hero). Omit
- * `title` for a back-only bar.
+ * too, or rely on the default scroll behaviour with `border={false}`. Pass
+ * `scrollBorder={false}` to suppress the fade-in entirely — for bars that sit
+ * inside a larger sticky header that draws its own divider. Set `transparent`
+ * to remove the bar background, or `inverse` for a transparent bar with white
+ * controls over a dark surface (e.g. the score hero). Omit `title` for a
+ * back-only bar. `action` renders a trailing control against the right edge.
  */
 export default function NavBar({
   title,
   backHref,
+  action,
   border = true,
+  scrollBorder = true,
   transparent = false,
   inverse = false,
 }) {
@@ -37,8 +41,9 @@ export default function NavBar({
   }, []);
 
   // Static-border bars keep it always on; the rest fade it in on scroll
-  // (except inverse bars, whose dark hero has no divider to reveal).
-  const showBorder = border || (scrolled && !inverse);
+  // (except inverse bars, whose dark hero has no divider to reveal, and bars
+  // that opt out because something around them owns the divider).
+  const showBorder = border || (scrolled && scrollBorder && !inverse);
 
   const backClassName = `-m-2 inline-flex shrink-0 cursor-pointer items-center justify-center rounded-lg p-2 outline-none transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 ${
     inverse
@@ -83,6 +88,9 @@ export default function NavBar({
         >
           {title}
         </h1>
+      ) : null}
+      {action ? (
+        <div className="ml-auto flex items-center">{action}</div>
       ) : null}
     </header>
   );
