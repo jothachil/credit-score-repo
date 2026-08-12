@@ -97,7 +97,7 @@ export default function RefreshScoreSheet({ open, onOpenChange }) {
             </h2>
             <p className="text-sm leading-6 text-content-secondary">
               Lenders report to the bureau in cycles, so your score won&apos;t
-              change within 2 days. Try again after a few days.
+              change within 2 days. Try again in 15 to 30 days.
             </p>
           </div>
           <div className="mt-2 w-full">
