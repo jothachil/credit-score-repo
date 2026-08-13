@@ -186,11 +186,12 @@ export default function PredictScore() {
                 </span>
               )}
             </p>
-            {/* Clamped to two lines and height-locked — a sticky header that
-                resized as summaries changed length would shift the page. */}
-            <p className="line-clamp-2 h-10 text-sm leading-5 text-content-secondary">
+            {/* Height-locked so the sticky header can't resize as this line
+                changes and shove the page around. Once a scenario is running
+                this anchors the prediction against the real score. */}
+            <p className="line-clamp-2 mt-2 h-10 text-sm leading-5 text-content-secondary">
               {result
-                ? result.summary
+                ? `Current CIBIL Score is ${mock.currentScore}`
                 : "Pick a scenario below to see its effect"}
             </p>
           </div>
