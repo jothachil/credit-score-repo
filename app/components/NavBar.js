@@ -18,12 +18,11 @@ import { useEffect, useState } from "react";
  * inside a larger sticky header that draws its own divider. Set `transparent`
  * to remove the bar background, or `inverse` for a transparent bar with white
  * controls over a dark surface (e.g. the score hero). Omit `title` for a
- * back-only bar. `action` renders a trailing control against the right edge.
+ * back-only bar.
  */
 export default function NavBar({
   title,
   backHref,
-  action,
   border = true,
   scrollBorder = true,
   transparent = false,
@@ -88,9 +87,6 @@ export default function NavBar({
         >
           {title}
         </h1>
-      ) : null}
-      {action ? (
-        <div className="ml-auto flex items-center">{action}</div>
       ) : null}
     </header>
   );

@@ -82,12 +82,6 @@ export default function PredictScore() {
 
   const delta = predicted - mock.currentScore;
 
-  // Drop the simulation — the gauge rolls back to the real score.
-  function reset() {
-    setResult(null);
-    setActiveId(null);
-  }
-
   // Confirmed from a sheet, or straight from the card for `direct` scenarios.
   function apply(scenario, outcome) {
     setResult({ scenarioId: scenario.id, ...outcome });
@@ -129,24 +123,8 @@ export default function PredictScore() {
           sticky wrapper to keep the back button reachable. */}
       <div className="sticky top-0 z-20 bg-background-primary">
         {/* No scroll divider — the score section below draws the only one
-            this sticky header should have. Reset only appears once there's a
-            simulation to clear. */}
-        <NavBar
-          backHref="/score"
-          border={false}
-          scrollBorder={false}
-          action={
-            result ? (
-              <button
-                type="button"
-                onClick={reset}
-                className="cursor-pointer text-[14px] leading-5 font-bold text-content-brand"
-              >
-                Reset
-              </button>
-            ) : null
-          }
-        />
+            this sticky header should have. */}
+        <NavBar backHref="/score" border={false} scrollBorder={false} />
 
         {/* Predicted score — the gauge lives here rather than on its own
             screen, so picking a scenario updates it in place. Bottom tint
