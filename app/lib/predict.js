@@ -5,8 +5,7 @@ import { formatAmount } from "../components/AmountRuler";
  * surface needs: the score `delta` to apply, and the `summary` sentence that
  * recaps what was simulated.
  *
- * Shared so the predict page's inline result and the standalone result page
- * can't drift apart.
+ * Shared so each input sheet and the predict page's result can't drift apart.
  */
 
 /** `select` — the delta belongs to the option picked. */
@@ -45,11 +44,4 @@ export function outcomeForAmount(scenario, rawAmount) {
 /** `direct` — no input, so the scenario's own delta applies as-is. */
 export function outcomeForDirect(scenario) {
   return { delta: scenario.delta, summary: scenario.resultPrefix };
-}
-
-/** Dispatch on the scenario's kind. */
-export function outcomeFor(scenario, input) {
-  if (scenario.kind === "select") return outcomeForSelect(scenario, input);
-  if (scenario.kind === "amount") return outcomeForAmount(scenario, input);
-  return outcomeForDirect(scenario);
 }

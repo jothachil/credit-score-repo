@@ -31,10 +31,6 @@ const debugPages = [
     path: "/predict",
   },
   {
-    id: "predict-result",
-    path: "/predict/result",
-  },
-  {
     id: "payment-history",
     path: "/payment-history",
   },
@@ -138,7 +134,7 @@ export default function DebugNavigationSidebar() {
       )}
 
       {visible && (
-        <aside className="fixed top-4 bottom-4 left-4 z-40 hidden w-[300px] flex-col rounded-2xl border border-zinc-200 bg-white p-3 text-zinc-950 shadow-lg md:flex">
+        <aside className="fixed top-4 bottom-4 left-4 z-40 hidden w-[340px] flex-col rounded-2xl border border-zinc-200 bg-white p-3 text-zinc-950 shadow-lg md:flex">
           <div className="-mx-3 flex items-center justify-between border-b border-zinc-100 px-3 pb-3">
             <div>
               <h2 className="mt-0.5 text-[13px] leading-4 font-bold">
@@ -179,21 +175,21 @@ export default function DebugNavigationSidebar() {
                       key={path}
                       href={path}
                       aria-current={active ? "page" : undefined}
-                      className={`grid grid-cols-[72px_1fr_52px] items-center gap-2 rounded-lg border px-2 py-2 text-[11px] leading-4 transition-colors ${
+                      className={`flex items-center gap-2 rounded-lg border px-2 py-2 text-[11px] leading-4 transition-colors ${
                         active
                           ? "border-zinc-950 bg-zinc-950 text-white"
                           : "border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50"
                       }`}
                     >
-                      <span className="font-semibold">{id}</span>
-                      <span className="truncate font-mono">{path}</span>
-                      <span
-                        className={`text-right font-mono uppercase ${
-                          active ? "text-white/70" : "text-zinc-400"
-                        }`}
-                      >
-                        {active ? "live" : "idle"}
+                      <span className="w-[72px] shrink-0 font-semibold">
+                        {id}
                       </span>
+                      <span className="flex-1 truncate font-mono">{path}</span>
+                      {active && (
+                        <span className="shrink-0 font-mono uppercase text-white/70">
+                          live
+                        </span>
+                      )}
                     </Link>
                   );
                 })}
