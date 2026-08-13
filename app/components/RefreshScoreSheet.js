@@ -68,9 +68,15 @@ export default function RefreshScoreSheet({ open, onOpenChange }) {
   }, [open, recentFetch]);
 
   // Drive the dummy flow: hold on the cancel window, linger on the loader,
-  // flash success, then hand off to the fetching page. Every timer is cleaned
-  // up on unmount or phase change, so cancelling really does stop the charge.
+  // flash success, then hand off to the fetching page.
+  //
+  // The `open` guard is what makes Cancel real. This component stays mounted
+  // when the sheet closes, and closing doesn't change `phase` — so without it
+  // the pending timer survives, and a cancelled transaction would still march
+  // on to /fetching a few seconds later. Depending on `open` means dismissing
+  // the sheet by any route (Cancel, swipe, backdrop) clears the timer.
   useEffect(() => {
+    if (!open) return;
     if (phase === "confirm") {
       const t = setTimeout(() => setPhase("processing"), CONFIRM_MS);
       return () => clearTimeout(t);
@@ -83,7 +89,7 @@ export default function RefreshScoreSheet({ open, onOpenChange }) {
       const t = setTimeout(() => router.push("/fetching"), SUCCESS_MS);
       return () => clearTimeout(t);
     }
-  }, [phase, router]);
+  }, [open, phase, router]);
 
   // Fill the countdown bar across the cancel window. Starts at 0 and is
   // pushed to 100 on the next frame so the CSS transition actually runs
