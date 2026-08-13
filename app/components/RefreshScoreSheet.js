@@ -219,7 +219,7 @@ export default function RefreshScoreSheet({ open, onOpenChange }) {
               onClick={() => setPhase(recentRefresh ? "warning" : "processing")}
               className="flex items-center justify-center gap-2"
             >
-              Instant refresh now for ₹49
+              Pay ₹49 with LazyPay
             </Button>
             <p className="flex items-center gap-1.5 text-xs text-content-secondary">
               <IconShieldCheckFilled size={16} className="text-content-brand" />
