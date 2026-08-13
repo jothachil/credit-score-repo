@@ -8,6 +8,7 @@ import {
   IconLoader2,
   IconShieldCheckFilled,
   IconTrendingUp,
+  IconWallet,
 } from "@tabler/icons-react";
 import { useAtomValue } from "jotai";
 import { useRouter } from "next/navigation";
@@ -33,14 +34,18 @@ const BENEFITS = [
   },
 ];
 
-// Dummy payment pacing: offer → processing → success → /fetching.
+// Dummy payment pacing: offer → confirm → processing → success → /fetching.
+// `confirm` is a grace period, not a spinner: it states where the money comes
+// from and gives a window to back out before anything is charged.
+const CONFIRM_MS = 8000;
 const PROCESSING_MS = 2200;
 const SUCCESS_MS = 1400;
 
 /**
  * Refresh-score upsell sheet — opens from the score screen's refresh CTA.
- * The CTA runs a dummy payment flow (loader → success) and then hands off
- * to the /fetching loader to pull the refreshed report.
+ * Paying steps through a confirmation with a cancel window, then a dummy
+ * payment flow (loader → success), and hands off to the /fetching loader to
+ * pull the refreshed report.
  *
  * When the last refresh was <15 days ago (debug flag "recent_refresh"),
  * tapping the paid CTA interjects a warning that the score is unlikely to
@@ -62,9 +67,14 @@ export default function RefreshScoreSheet({ open, onOpenChange }) {
     if (open) setPhase(recentFetch ? "blocked" : "offer");
   }, [open, recentFetch]);
 
-  // Drive the dummy flow: linger on the loader, flash success, then hand
-  // off to the fetching page.
+  // Drive the dummy flow: hold on the cancel window, linger on the loader,
+  // flash success, then hand off to the fetching page. Every timer is cleaned
+  // up on unmount or phase change, so cancelling really does stop the charge.
   useEffect(() => {
+    if (phase === "confirm") {
+      const t = setTimeout(() => setPhase("processing"), CONFIRM_MS);
+      return () => clearTimeout(t);
+    }
     if (phase === "processing") {
       const t = setTimeout(() => setPhase("success"), PROCESSING_MS);
       return () => clearTimeout(t);
@@ -74,6 +84,19 @@ export default function RefreshScoreSheet({ open, onOpenChange }) {
       return () => clearTimeout(t);
     }
   }, [phase, router]);
+
+  // Fill the countdown bar across the cancel window. Starts at 0 and is
+  // pushed to 100 on the next frame so the CSS transition actually runs
+  // (setting both in one paint would jump straight to the end).
+  const [countdown, setCountdown] = useState(0);
+  useEffect(() => {
+    if (phase !== "confirm") {
+      setCountdown(0);
+      return;
+    }
+    const raf = requestAnimationFrame(() => setCountdown(100));
+    return () => cancelAnimationFrame(raf);
+  }, [phase]);
 
   return (
     <BottomSheet
@@ -129,12 +152,58 @@ export default function RefreshScoreSheet({ open, onOpenChange }) {
           </div>
           <div className="mt-2 flex w-full flex-col gap-2">
             {/* Skip the offer pitch — straight into the payment flow */}
-            <Button variant="primary" onClick={() => setPhase("processing")}>
+            <Button variant="primary" onClick={() => setPhase("confirm")}>
               Refresh anyway
             </Button>
             <Button variant="secondary" onClick={() => onOpenChange(false)}>
               Maybe later
             </Button>
+          </div>
+        </div>
+      )}
+
+      {/* Cancel window — names the funding source and holds for three seconds
+          before anything is charged. The bar makes the window visible so the
+          Cancel button doesn't feel like a race. */}
+      {phase === "confirm" && (
+        <div className="flex flex-col items-center gap-4 pt-6 text-center">
+          <span className="flex size-16 items-center justify-center rounded-full bg-background-light-brand">
+            <IconWallet size={32} stroke={2} className="text-content-brand" />
+          </span>
+          <div className="flex flex-col gap-1">
+            <h2 className="text-xl leading-8 font-bold text-content-primary">
+              Confirming payment
+            </h2>
+            <p className="text-sm leading-6 text-content-secondary">
+              ₹49 will be deducted from your LazyPay BNPL limit.
+            </p>
+          </div>
+
+          <div className="mt-2 flex w-full flex-col gap-2">
+            <div
+              aria-hidden
+              className="h-3 w-full overflow-hidden rounded-full bg-background-secondary"
+            >
+              {/* Fill time is driven by CONFIRM_MS rather than a duration
+                  utility, so retiming the window can't leave the bar
+                  finishing early and sitting full. */}
+              <div
+                style={{
+                  width: `${countdown}%`,
+                  transitionDuration: `${CONFIRM_MS}ms`,
+                }}
+                className="h-full rounded-full bg-background-brand transition-[width] ease-linear"
+              />
+            </div>
+          </div>
+
+          <div className="w-full">
+            <Button variant="secondary" onClick={() => onOpenChange(false)}>
+              Cancel
+            </Button>
+            <p className="text-xs mt-4 leading-4 text-content-tertiary">
+              Cancel now to stop this transaction
+            </p>
           </div>
         </div>
       )}
@@ -216,7 +285,7 @@ export default function RefreshScoreSheet({ open, onOpenChange }) {
             <Button
               variant="primary"
               // Recently refreshed → warn before taking the payment
-              onClick={() => setPhase(recentRefresh ? "warning" : "processing")}
+              onClick={() => setPhase(recentRefresh ? "warning" : "confirm")}
               className="flex items-center justify-center gap-2"
             >
               Pay ₹49 with LazyPay
