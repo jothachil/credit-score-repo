@@ -4,6 +4,7 @@ import "slot-text/style.css";
 import { IconArrowDown, IconArrowUp } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { SlotText } from "slot-text/react";
+import AccountSheet from "../components/AccountSheet";
 import AmountSheet from "../components/AmountSheet";
 import NavBar from "../components/NavBar";
 import ScoreGauge, { clampScore } from "../components/ScoreGauge";
@@ -65,6 +66,7 @@ export default function PredictScore() {
   const [activeId, setActiveId] = useState(null);
   const [selectScenarioId, setSelectScenarioId] = useState(null);
   const [amountScenarioId, setAmountScenarioId] = useState(null);
+  const [accountScenarioId, setAccountScenarioId] = useState(null);
   // The simulation currently on the gauge: { scenarioId, delta, summary }.
   // Null until the first choice is made, when the gauge shows today's score.
   const [result, setResult] = useState(null);
@@ -92,11 +94,13 @@ export default function PredictScore() {
     setActiveId(scenario.id);
     setSelectScenarioId(null);
     setAmountScenarioId(null);
+    setAccountScenarioId(null);
   }
 
   // The scenario's `kind` decides what tapping a card does: `select` and
-  // `amount` collect their data point in a sheet first, `direct` predicts
-  // straight away. Choices with no scenario yet just toggle selected state.
+  // `amount` collect a data point in a sheet first, `account` shows which
+  // account it acts on, and `direct` predicts straight away. Choices with no
+  // scenario yet just toggle selected state.
   function choose(choice) {
     const scenario = mock.predictor.scenarios[choice.id];
     if (!scenario) {
@@ -109,6 +113,10 @@ export default function PredictScore() {
     }
     if (scenario.kind === "amount") {
       setAmountScenarioId(choice.id);
+      return;
+    }
+    if (scenario.kind === "account") {
+      setAccountScenarioId(choice.id);
       return;
     }
     apply(scenario, outcomeForDirect(scenario));
@@ -226,6 +234,12 @@ export default function PredictScore() {
       <AmountSheet
         scenarioId={amountScenarioId}
         onOpenChange={(open) => !open && setAmountScenarioId(null)}
+        onConfirm={apply}
+      />
+
+      <AccountSheet
+        scenarioId={accountScenarioId}
+        onOpenChange={(open) => !open && setAccountScenarioId(null)}
         onConfirm={apply}
       />
     </div>

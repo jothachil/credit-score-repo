@@ -275,9 +275,17 @@ const scenarios = {
   },
   "close-oldest-card": {
     id: "close-oldest-card",
-    kind: "direct",
+    // Collects nothing, but shows which account it means before predicting —
+    // "your oldest card" is meaningless until you see which one it is.
+    kind: "account",
+    image: "close-oldest-card",
+    tone: "warning",
+    kicker: "See how your score changes",
+    title: "If you close your oldest card",
+    accountLabel: "This is your oldest card",
     resultPrefix: "If you close your oldest card",
     delta: -24,
+    cta: "Predict score",
     tipsTitle: "Before you close it",
     tips: [
       {
@@ -1056,6 +1064,36 @@ const loans = {
 const card = loans.active.find((l) => l.type === "card");
 const loan = loans.active.find((l) => l.type === "loan");
 
+// Account age is measured against the report pull date rather than the wall
+// clock: a `new Date()` here would render one number on the server and
+// possibly another on the client, and would silently drift over time.
+const REPORT_DATE_ISO = "2026-07-13";
+
+function formatOpened(iso) {
+  const [year, month, day] = iso.split("-");
+  return `${Number(day)} ${MONTH_LABELS[Number(month) - 1]} ${year}`;
+}
+
+function yearsSince(iso) {
+  const [y, m, d] = iso.split("-").map(Number);
+  const [ry, rm, rd] = REPORT_DATE_ISO.split("-").map(Number);
+  const beforeAnniversary = rm < m || (rm === m && rd < d);
+  return ry - y - (beforeAnniversary ? 1 : 0);
+}
+
+// The account behind the "close my oldest card" scenario. Derived from the
+// tradelines rather than hardcoded, so the sheet always names the card the
+// data actually says is oldest.
+const oldestCardRecord = loans.active
+  .filter((l) => l.type === "card")
+  .reduce((a, b) => (a.opened <= b.opened ? a : b));
+
+const oldestCard = {
+  ...oldestCardRecord,
+  openedLabel: formatOpened(oldestCardRecord.opened),
+  ageLabel: `${yearsSince(oldestCardRecord.opened)} years old`,
+};
+
 const paymentLegend = [
   { id: "on-time", label: "On time" },
   { id: "delayed", label: "Delayed" },
@@ -1086,6 +1124,7 @@ export const mock = {
   loans,
   card,
   loan,
+  oldestCard,
   findAccount,
   paymentLegend,
 };
