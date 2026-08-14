@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { SlotText } from "slot-text/react";
 import AccountSheet from "../components/AccountSheet";
 import AmountSheet from "../components/AmountSheet";
+import CardsSheet from "../components/CardsSheet";
 import NavBar from "../components/NavBar";
 import ScoreGauge, { clampScore } from "../components/ScoreGauge";
 import SelectSheet from "../components/SelectSheet";
@@ -67,6 +68,7 @@ export default function PredictScore() {
   const [selectScenarioId, setSelectScenarioId] = useState(null);
   const [amountScenarioId, setAmountScenarioId] = useState(null);
   const [accountScenarioId, setAccountScenarioId] = useState(null);
+  const [cardsScenarioId, setCardsScenarioId] = useState(null);
   // The simulation currently on the gauge: { scenarioId, delta, summary }.
   // Null until the first choice is made, when the gauge shows today's score.
   const [result, setResult] = useState(null);
@@ -89,12 +91,14 @@ export default function PredictScore() {
     setSelectScenarioId(null);
     setAmountScenarioId(null);
     setAccountScenarioId(null);
+    setCardsScenarioId(null);
   }
 
   // The scenario's `kind` decides what tapping a card does: `select` and
   // `amount` collect a data point in a sheet first, `account` shows which
-  // account it acts on, and `direct` predicts straight away. Choices with no
-  // scenario yet just toggle selected state.
+  // account it acts on, `cards` sums up the cards it would clear, and `direct`
+  // predicts straight away. Choices with no scenario yet just toggle selected
+  // state.
   function choose(choice) {
     const scenario = mock.predictor.scenarios[choice.id];
     if (!scenario) {
@@ -111,6 +115,10 @@ export default function PredictScore() {
     }
     if (scenario.kind === "account") {
       setAccountScenarioId(choice.id);
+      return;
+    }
+    if (scenario.kind === "cards") {
+      setCardsScenarioId(choice.id);
       return;
     }
     apply(scenario, outcomeForDirect(scenario));
@@ -184,6 +192,16 @@ export default function PredictScore() {
 
           <ScoreGauge score={score} />
         </section>
+
+        {/* Soft edge below the header. Hangs off the bottom of the sticky
+            wrapper (`top-full`) and blurs whatever scrolls behind it, with
+            both the blur and the white tint masked away downwards — so
+            scenarios sharpen up as they clear the score section instead of
+            appearing all at once at its edge. */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 top-full h-8 bg-gradient-to-b from-background-primary to-transparent backdrop-blur-[3px] mask-[linear-gradient(to_bottom,#000,transparent)]"
+        />
       </div>
 
       {/* Choice grid */}
@@ -218,6 +236,12 @@ export default function PredictScore() {
       <AccountSheet
         scenarioId={accountScenarioId}
         onOpenChange={(open) => !open && setAccountScenarioId(null)}
+        onConfirm={apply}
+      />
+
+      <CardsSheet
+        scenarioId={cardsScenarioId}
+        onOpenChange={(open) => !open && setCardsScenarioId(null)}
         onConfirm={apply}
       />
     </div>

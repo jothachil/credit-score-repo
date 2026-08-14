@@ -310,9 +310,17 @@ const scenarios = {
   },
   "pay-off-cards": {
     id: "pay-off-cards",
-    kind: "direct",
+    // Collects nothing, but shows what "your credit cards" adds up to before
+    // predicting — how many carry a balance, and what clearing them costs.
+    kind: "cards",
+    image: "pay-outstanding",
+    tone: "positive",
+    kicker: "See how your score changes",
+    title: "If you pay off your credit cards",
+    cardsLabel: "Cards you'd be clearing",
     resultPrefix: "If you pay off your credit cards",
     delta: 32,
+    cta: "Predict score",
     tipsTitle: "Tips to keep it there",
     tips: [
       {
@@ -1094,6 +1102,35 @@ const oldestCard = {
   ageLabel: `${yearsSince(oldestCardRecord.opened)} years old`,
 };
 
+// Amounts are stored the way they're displayed ("₹51,132"), so totalling them
+// means stripping the formatting back off and rebuilding it.
+function parseRupees(label) {
+  return Number(label.replace(/\D/g, ""));
+}
+
+function formatRupees(amount) {
+  return `₹${amount.toLocaleString("en-IN")}`;
+}
+
+// What "pay off my credit cards" actually covers: the active cards still
+// carrying a balance, and the total owed across them. Derived from the
+// tradelines rather than written down, so the sheet can't drift from the
+// report — a card cleared in the data drops out of the count on its own.
+const cardsWithBalance = loans.active.filter(
+  (account) =>
+    account.type === "card" && parseRupees(account.limitUsedAmount) > 0,
+);
+
+const outstandingCards = {
+  count: cardsWithBalance.length,
+  totalLabel: formatRupees(
+    cardsWithBalance.reduce(
+      (total, account) => total + parseRupees(account.limitUsedAmount),
+      0,
+    ),
+  ),
+};
+
 const paymentLegend = [
   { id: "on-time", label: "On time" },
   { id: "delayed", label: "Delayed" },
@@ -1125,6 +1162,7 @@ export const mock = {
   card,
   loan,
   oldestCard,
+  outstandingCards,
   findAccount,
   paymentLegend,
 };
