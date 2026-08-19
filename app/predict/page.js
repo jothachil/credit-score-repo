@@ -1,8 +1,14 @@
 "use client";
 
 import "slot-text/style.css";
-import { IconArrowDown, IconArrowUp } from "@tabler/icons-react";
-import { useEffect, useState } from "react";
+import {
+  IconAlertTriangle,
+  IconArrowDown,
+  IconArrowUp,
+  IconLoader2,
+} from "@tabler/icons-react";
+import { useAtomValue } from "jotai";
+import { useEffect, useRef, useState } from "react";
 import { SlotText } from "slot-text/react";
 import AccountSheet from "../components/AccountSheet";
 import AmountSheet from "../components/AmountSheet";
@@ -10,8 +16,36 @@ import CardsSheet from "../components/CardsSheet";
 import NavBar from "../components/NavBar";
 import ScoreGauge, { clampScore } from "../components/ScoreGauge";
 import SelectSheet from "../components/SelectSheet";
+import { toast } from "../components/Toast";
 import { mock } from "../data/mock";
 import { outcomeForDirect } from "../lib/predict";
+import { debugFlagAtoms } from "../state/debugFlags";
+
+// A tapped tile shows a loading snackbar for a beat before its sheet or result
+// appears, so the tap is acknowledged immediately.
+const PREDICT_DELAY_MS = 900;
+const PREDICT_LOADING = "Predicting your score…";
+const PREDICT_ERROR = "Couldn't predict your score";
+// The error clears itself quickly rather than sitting on screen — long enough
+// to read and reach Retry, short enough not to linger over the gauge.
+const PREDICT_ERROR_MS = 1500;
+
+// Spinning loader for the snackbar. Merges the className the toast passes in
+// rather than replacing it, so the toast's own layout classes survive.
+function SpinnerIcon({ className = "", ...props }) {
+  return <IconLoader2 {...props} className={`animate-spin ${className}`} />;
+}
+
+// Cancel an in-flight tap: drop its timer and its snackbar. Module-level so it
+// is referentially stable — as a component-scoped closure it would be a new
+// function each render, and listing it as an effect dependency would re-run
+// the cleanup on every render and dismiss the snackbar immediately.
+function dismissPending(ref) {
+  if (!ref.current) return;
+  clearTimeout(ref.current.timer);
+  toast.close(ref.current.toastId);
+  ref.current = null;
+}
 
 // Tone → the choice card's bottom glow, using the light semantic tokens so
 // the cards stay on-brand in light mode.
@@ -64,6 +98,8 @@ function ChoiceCard({ choice, active, onClick }) {
 }
 
 export default function PredictScore() {
+  // Debug flag "Predict API fails" — every scenario errors instead of resolving.
+  const predictFails = useAtomValue(debugFlagAtoms.predictFails);
   const [activeId, setActiveId] = useState(null);
   const [selectScenarioId, setSelectScenarioId] = useState(null);
   const [amountScenarioId, setAmountScenarioId] = useState(null);
@@ -84,44 +120,88 @@ export default function PredictScore() {
 
   const delta = predicted - mock.currentScore;
 
+  // The prediction currently loading. Held in a ref so a second prediction
+  // supersedes the first rather than stacking snackbars.
+  const pending = useRef(null);
+
+  // Leaving the page mid-prediction must not leave a snackbar stranded.
+  useEffect(() => () => dismissPending(pending), []);
+
+  // Hold a loading snackbar for a beat, then commit. The timeout is a backstop
+  // rather than the intended dismissal: we close it explicitly when the commit
+  // lands, but if that path is ever interrupted the snackbar still clears
+  // itself instead of pinning to the screen (`timeout: 0` would never expire).
+  function predictWithLoading(commit) {
+    dismissPending(pending);
+    const toastId = toast.add({
+      title: PREDICT_LOADING,
+      timeout: PREDICT_DELAY_MS + 2000,
+      data: { icon: SpinnerIcon },
+    });
+    const timer = setTimeout(() => {
+      pending.current = null;
+
+      // Simulated API failure: leave the gauge exactly as it was, so a failed
+      // call never half-applies a result. Retry re-runs the same commit, so the
+      // scenario's inputs are preserved.
+      //
+      // Re-adding under the loading toast's own id updates it in place and
+      // refreshes its dismiss timer. Closing it and adding a second toast
+      // instead put an exiting and an entering toast in the viewport at once,
+      // which animated over each other and reflowed the stack — the loader
+      // now morphs into the error in the same DOM node.
+      if (predictFails) {
+        toast.add({
+          id: toastId,
+          title: PREDICT_ERROR,
+          timeout: PREDICT_ERROR_MS,
+          data: {
+            icon: IconAlertTriangle,
+            action: {
+              label: "Retry",
+              onClick: () => predictWithLoading(commit),
+            },
+          },
+        });
+        return;
+      }
+
+      toast.close(toastId);
+      commit();
+    }, PREDICT_DELAY_MS);
+    pending.current = { timer, toastId };
+  }
+
   // Confirmed from a sheet, or straight from the card for `direct` scenarios.
+  // The sheets close first so the snackbar reads as the prediction being
+  // computed, not as something happening behind an open sheet.
   function apply(scenario, outcome) {
-    setResult({ scenarioId: scenario.id, ...outcome });
-    setActiveId(scenario.id);
     setSelectScenarioId(null);
     setAmountScenarioId(null);
     setAccountScenarioId(null);
     setCardsScenarioId(null);
+    predictWithLoading(() => {
+      setResult({ scenarioId: scenario.id, ...outcome });
+      setActiveId(scenario.id);
+    });
   }
 
-  // The scenario's `kind` decides what tapping a card does: `select` and
-  // `amount` collect a data point in a sheet first, `account` shows which
-  // account it acts on, `cards` sums up the cards it would clear, and `direct`
-  // predicts straight away. Choices with no scenario yet just toggle selected
-  // state.
+  // The scenario's `kind` decides where a tap lands: `select` and `amount`
+  // collect a data point in a sheet first, `account` shows which account it
+  // acts on, `cards` sums up the cards it would clear, and `direct` predicts
+  // straight away. Sheets open immediately — the loading snackbar comes after
+  // they're confirmed and dismissed, by way of `apply`.
   function choose(choice) {
     const scenario = mock.predictor.scenarios[choice.id];
     if (!scenario) {
       setActiveId(activeId === choice.id ? null : choice.id);
       return;
     }
-    if (scenario.kind === "select") {
-      setSelectScenarioId(choice.id);
-      return;
-    }
-    if (scenario.kind === "amount") {
-      setAmountScenarioId(choice.id);
-      return;
-    }
-    if (scenario.kind === "account") {
-      setAccountScenarioId(choice.id);
-      return;
-    }
-    if (scenario.kind === "cards") {
-      setCardsScenarioId(choice.id);
-      return;
-    }
-    apply(scenario, outcomeForDirect(scenario));
+    if (scenario.kind === "select") return setSelectScenarioId(scenario.id);
+    if (scenario.kind === "amount") return setAmountScenarioId(scenario.id);
+    if (scenario.kind === "account") return setAccountScenarioId(scenario.id);
+    if (scenario.kind === "cards") return setCardsScenarioId(scenario.id);
+    return apply(scenario, outcomeForDirect(scenario));
   }
 
   return (
