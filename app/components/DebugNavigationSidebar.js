@@ -31,6 +31,10 @@ const debugPages = [
     path: "/predict",
   },
   {
+    id: "your-details",
+    path: "/your-details",
+  },
+  {
     id: "payment-history",
     path: "/payment-history",
   },

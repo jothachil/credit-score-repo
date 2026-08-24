@@ -9,16 +9,17 @@ import { mock } from "../data/mock";
 
 const COPY = mock.creditMixDetail;
 
-// Mix considers active accounts. Every tradeline in this report is unsecured
-// (cards + consumer/personal loans); a `secured: true` flag on an account
-// record would move it to the secured bucket.
+// Mix considers active accounts. A `secured: true` flag on an account record
+// puts it in the secured bucket — in this report that's the car loan and the
+// home loan, against an unsecured credit card and consumer loan.
 const ALL = mock.loans.active;
 const SECURED_PCT = Math.round(
   (ALL.filter((a) => a.secured).length / ALL.length) * 100,
 );
 
-// The badge and breakdown sheet reuse the credit-mix impact data. Unlike the
-// other factors this one rates Poor, so the badge tone follows the rating.
+// The badge and breakdown sheet reuse the credit-mix impact data. The badge
+// tone follows the rating rather than being fixed, since this factor is the
+// one most likely to drop out of the green.
 const IMPACT = mock.impacts.find((i) => i.id === "credit-mix");
 const RATING_BADGE = {
   Excellent: "bg-background-postive",

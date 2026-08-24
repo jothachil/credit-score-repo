@@ -9,7 +9,11 @@ import {
   IconFileSearch,
   IconFileText,
   IconHelpCircle,
+  IconId,
   IconInfoCircle,
+  IconMail,
+  IconMapPin,
+  IconPhone,
 } from "@tabler/icons-react";
 import { useAtomValue } from "jotai";
 import { useRouter } from "next/navigation";
@@ -59,6 +63,25 @@ const BAND_FILL = {
 
 // 16 evenly spaced scale ticks under the gauge.
 const SCORE_TICKS = Array.from({ length: 16 }, (_, i) => `tick-${i}`);
+
+// Contact-detail group id → its icon. Kept next to the other id→presentation
+// maps rather than in the mock, which holds copy and numbers, not icons.
+const DETAIL_ICONS = {
+  email: IconMail,
+  address: IconMapPin,
+  phone: IconPhone,
+};
+
+// "Nikhil Vaidya" → "NV". Falls back to the first two characters for a
+// single-word name so the avatar is never blank.
+function initials(name) {
+  const words = name.trim().split(/\s+/);
+  const letters =
+    words.length > 1
+      ? `${words[0][0]}${words.at(-1)[0]}`
+      : words[0].slice(0, 2);
+  return letters.toUpperCase();
+}
 
 // Impact tile id → its detail page.
 const IMPACT_ROUTES = {
@@ -519,6 +542,72 @@ export default function CreditScore() {
                 onClick={() => router.push(`/${loan.type}?id=${loan.id}`)}
               />
             ))}
+          </div>
+        </section>
+
+        {/* Your details — the latest of each contact field the bureau holds.
+            Each list in the mock is newest-first, so `[0]` is the current one. */}
+        <section className="flex flex-col gap-2">
+          <h2 className="text-sm leading-6 font-semibold text-content-secondary">
+            {mock.personalDetailsPage.title}
+          </h2>
+          <div className="overflow-hidden rounded-2xl border border-border-primary bg-background-primary">
+            {/* Identity header — initials, name, provenance. The tint ends on
+                an opaque colour rather than `transparent`, which Safari ramps
+                through grey. */}
+            <div className="flex items-center gap-3 bg-gradient-to-b from-background-light-brand to-background-primary p-4">
+              <span className="flex size-12 shrink-0 items-center justify-center rounded-full bg-background-brand text-[16px] leading-5 font-bold text-content-inverse-primary">
+                {initials(mock.personalDetails.name)}
+              </span>
+              <div className="flex min-w-0 flex-col gap-0.5">
+                <span className="truncate text-[17px] leading-6 font-bold text-content-primary">
+                  {mock.personalDetails.name}
+                </span>
+                <span className="text-xs leading-4 text-content-secondary">
+                  {mock.personalDetailsPage.cardSubtitle}
+                </span>
+              </div>
+            </div>
+
+            {/* Contact rows — no dividers between them; the icons and labels
+                carry the grouping on their own. */}
+            <div className="flex flex-col border-t border-border-primary  py-2.5">
+              {mock.personalDetailsPage.groups.map(({ id, label, key }) => {
+                const Icon = DETAIL_ICONS[id];
+                const latest = mock.personalDetails[key][0];
+                return (
+                  <div key={id} className="flex items-center gap-4 px-4 py-2">
+                    <Icon
+                      size={20}
+                      stroke={2}
+                      className="shrink-0 text-content-secondary"
+                    />
+                    <div className="flex min-w-0 flex-col">
+                      <span className="text-[11px] leading-4 tracking-[0.4px] text-content-secondary uppercase">
+                        {label}
+                      </span>
+                      {/* Clamped rather than truncated: addresses need the
+                          second line to stay readable, and short values like
+                          the email and phone are unaffected. */}
+                      <span className="line-clamp-2 text-[15px] leading-5 font-semibold text-content-primary">
+                        {latest.value}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* "View all" sits at the foot of the card rather than beside the
+                heading — same row treatment as the Actions section below. */}
+            <div className="border-t border-border-primary">
+              <ActionRow
+                icon={IconId}
+                label={mock.personalDetailsPage.viewAllLabel}
+                onClick={() => router.push("/your-details")}
+                last
+              />
+            </div>
           </div>
         </section>
 

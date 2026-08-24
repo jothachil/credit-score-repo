@@ -10,9 +10,9 @@ import { mock } from "../data/mock";
 const COPY = mock.paymentHistoryDetail;
 
 // Count each account's reported months (anything but not-reported) and how
-// many of those were on time. In this report every reported month is on
-// time, so the two match everywhere — but delayed/overdue months would
-// lower `onTime` below `total`.
+// many of those were on time. The two match on every account here except the
+// closed AMEX card, whose two delinquent months in late 2022 pull its `onTime`
+// below `total`.
 function paymentCounts(account) {
   const months = Object.values(account.payments.byYear).flat();
   const total = months.filter((m) => m.status !== "not-reported").length;

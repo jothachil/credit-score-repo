@@ -21,24 +21,25 @@ import {
 // (colours, charts, classification tones) lives in the components; this file
 // only holds the numbers, copy, and lists the screens render.
 //
-// Values are derived from a real CIBIL (TrueLink) report pulled on
-// 13 Jul 2026: riskScore 784, populationRank 15, 8 tradelines (6 open,
-// 2 closed — closure detected via `dateClosed`), 9 inquiries.
+// Values are derived from the CIBIL (TrueLink) report in
+// `public/sample-nikil-cibil.json`, pulled on 13 Jul 2026: riskScore 800,
+// populationRank 10, 10 tradelines (4 open, 6 closed — closure detected via
+// `dateClosed`), 3 inquiries.
 
 // ---- Score ----
-const currentScore = 784;
+const currentScore = 800;
 const reportFetchDate = "13 Jul 2026";
-const userPercentile = 15; // populationRank — top 15% of scored borrowers
+const userPercentile = 10; // populationRank — top 10% of scored borrowers
 
 // Month-by-month history (oldest → newest). The bureau report only carries
-// the latest score, so earlier months are a plausible ramp up to 784.
+// the latest score, so earlier months are a plausible ramp up to 800.
 const scoreHistory = [
-  { month: "Feb", score: 712 }, // Good
-  { month: "Mar", score: 728 }, // Good
-  { month: "Apr", score: 741 }, // Good
-  { month: "May", score: 756 }, // Very Good
-  { month: "Jun", score: 770 }, // Very Good
-  { month: "Jul", score: 784 }, // Very Good
+  { month: "Feb", score: 776 }, // Very Good
+  { month: "Mar", score: 782 }, // Very Good
+  { month: "Apr", score: 788 }, // Excellent
+  { month: "May", score: 792 }, // Excellent
+  { month: "Jun", score: 796 }, // Excellent
+  { month: "Jul", score: 800 }, // Excellent
 ];
 const scoreDelta = scoreHistory.at(-1).score - scoreHistory.at(-2).score;
 
@@ -635,66 +636,24 @@ const inquiriesDetail = {
 // 6-month window before the report fetch (13 Jul 2026).
 const inquiries = [
   {
-    id: "hdfc-2026-01",
-    lender: "HDFC Bank",
-    date: "29 Jan 2026",
-    amount: "₹10,000",
+    id: "hsbc-2026-02",
+    lender: "HSBC",
+    date: "22 Feb 2026",
+    amount: "₹15,000",
     recent: true,
   },
   {
-    id: "idfc-2025-12",
-    lender: "IDFC First Bank",
-    date: "19 Dec 2025",
-    amount: "₹20,000",
-    recent: false,
-  },
-  {
-    id: "hdfc-2025-07",
+    id: "hdfc-2025-10",
     lender: "HDFC Bank",
-    date: "22 Jul 2025",
-    amount: "₹1,000",
+    date: "14 Oct 2025",
+    amount: "₹77,00,000",
     recent: false,
   },
   {
-    id: "icici-2025-01",
-    lender: "ICICI Bank",
-    date: "25 Jan 2025",
-    amount: "₹1,00,000",
-    recent: false,
-  },
-  {
-    id: "adityabirla-2024-09",
-    lender: "Aditya Birla Finance",
-    date: "13 Sep 2024",
-    amount: "₹4,00,000",
-    recent: false,
-  },
-  {
-    id: "tcl-2024-08",
-    lender: "Tata Capital",
-    date: "14 Aug 2024",
-    amount: "₹7,09,000",
-    recent: false,
-  },
-  {
-    id: "icici-2024-04",
-    lender: "ICICI Bank",
-    date: "16 Apr 2024",
-    amount: "₹10,00,000",
-    recent: false,
-  },
-  {
-    id: "hdfc-2024-03",
-    lender: "HDFC Bank",
-    date: "15 Mar 2024",
-    amount: "₹1,000",
-    recent: false,
-  },
-  {
-    id: "idfc-2023-08",
-    lender: "IDFC First Bank",
-    date: "01 Aug 2023",
-    amount: "₹20,000",
+    id: "payu-2025-09",
+    lender: "PayU Finance",
+    date: "23 Sep 2025",
+    amount: "₹5,000",
     recent: false,
   },
 ];
@@ -795,19 +754,20 @@ function classifyRecentInquiries(n) {
 
 // Impact tiles — `rating` is derived from `value` so the two stay in sync.
 // Numbers computed from the report:
-// - Payment history: every MonthlyPayStatus across all 8 tradelines is "0"
-//   (on time) or "XXX" (not reported) → 100%.
+// - Payment history: 204 reported MonthlyPayStatus months across the 10
+//   tradelines, of which 202 are "0" (on time). The two exceptions are both
+//   on the closed AMEX card — 12 dpd in Oct 2022, 42 dpd in Nov 2022 → 99%.
 // - Utilization: revolving (type 10) accounts only —
-//   (51,132 + 8,850 + 0 + 47,330) / (1,89,000 + 3 × 5,00,000) ≈ 6%.
-// - History: oldest tradeline opened 06 Apr 2022 → ~4 years.
-// - Mix: all accounts are unsecured (cards + consumer/personal loans) → 0%.
-// - Inquiries: 1 in the last 6 months (HDFC, 29 Jan 2026).
+//   1,92,925 / (25,00,000 + 4,70,000 + 98,000 + 0) ≈ 6%.
+// - History: oldest tradeline opened 31 Oct 2011 → ~14 years.
+// - Mix: 2 of the 4 active accounts are secured (car loan + home loan) → 50%.
+// - Inquiries: 1 in the last 6 months (HSBC, 22 Feb 2026).
 const impacts = [
   {
     id: "payment-history",
-    rating: classifyPaymentHistory(100),
+    rating: classifyPaymentHistory(99),
     label: ["Payment history"],
-    value: "100%",
+    value: "99%",
     title: "Payment history",
     description:
       "The share of your credit payments made on time. Even one missed payment can pull this down.",
@@ -825,9 +785,9 @@ const impacts = [
   },
   {
     id: "credit-history",
-    rating: classifyCreditHistory(4),
+    rating: classifyCreditHistory(14),
     label: ["Credit history"],
-    value: "4 years",
+    value: "14 years",
     title: "Credit history",
     description:
       "How long you've had active credit accounts. A longer history helps your score.",
@@ -835,9 +795,9 @@ const impacts = [
   },
   {
     id: "credit-mix",
-    rating: classifyCreditMix(0),
+    rating: classifyCreditMix(50),
     label: ["Credit mix"],
-    value: "0%",
+    value: "50%",
     title: "Credit mix",
     description:
       "The share of secured vs unsecured credit you hold. A healthier balance helps your score.",
@@ -873,9 +833,10 @@ const MONTH_LABELS = [
 
 // Builds the per-year payment calendar from a tradeline's MonthlyPayStatus
 // window ("YYYY-MM", inclusive). Months inside the window default to on-time —
-// this report has status "0" everywhere — except explicit overrides
-// ({ "YYYY-MM": status }) for the "XXX" (not-reported) gaps. Months outside
-// the reported window render as not-reported.
+// the report is "0"/"STD" almost everywhere — except explicit overrides
+// ({ "YYYY-MM": status }) for the "XXX" (not-reported) gaps and the handful of
+// days-past-due entries. Months outside the reported window render as
+// not-reported.
 function buildPayments(from, to, overrides = {}) {
   const [fromYear, fromMonth] = from.split("-").map(Number);
   const [toYear, toMonth] = to.split("-").map(Number);
@@ -896,174 +857,229 @@ function buildPayments(from, to, overrides = {}) {
 }
 
 // ---- Loans & credit lines ----
-// One record per tradeline in the report. `type` decides which detail layout
-// renders it ("card" → CreditLimit-based, "loan" → highBalance-based).
-// Open vs closed follows the bureau's `dateClosed` field. `payments` mirrors
-// each tradeline's actual MonthlyPayStatus range.
+// One record per tradeline in the report, newest-opened first. `type` decides
+// which detail layout renders it ("card" → CreditLimit-based, "loan" →
+// highBalance-based). Open vs closed follows the bureau's `dateClosed` field.
+// `secured` marks the collateral-backed products (CIBIL account types 01 Auto,
+// 02 Housing, 13 Two-wheeler) and drives the credit-mix screen. `payments`
+// mirrors each tradeline's actual MonthlyPayStatus range.
 const loans = {
   active: [
     {
-      id: "hdfc-card",
-      type: "card",
-      opened: "2026-02-04",
-      icon: IconCreditCard,
-      name: "HDFC Bank Credit Card",
-      detail: "₹1,89,000 · Credit Card",
-      status: "Active",
-      tone: "positive",
-      bank: "HDFC Bank",
-      totalSpends: "₹51,132",
-      creditLimit: "₹1,89,000",
-      limitUsedPct: 27,
-      limitUsedAmount: "₹51,132",
-      year: 2026,
-      updatedBy: "HDFC Bank",
-      updatedOn: "10 Jul 2026",
-      payments: buildPayments("2026-02", "2026-07"),
-    },
-    {
-      id: "idfc-card",
-      type: "card",
-      opened: "2025-12-19",
-      icon: IconCreditCard,
-      name: "IDFC First Bank Credit Card",
-      detail: "₹5,00,000 · Credit Card",
-      status: "Active",
-      tone: "positive",
-      bank: "IDFC First Bank",
-      totalSpends: "₹8,850",
-      creditLimit: "₹5,00,000",
-      limitUsedPct: 2,
-      limitUsedAmount: "₹8,850",
-      year: 2025,
-      updatedBy: "IDFC First Bank",
-      updatedOn: "09 Jul 2026",
-      payments: buildPayments("2025-12", "2026-07"),
-    },
-    {
-      id: "snapmint-loan",
+      id: "hdfc-auto-loan",
       type: "loan",
-      opened: "2025-10-28",
+      opened: "2025-10-15",
       icon: IconBuildingBank,
-      name: "Snapmint Financial Services",
-      detail: "₹4,282 · Consumer Loan",
+      name: "HDFC Bank Car Loan",
+      detail: "₹77,00,000 · Auto Loan",
       status: "Active",
       tone: "positive",
-      bank: "Snapmint",
-      outstanding: "₹3,742",
-      loanAmount: "₹4,282",
-      paidPct: 13,
-      principalPaid: "₹540",
+      secured: true,
+      bank: "HDFC Bank",
+      outstanding: "₹71,37,562",
+      loanAmount: "₹77,00,000",
+      paidPct: 7,
+      principalPaid: "₹5,62,438",
       year: 2025,
-      updatedBy: "Snapmint",
+      updatedBy: "HDFC Bank",
       updatedOn: "30 Jun 2026",
       payments: buildPayments("2025-10", "2026-06"),
     },
     {
-      id: "icici-card-8747",
-      type: "card",
-      opened: "2022-12-30",
-      icon: IconCreditCard,
-      name: "ICICI Bank Credit Card ••8747",
-      detail: "₹5,00,000 · Credit Card",
-      status: "Active",
-      tone: "positive",
-      bank: "ICICI Bank",
-      totalSpends: "₹0",
-      creditLimit: "₹5,00,000",
-      limitUsedPct: 0,
-      limitUsedAmount: "₹0",
-      year: 2022,
-      updatedBy: "ICICI Bank",
-      updatedOn: "31 Jan 2026",
-      // "XXX" gaps in the bureau data: Apr–Aug 2025 and Oct–Nov 2025.
-      payments: buildPayments("2023-02", "2026-01", {
-        "2025-04": "not-reported",
-        "2025-05": "not-reported",
-        "2025-06": "not-reported",
-        "2025-07": "not-reported",
-        "2025-08": "not-reported",
-        "2025-10": "not-reported",
-        "2025-11": "not-reported",
-      }),
-    },
-    {
-      id: "lazypay-loan",
+      id: "payu-consumer-loan",
       type: "loan",
-      opened: "2022-09-01",
+      opened: "2025-09-23",
       icon: IconBuildingBank,
       name: "PayU Finance (LazyPay)",
-      detail: "₹5,600 · Consumer Loan",
+      detail: "₹25,000 · Consumer Loan",
       status: "Active",
       tone: "positive",
       bank: "PayU Finance",
       outstanding: "₹0",
-      loanAmount: "₹5,600",
+      loanAmount: "₹25,000",
       paidPct: 100,
-      principalPaid: "₹5,600",
-      year: 2022,
+      principalPaid: "₹25,000",
+      year: 2025,
       updatedBy: "PayU Finance",
-      updatedOn: "30 Jun 2026",
-      payments: buildPayments("2023-07", "2026-06"),
+      updatedOn: "09 Jul 2026",
+      payments: buildPayments("2025-09", "2026-07"),
     },
     {
-      id: "icici-card-1784",
-      type: "card",
-      opened: "2022-06-14",
-      icon: IconCreditCard,
-      name: "ICICI Bank Credit Card ••1784",
-      detail: "₹5,00,000 · Credit Card",
+      id: "hdfc-home-loan",
+      type: "loan",
+      opened: "2021-03-19",
+      icon: IconBuildingBank,
+      name: "HDFC Bank Home Loan",
+      detail: "₹1,26,54,375 · Housing Loan",
       status: "Active",
       tone: "positive",
-      bank: "ICICI Bank",
-      totalSpends: "₹47,330",
-      creditLimit: "₹5,00,000",
-      limitUsedPct: 9,
-      limitUsedAmount: "₹47,330",
-      year: 2022,
-      updatedBy: "ICICI Bank",
-      updatedOn: "30 Jun 2026",
-      payments: buildPayments("2023-07", "2026-06"),
+      secured: true,
+      bank: "HDFC Bank",
+      outstanding: "₹45,76,944",
+      loanAmount: "₹1,26,54,375",
+      paidPct: 64,
+      principalPaid: "₹80,77,431",
+      year: 2021,
+      updatedBy: "HDFC Bank",
+      updatedOn: "07 Jul 2026",
+      // The bureau only carries the last 36 months of status for this account.
+      payments: buildPayments("2023-08", "2026-07"),
+    },
+    {
+      id: "hdfc-card",
+      type: "card",
+      opened: "2011-10-31",
+      icon: IconCreditCard,
+      name: "HDFC Bank Credit Card",
+      detail: "₹25,00,000 · Credit Card",
+      status: "Active",
+      tone: "positive",
+      bank: "HDFC Bank",
+      totalSpends: "₹1,92,925",
+      creditLimit: "₹25,00,000",
+      limitUsedPct: 8,
+      limitUsedAmount: "₹1,92,925",
+      year: 2011,
+      updatedBy: "HDFC Bank",
+      updatedOn: "09 Jul 2026",
+      payments: buildPayments("2023-08", "2026-07"),
     },
   ],
   closed: [
     {
-      id: "adityabirla-loan",
+      id: "amex-card-0551",
+      type: "card",
+      opened: "2019-08-19",
+      icon: IconCreditCard,
+      name: "American Express Credit Card ••0551",
+      detail: "₹4,70,000 · Credit Card",
+      status: "Closed",
+      tone: "negative",
+      bank: "American Express",
+      totalSpends: "₹0",
+      creditLimit: "₹4,70,000",
+      limitUsedPct: 0,
+      limitUsedAmount: "₹0",
+      year: 2019,
+      updatedBy: "American Express",
+      updatedOn: "18 Mar 2023",
+      // The only delinquency in the whole report: 12 days past due in Oct 2022,
+      // 42 days in Nov 2022, then an "XXX" gap in the final month.
+      payments: buildPayments("2020-04", "2023-03", {
+        "2022-10": "delayed",
+        "2022-11": "overdue",
+        "2023-02": "not-reported",
+      }),
+    },
+    {
+      id: "hdfc-home-loan-closed",
       type: "loan",
-      opened: "2024-09-13",
+      opened: "2017-02-28",
       icon: IconBuildingBank,
-      name: "Aditya Birla Capital",
+      name: "HDFC Bank Home Loan (e-HDFC Ltd)",
+      detail: "₹35,00,000 · Housing Loan",
+      status: "Closed",
+      tone: "negative",
+      secured: true,
+      bank: "HDFC Bank",
+      outstanding: "₹0",
+      loanAmount: "₹35,00,000",
+      paidPct: 100,
+      principalPaid: "₹35,00,000",
+      year: 2017,
+      updatedBy: "HDFC Bank",
+      updatedOn: "31 Mar 2022",
+      payments: buildPayments("2019-04", "2022-03", {
+        "2021-12": "not-reported",
+      }),
+    },
+    {
+      id: "amex-card-1444",
+      type: "card",
+      opened: "2014-06-17",
+      icon: IconCreditCard,
+      name: "American Express Credit Card ••1444",
+      // The bureau carries no credit limit or high balance for this one
+      // (both come through as -1), so there's nothing to show as a limit.
+      detail: "No limit reported · Credit Card",
+      status: "Closed",
+      tone: "negative",
+      bank: "American Express",
+      totalSpends: "₹0",
+      creditLimit: "₹0",
+      limitUsedPct: 0,
+      limitUsedAmount: "₹0",
+      year: 2014,
+      updatedBy: "American Express",
+      updatedOn: "14 Apr 2019",
+      // Its 36-month window is "XXX" apart from the final month.
+      payments: buildPayments("2019-04", "2019-04"),
+    },
+    {
+      id: "citi-card-7113",
+      type: "card",
+      opened: "2013-03-28",
+      icon: IconCreditCard,
+      name: "Citibank Credit Card ••7113",
+      detail: "₹98,000 · Credit Card",
+      status: "Closed",
+      tone: "negative",
+      bank: "Citibank",
+      totalSpends: "₹0",
+      creditLimit: "₹98,000",
+      limitUsedPct: 0,
+      limitUsedAmount: "₹0",
+      year: 2013,
+      updatedBy: "Citibank",
+      updatedOn: "15 Nov 2014",
+      payments: buildPayments("2014-04", "2014-04"),
+    },
+    {
+      id: "bajaj-twowheeler-loan",
+      type: "loan",
+      opened: "2010-03-30",
+      icon: IconBuildingBank,
+      name: "Bajaj Finance Two-wheeler Loan",
+      detail: "₹61,000 · Two-wheeler Loan",
+      status: "Closed",
+      tone: "negative",
+      secured: true,
+      bank: "Bajaj Finance",
+      outstanding: "₹0",
+      loanAmount: "₹61,000",
+      paidPct: 100,
+      principalPaid: "₹61,000",
+      year: 2010,
+      updatedBy: "Bajaj Finance",
+      updatedOn: "03 Jun 2014",
+      // Reported as "STD" (standard/on-time) throughout, with "XXX" gaps.
+      payments: buildPayments("2010-05", "2012-03", {
+        "2010-07": "not-reported",
+        "2011-09": "not-reported",
+        "2011-11": "not-reported",
+        "2011-12": "not-reported",
+        "2012-01": "not-reported",
+        "2012-02": "not-reported",
+      }),
+    },
+    {
+      id: "hdfc-personal-loan",
+      type: "loan",
+      opened: "2010-02-17",
+      icon: IconBuildingBank,
+      name: "HDFC Bank Personal Loan",
       detail: "₹1,00,000 · Personal Loan",
       status: "Closed",
       tone: "negative",
-      bank: "Aditya Birla Capital",
+      bank: "HDFC Bank",
       outstanding: "₹0",
       loanAmount: "₹1,00,000",
       paidPct: 100,
       principalPaid: "₹1,00,000",
-      year: 2024,
-      updatedBy: "Aditya Birla Capital",
-      updatedOn: "15 Jan 2025",
-      payments: buildPayments("2024-09", "2025-01"),
-    },
-    {
-      id: "idfc-ola-loan",
-      type: "loan",
-      opened: "2022-04-06",
-      icon: IconBuildingBank,
-      name: "IDFC First Bank (OLA)",
-      detail: "₹30,000 · Consumer Loan",
-      status: "Closed",
-      tone: "negative",
-      bank: "IDFC First Bank",
-      outstanding: "₹0",
-      loanAmount: "₹30,000",
-      paidPct: 100,
-      principalPaid: "₹30,000",
-      year: 2022,
-      updatedBy: "IDFC First Bank",
-      updatedOn: "04 Jun 2025",
-      payments: buildPayments("2022-07", "2025-06"),
+      year: 2010,
+      updatedBy: "HDFC Bank",
+      updatedOn: "31 Dec 2011",
+      payments: buildPayments("2010-02", "2011-12"),
     },
   ],
 };
@@ -1131,6 +1147,114 @@ const outstandingCards = {
   ),
 };
 
+// ---- Your details ----
+// Contact information as lenders reported it to the bureau — the bureau holds
+// whatever each lender last sent, which is why the same person can sit under
+// several addresses or numbers.
+//
+// Dates are stored as ISO and the lists are sorted newest-first from them, so
+// "latest" is derived rather than a property of the order someone typed these
+// in. The score page shows `[0]` of each list and the detail page badges it.
+//
+// The report's BorrowerAddress entries carry an `Origin` (the lender that sent
+// them) and a `dateReported`; emails and phones don't, so those are attributed
+// to the lender whose tradeline was reported on the same date. Exact duplicates
+// are collapsed — the report lists the same mobile number four times.
+const reportedDetails = {
+  emails: [
+    {
+      id: "email-hdfc",
+      value: "nik86vaidya@gmail.com",
+      reportedBy: "HDFC Bank",
+      on: "2025-10-15",
+    },
+    {
+      id: "email-payu",
+      value: "nikhil.vaidya@payufin.com",
+      reportedBy: "PayU Finance",
+      on: "2025-09-30",
+    },
+  ],
+  addresses: [
+    {
+      id: "address-hdfc-office",
+      value:
+        "Divyasree Greens, 100 Feet Road, Embassy Golf Links Business Park, Challaghatta, Bengaluru 560071",
+      reportedBy: "HDFC Bank",
+      on: "2025-10-15",
+    },
+    {
+      id: "address-hdfc-home",
+      value:
+        "B-1503, August Grand, 15th Floor, Wing B, Sarjapur Main Road, Kaikondrahalli, Bengaluru 560035",
+      reportedBy: "HDFC Bank",
+      on: "2025-10-15",
+    },
+    {
+      id: "address-payu",
+      value:
+        "B 1503, August Grand, 15th Floor, Wing B, Sarjapur Main Road, Kaikondrahalli, Bengaluru, Karnataka 560035",
+      reportedBy: "PayU Finance",
+      on: "2025-09-30",
+    },
+    {
+      id: "address-hdfc-old",
+      value:
+        "Flat No 1503, B Block, 15th Floor, August Grand Apartment, Sarjapur Road, Near Wipro, Bengaluru 560035",
+      reportedBy: "HDFC Bank",
+      on: "2024-01-31",
+    },
+  ],
+  phones: [
+    {
+      id: "phone-hdfc",
+      value: "+91 97429 42546",
+      reportedBy: "HDFC Bank",
+      on: "2025-10-15",
+    },
+  ],
+};
+
+// ISO sorts lexicographically, so no date parsing is needed to order these.
+function newestFirst(entries) {
+  return [...entries]
+    .sort((a, b) => (a.on < b.on ? 1 : -1))
+    .map((entry) => ({ ...entry, reportedOn: formatOpened(entry.on) }));
+}
+
+const personalDetails = {
+  // Onboarding collects a name but doesn't persist it, so the identity on the
+  // contact card comes from here.
+  name: "Nikhil Vijay Vaidya",
+  emails: newestFirst(reportedDetails.emails),
+  addresses: newestFirst(reportedDetails.addresses),
+  phones: newestFirst(reportedDetails.phones),
+};
+
+// Copy for the details screens. `groups` drives both the summary rows on the
+// score page and the sections on the detail page, so the two can't fall out of
+// step when a field is added — or reordered. Phone leads: it's the detail
+// lenders key off and the one people check first.
+const personalDetailsPage = {
+  title: "Personal information",
+  intro:
+    "This is the contact information your lenders have reported to CIBIL. It updates when a lender sends the bureau something new.",
+  groups: [
+    { id: "phone", label: "Phone", plural: "Phone numbers", key: "phones" },
+    { id: "email", label: "Email", plural: "Email addresses", key: "emails" },
+    { id: "address", label: "Address", plural: "Addresses", key: "addresses" },
+  ],
+  cardSubtitle: "As reported to CIBIL",
+  // Row at the foot of the score page's details card, opening this page.
+  viewAllLabel: "View all details",
+  // Foot of a details group that's showing only its most recent entries.
+  viewMoreLabel: (n) => `View ${n} more`,
+  latestBadge: "Latest",
+  reportedNote: (entry) => `${entry.reportedBy} · ${entry.reportedOn}`,
+  footnote:
+    "Something look wrong? Contact the lender that reported it — they update the bureau, not the other way round.",
+};
+
 const paymentLegend = [
   { id: "on-time", label: "On time" },
   { id: "delayed", label: "Delayed" },
@@ -1165,4 +1289,6 @@ export const mock = {
   outstandingCards,
   findAccount,
   paymentLegend,
+  personalDetails,
+  personalDetailsPage,
 };
