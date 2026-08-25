@@ -112,7 +112,7 @@ const amountScenarios = {
   "obtain-home-loan": {
     id: "obtain-home-loan",
     kind: "amount",
-    image: "pay-outstanding",
+    image: "house-loan",
     tone: "brand",
     kicker: "See how your score changes",
     title: "If you take a home loan",
@@ -150,7 +150,7 @@ const amountScenarios = {
   "obtain-auto-loan": {
     id: "obtain-auto-loan",
     kind: "amount",
-    image: "new-credit",
+    image: "car-loan",
     tone: "brand",
     kicker: "See how your score changes",
     title: "If you take a car loan",
@@ -188,7 +188,7 @@ const amountScenarios = {
   "obtain-personal-loan": {
     id: "obtain-personal-loan",
     kind: "amount",
-    image: "default-loan",
+    image: "personal-loans",
     tone: "brand",
     kicker: "See how your score changes",
     title: "If you take a personal loan",
@@ -314,7 +314,7 @@ const scenarios = {
     // Collects nothing, but shows what "your credit cards" adds up to before
     // predicting — how many carry a balance, and what clearing them costs.
     kind: "cards",
-    image: "pay-outstanding",
+    image: "clear-credit-card",
     tone: "positive",
     kicker: "See how your score changes",
     title: "If you pay off your credit cards",
@@ -479,7 +479,7 @@ const predictor = {
     {
       id: "pay-off-cards",
       label: "Pay off my credit cards",
-      image: "pay-outstanding",
+      image: "clear-credit-card",
       delta: 32,
       tone: "positive",
       input: { kind: "toggle", label: "Clear every card balance" },
@@ -525,7 +525,7 @@ const predictor = {
     {
       id: "obtain-home-loan",
       label: "Take a home loan",
-      image: "pay-outstanding",
+      image: "house-loan",
       delta: -18,
       tone: "brand",
       input: {
@@ -538,7 +538,7 @@ const predictor = {
     {
       id: "obtain-auto-loan",
       label: "Take a car loan",
-      image: "new-credit",
+      image: "car-loan",
       delta: -14,
       tone: "brand",
       input: {
@@ -551,7 +551,7 @@ const predictor = {
     {
       id: "obtain-personal-loan",
       label: "Take a personal loan",
-      image: "default-loan",
+      image: "personal-loans",
       delta: -16,
       tone: "brand",
       input: {
