@@ -564,6 +564,9 @@ const predictor = {
     {
       id: "add-enquiry",
       label: "Apply for new credit",
+      // Kept out of the grid for now — the enquiry input isn't built yet, so
+      // the tile has nowhere to land. Drop `hidden` to bring it back.
+      hidden: true,
       image: "lower-utilisation",
       delta: -8,
       tone: "warning",

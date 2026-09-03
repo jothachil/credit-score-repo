@@ -290,14 +290,16 @@ export default function PredictScore() {
           {result ? "Try another scenario" : "Scenarios"}
         </h2>
         <div className="grid grid-cols-2 gap-3">
-          {mock.predictor.choices.map((choice) => (
-            <ChoiceCard
-              key={choice.id}
-              choice={choice}
-              active={activeId === choice.id}
-              onClick={() => choose(choice)}
-            />
-          ))}
+          {mock.predictor.choices
+            .filter((choice) => !choice.hidden)
+            .map((choice) => (
+              <ChoiceCard
+                key={choice.id}
+                choice={choice}
+                active={activeId === choice.id}
+                onClick={() => choose(choice)}
+              />
+            ))}
         </div>
       </section>
 
