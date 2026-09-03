@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# sample bureau data — real report, kept local
+/public/sample-nikil-cibil.json
