@@ -630,13 +630,15 @@ export default function CreditScore() {
           </div>
         </section>
 
-        {/* Powered by CIBIL — bureau attribution */}
+        {/* Powered by Experian — bureau attribution. The wordmark is a wide
+            strip (~4.7:1), so it needs more width than the old stacked CIBIL
+            lockup to stay legible. */}
         <div className="flex items-center justify-center pt-2 pb-4">
           {/* biome-ignore lint/performance/noImgElement: prototype static asset */}
           <img
-            src="/cibil.png"
-            alt="Powered by CIBIL"
-            className="h-auto w-full max-w-[64px] object-contain"
+            src="/powered-by-experian-3.png"
+            alt="Powered by Experian"
+            className="h-auto w-full max-w-[140px] object-contain"
           />
         </div>
       </div>

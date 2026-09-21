@@ -31,13 +31,13 @@ export default function NoCreditHistory() {
         </div>
       </div>
 
-      {/* Powered by CIBIL — bureau attribution */}
+      {/* Powered by Experian — bureau attribution */}
       <div className="flex items-center justify-center pb-2">
         {/* biome-ignore lint/performance/noImgElement: prototype static asset */}
         <img
-          src="/cibil.png"
-          alt="Powered by CIBIL"
-          className="h-auto w-full max-w-[80px] object-contain"
+          src="/powered-by-experian-3.png"
+          alt="Powered by Experian"
+          className="h-auto w-full max-w-[160px] object-contain"
         />
       </div>
 
