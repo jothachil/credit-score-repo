@@ -25,15 +25,15 @@ const FAQS = [
   },
   {
     id: "revoke-consent",
-    question: "How do I revoke my CIBIL consent?",
+    question: "How do I revoke my Experian consent?",
     answer:
-      'To revoke your consent for accessing your credit report from CIBIL, please email wecare@payufin.com using the subject line "Revoke My CIBIL Consent." If you do not receive a response within 48 hours of raising your request, you can escalate the matter to our grievance officer, who will respond within 24 hours of the escalation.',
+      'To revoke your consent for accessing your credit report from Experian, please email wecare@payufin.com using the subject line "Revoke My Experian Consent." If you do not receive a response within 48 hours of raising your request, you can escalate the matter to our grievance officer, who will respond within 24 hours of the escalation.',
   },
   {
     id: "grievances",
-    question: "How can I get my grievances addressed for my CIBIL score?",
+    question: "How can I get my grievances addressed for my Experian score?",
     answer:
-      'For any grievances related to your CIBIL score, please email wecare@payufin.com using the subject line "CIBIL Score Grievance." If you do not receive a response within 48 hours of raising your request, you can escalate the matter to our grievance officer, who will respond within 24 hours of the escalation.',
+      'For any grievances related to your Experian score, please email wecare@payufin.com using the subject line "Experian Score Grievance." If you do not receive a response within 48 hours of raising your request, you can escalate the matter to our grievance officer, who will respond within 24 hours of the escalation.',
   },
   {
     id: "old-score",

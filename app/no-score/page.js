@@ -21,9 +21,9 @@ export default function NoCreditScore() {
             We couldn&apos;t spot a score
           </h1>
           <p className="text-sm leading-6 text-content-secondary">
-            We are unable to locate your information in CIBIL records. Based on
-            the information you have provided during enrollment, we could not
-            locate your credit data in CIBIL records
+            We are unable to locate your information in Experian records. Based
+            on the information you have provided during enrollment, we could not
+            locate your credit data in Experian records
           </p>
         </div>
       </div>

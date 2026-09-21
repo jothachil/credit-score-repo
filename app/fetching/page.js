@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 
 // Each message shows for STEP_MS; after the last, we move on to the score.
 const STEPS = [
-  "Fetching your CIBIL report",
+  "Fetching your Experian report",
   "Analysing your accounts",
   "Calculating your score",
 ];

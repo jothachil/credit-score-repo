@@ -231,7 +231,7 @@ export default function PredictScore() {
               the score page hero, in light-mode colours. */}
           <div className="flex flex-col mt-6">
             <p className="text-[10px] leading-4 font-medium tracking-[1px] text-content-secondary uppercase">
-              {result ? "Predicted score" : "CIBIL Score"}
+              {result ? "Predicted score" : "Experian Credit Score"}
             </p>
             {/* Fixed height so the SSR-empty → built → rolling states of the
                 slot-text number never change the row height. */}
@@ -265,7 +265,7 @@ export default function PredictScore() {
                 this anchors the prediction against the real score. */}
             <p className="line-clamp-2 mt-2 h-10 text-sm leading-5 text-content-secondary">
               {result
-                ? `Current CIBIL Score is ${mock.currentScore}`
+                ? `Current Experian Credit Score  is ${mock.currentScore}`
                 : "Pick a scenario below to see its effect"}
             </p>
           </div>

@@ -27,8 +27,8 @@ export default function PaymentInProgress() {
           </h1>
           <p className="text-sm leading-6 text-content-secondary">
             Your ₹49 payment is still being confirmed by your bank. We&apos;ll
-            refresh your CIBIL score the moment it goes through — this usually
-            takes a few minutes.
+            refresh your Experian Credit Score score the moment it goes through
+            — this usually takes a few minutes.
           </p>
         </div>
       </div>

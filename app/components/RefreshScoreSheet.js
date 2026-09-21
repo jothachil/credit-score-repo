@@ -108,7 +108,7 @@ export default function RefreshScoreSheet({ open, onOpenChange }) {
     <BottomSheet
       open={open}
       onOpenChange={onOpenChange}
-      title="Unlock Your Latest CIBIL Score"
+      title="Unlock Your Latest Experian Credit Score"
       titleHidden
     >
       {phase === "blocked" && (
@@ -259,7 +259,7 @@ export default function RefreshScoreSheet({ open, onOpenChange }) {
           {/* Heading + subtitle */}
           <div className="flex flex-col text-center">
             <h2 className="text-xl leading-8 font-bold text-content-primary">
-              Unlock Latest CIBIL Score
+              Unlock Latest Experian Credit Score
             </h2>
             <p className="text-sm leading-6 text-content-secondary">
               Refresh it to see the most up-to-date picture of your credit

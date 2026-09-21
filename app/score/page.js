@@ -337,7 +337,7 @@ export default function CreditScore() {
         <div className="relative flex flex-col gap-4 px-4 pt-1 pb-5">
           <div className="flex flex-col gap-0.5">
             <p className="mt-10 text-[10px] leading-4 font-medium tracking-[1px] text-content-inverse-primary uppercase">
-              CIBIL Score
+              Experian Credit Score
             </p>
             {/* Fixed height so the SSR-empty → built → rolling states of the
                 slot-text number never change the row height (slot-text injects
@@ -631,7 +631,7 @@ export default function CreditScore() {
         </section>
 
         {/* Powered by Experian — bureau attribution. The wordmark is a wide
-            strip (~4.7:1), so it needs more width than the old stacked CIBIL
+            strip (~4.7:1), so it needs more width than the old stacked Experian
             lockup to stay legible. */}
         <div className="flex items-center justify-center pt-2 pb-4">
           {/* biome-ignore lint/performance/noImgElement: prototype static asset */}

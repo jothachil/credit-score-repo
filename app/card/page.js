@@ -180,7 +180,7 @@ function CardDetailContent() {
 
         {/* Footer */}
         <p className="px-1 pt-1 text-[13px] leading-5 text-content-secondary">
-          Last updated by {CARD.updatedBy} on {CARD.updatedOn} to CIBIL
+          Last updated by {CARD.updatedBy} on {CARD.updatedOn} to Experian
         </p>
         <Button variant="secondary" onClick={() => router.push("/error-state")}>
           Report an error

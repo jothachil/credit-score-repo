@@ -21,7 +21,7 @@ import {
 // (colours, charts, classification tones) lives in the components; this file
 // only holds the numbers, copy, and lists the screens render.
 //
-// Values are derived from the CIBIL (TrueLink) report in
+// Values are derived from the Experian (TrueLink) report in
 // `public/sample-nikil-cibil.json`, pulled on 13 Jul 2026: riskScore 800,
 // populationRank 10, 10 tradelines (4 open, 6 closed — closure detected via
 // `dateClosed`), 3 inquiries.
@@ -863,7 +863,7 @@ function buildPayments(from, to, overrides = {}) {
 // One record per tradeline in the report, newest-opened first. `type` decides
 // which detail layout renders it ("card" → CreditLimit-based, "loan" →
 // highBalance-based). Open vs closed follows the bureau's `dateClosed` field.
-// `secured` marks the collateral-backed products (CIBIL account types 01 Auto,
+// `secured` marks the collateral-backed products (Experian account types 01 Auto,
 // 02 Housing, 13 Two-wheeler) and drives the credit-mix screen. `payments`
 // mirrors each tradeline's actual MonthlyPayStatus range.
 const loans = {
@@ -1241,13 +1241,13 @@ const personalDetails = {
 const personalDetailsPage = {
   title: "Personal information",
   intro:
-    "This is the contact information your lenders have reported to CIBIL. It updates when a lender sends the bureau something new.",
+    "This is the contact information your lenders have reported to Experian. It updates when a lender sends the bureau something new.",
   groups: [
     { id: "phone", label: "Phone", plural: "Phone numbers", key: "phones" },
     { id: "email", label: "Email", plural: "Email addresses", key: "emails" },
     { id: "address", label: "Address", plural: "Addresses", key: "addresses" },
   ],
-  cardSubtitle: "As reported to CIBIL",
+  cardSubtitle: "As reported to Experian",
   // Row at the foot of the score page's details card, opening this page.
   viewAllLabel: "View all details",
   // Foot of a details group that's showing only its most recent entries.
